@@ -424,10 +424,28 @@
         font-weight: 700;
     }
 
+    .pricing-old-price {
+        font-size: 2rem;
+        text-decoration: line-through;
+        opacity: 0.6;
+        margin-bottom: 0.5rem;
+    }
+
     .pricing-price {
         font-size: 5rem;
         font-weight: 900;
-        margin: 1rem 0;
+        margin: 0.5rem 0;
+    }
+
+    .pricing-discount {
+        background: #28a745;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 0.5rem 0;
+        font-weight: 700;
+        font-size: 1.1rem;
     }
 
     .pricing-period {
@@ -784,7 +802,7 @@
                     <tr>
                         <td><strong>Custo Inicial</strong></td>
                         <td>R$ 30.000 - R$ 80.000</td>
-                        <td class="col-destaque">R$ 549/mês</td>
+                        <td class="col-destaque"><s>R$ 2.329,90</s><br><strong>R$ 549,90/mês</strong></td>
                     </tr>
                     <tr>
                         <td><strong>Tempo</strong></td>
@@ -857,17 +875,19 @@
 <section class="pricing-section" id="pricing">
     <div class="container">
         <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem;" data-aos="fade-up">
-            Investimento Que Se Paga Sozinho
+            76% de Desconto por Tempo Limitado
         </h2>
         <p style="text-align: center; font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9;" data-aos="fade-up" data-aos-delay="100">
-            Com apenas 1 venda extra por mês, o sistema já está pago
+            De R$ 2.329,90 por apenas R$ 549,90/mês - Economize R$ 1.780,00 mensais!
         </p>
 
         <div class="pricing-card" data-aos="zoom-in" data-aos-delay="200">
             <div class="pricing-header">
                 <div class="pricing-badge">OFERTA LIMITADA</div>
                 <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">Sistema Completo</h3>
-                <div class="pricing-price">R$ 549</div>
+                <div class="pricing-old-price">De R$ 2.329,90</div>
+                <div class="pricing-price">Por R$ 549,90</div>
+                <div class="pricing-discount">🔥 ECONOMIA DE R$ 1.780,00/MÊS</div>
                 <div class="pricing-period">/mês sem fidelidade</div>
             </div>
 
