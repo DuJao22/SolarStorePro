@@ -5,6 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block meta_description %}Energia solar de alta qualidade. Reduza sua conta de luz em até 95% com placas solares profissionais.{% endblock %}">
     <title>{% block title %}SolarPro - Energia Solar Profissional{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="alternate icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}SolarPro - Energia Solar Profissional{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Economia de até 95% na conta de luz. Painéis solares de alta eficiência com instalação profissional.{% endblock %}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="SolarPro">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}SolarPro - Energia Solar Profissional{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Economia de até 95% na conta de luz. Painéis solares de alta eficiência.{% endblock %}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+    
+    <!-- WhatsApp específico -->
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:locale" content="pt_BR">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -1,10 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Admin - SolarPro{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="alternate icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +18,7 @@
 <body>
     <button class="mobile-menu-toggle" aria-label="Menu">☰</button>
     <div class="sidebar-overlay"></div>
-    
+
     <aside class="admin-sidebar">
         <div class="sidebar-brand">
             <span class="brand-icon">☀️</span>
@@ -23,7 +27,7 @@
                 <span class="brand-badge">Admin</span>
             </div>
         </div>
-        
+
         <ul class="sidebar-nav">
             <li class="nav-item">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
@@ -123,7 +127,7 @@
 
         <div class="admin-content">
             {% block content %}{% endblock %}
-            
+
             <div class="admin-footer">
                 <p>&copy; 2024 SolarPro Admin Panel. Todos os direitos reservados.</p>
                 <div class="admin-developer-credit">

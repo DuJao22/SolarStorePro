@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}Sistema Completo para Empresas de Energia Solar - SolarPro{% endblock %}
@@ -591,6 +590,34 @@
         }
     }
 </style>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Completo para Empresas de Energia Solar - SolarPro</title>
+    <meta name="description" content="Sistema profissional de e-commerce para sua empresa de energia solar. Landing page, site completo, hospedagem e manutenção por apenas R$ 549/mês.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="alternate icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sistema Completo para Energia Solar - R$ 549/mês">
+    <meta property="og:description" content="E-commerce profissional + IA + Calculadora Solar. Tudo pronto para sua empresa vender mais!">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="SolarPro">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sistema Completo para Energia Solar">
+    <meta name="twitter:description" content="E-commerce + IA + Calculadora por R$ 549/mês">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -600,12 +627,12 @@
         <div class="badge-urgencia">
             🔥 APENAS 5 VAGAS DISPONÍVEIS ESTE MÊS
         </div>
-        
+
         <h1 data-aos="fade-up" data-aos-delay="100">
             Sistema Completo de <span>E-commerce</span><br>
             Para Empresas de Energia Solar
         </h1>
-        
+
         <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
             Pare de perder vendas! Tenha um e-commerce profissional, calculadora solar, 
             assistente IA e gestão completa por uma fração do preço de desenvolver do zero.
@@ -788,7 +815,7 @@
         <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem; color: var(--primary);" data-aos="fade-up">
             Compare: Desenvolver vs. Nosso Sistema
         </h2>
-        
+
         <div class="comparacao-table" data-aos="fade-up" data-aos-delay="200">
             <table>
                 <thead>
@@ -851,7 +878,7 @@
         <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem;" data-aos="fade-up">
             O Que Nossos Clientes Dizem
         </h2>
-        
+
         <div class="depoimentos-carousel" data-aos="fade-up" data-aos-delay="200">
             <div class="depoimento-card">
                 <div class="depoimento-stars">⭐⭐⭐⭐⭐</div>

@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Completo para Vendas de Energia Solar - R$ 549/mês</title>
     <meta name="description" content="Sistema profissional de e-commerce para sua empresa de energia solar. Landing page, site completo, hospedagem e manutenção por apenas R$ 549/mês.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="alternate icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sistema Completo para Energia Solar - R$ 549/mês">
+    <meta property="og:description" content="E-commerce profissional para sua empresa de energia solar. Tudo pronto por R$ 549/mês!">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="SolarPro">
+    <meta property="og:locale" content="pt_BR">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sistema Completo para Energia Solar">
+    <meta name="twitter:description" content="E-commerce profissional por R$ 549/mês">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         * {

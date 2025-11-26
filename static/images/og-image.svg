@@ -1,0 +1,33 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0B6A4A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#063325;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sunGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFC857;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFB020;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Sol grande -->
+  <circle cx="950" cy="150" r="100" fill="url(#sunGradient)" opacity="0.8"/>
+  
+  <!-- Painéis solares -->
+  <g transform="translate(100, 200)">
+    <rect x="0" y="0" width="300" height="200" fill="#0B6A4A" stroke="#063325" stroke-width="4" rx="8"/>
+    <line x1="100" y1="0" x2="100" y2="200" stroke="#063325" stroke-width="3"/>
+    <line x1="200" y1="0" x2="200" y2="200" stroke="#063325" stroke-width="3"/>
+    <line x1="0" y1="66" x2="300" y2="66" stroke="#063325" stroke-width="3"/>
+    <line x1="0" y1="133" x2="300" y2="133" stroke="#063325" stroke-width="3"/>
+  </g>
+  
+  <!-- Texto -->
+  <text x="550" y="280" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white">SolarPro</text>
+  <text x="550" y="360" font-family="Arial, sans-serif" font-size="40" fill="#FFC857">Energia Solar Profissional</text>
+  <text x="550" y="420" font-family="Arial, sans-serif" font-size="32" fill="white" opacity="0.9">Economia de até 95% na conta de luz</text>
+</svg>
