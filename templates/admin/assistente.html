@@ -1,0 +1,443 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Assistente IA - Admin SolarPro{% endblock %}
+{% block page_title %}Assistente IA{% endblock %}
+{% block header_icon %}🤖{% endblock %}
+
+{% block extra_css %}
+<style>
+.assistant-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.assistant-welcome {
+    background: linear-gradient(135deg, var(--primary-green) 0%, #095539 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.assistant-welcome h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.assistant-welcome p {
+    opacity: 0.95;
+    font-size: 1rem;
+}
+
+.chat-card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.chat-messages {
+    height: 500px;
+    overflow-y: auto;
+    padding: 2rem;
+    background: #f8f9fa;
+    scroll-behavior: smooth;
+}
+
+.chat-message {
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-message.assistant {
+    justify-content: flex-start;
+}
+
+.chat-message.user {
+    justify-content: flex-end;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.chat-message.assistant .message-avatar {
+    background: linear-gradient(135deg, var(--primary-green), #095539);
+    color: white;
+}
+
+.chat-message.user .message-avatar {
+    background: linear-gradient(135deg, var(--secondary-gold), #fdb731);
+    color: var(--dark-gray);
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 1rem 1.5rem;
+    border-radius: 18px;
+    line-height: 1.6;
+}
+
+.chat-message.assistant .message-content {
+    background: white;
+    color: var(--dark-gray);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.chat-message.user .message-content {
+    background: linear-gradient(135deg, var(--primary-green), #095539);
+    color: white;
+}
+
+.message-content ul {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+}
+
+.message-content li {
+    margin: 0.5rem 0;
+}
+
+.chat-message.loading .message-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-green);
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    30% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+}
+
+.chat-input-area {
+    padding: 1.5rem;
+    background: white;
+    border-top: 2px solid var(--light-gray);
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+#chatInput {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    resize: none;
+    min-height: 60px;
+    max-height: 150px;
+    transition: var(--transition);
+}
+
+#chatInput:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(11, 106, 74, 0.1);
+}
+
+#sendBtn {
+    padding: 1rem 2rem;
+    min-width: 120px;
+}
+
+.quick-prompts-section {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.quick-prompts-section h3 {
+    font-size: 1.25rem;
+    color: var(--dark-gray);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.prompt-bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.prompt-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    color: var(--dark-gray);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.prompt-bubble:hover {
+    background: linear-gradient(135deg, var(--primary-green) 0%, #095539 100%);
+    color: white;
+    border-color: var(--primary-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.prompt-bubble .bubble-icon {
+    font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .chat-messages {
+        height: 400px;
+        padding: 1rem;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .prompt-bubbles {
+        gap: 0.75rem;
+    }
+    
+    .prompt-bubble {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.875rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="assistant-layout">
+    <div class="assistant-welcome">
+        <h2>
+            <span>🤖</span>
+            Olá, {{ current_user.nome }}!
+        </h2>
+        <p>Converse com o assistente inteligente para obter insights sobre sua loja, estratégias de vendas e ajuda para recuperar carrinhos abandonados.</p>
+    </div>
+
+    <div class="chat-card">
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message assistant">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    Olá! Sou o assistente da SolarPro. Posso ajudar você a:
+                    <ul>
+                        <li>Analisar carrinhos abandonados e sugerir estratégias de recuperação</li>
+                        <li>Identificar produtos com estoque baixo</li>
+                        <li>Gerar relatórios de vendas</li>
+                        <li>Sugerir estratégias de marketing</li>
+                        <li>Tirar dúvidas sobre gestão do e-commerce</li>
+                    </ul>
+                    Como posso ajudar?
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <textarea id="chatInput" placeholder="Digite sua mensagem aqui..." rows="2"></textarea>
+                <button id="sendBtn" class="btn btn-primary">
+                    <span>Enviar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quick-prompts-section">
+        <h3>
+            <span>⚡</span>
+            Perguntas Rápidas
+        </h3>
+        <div class="prompt-bubbles">
+            <button class="prompt-bubble" data-prompt="Analise os carrinhos abandonados e sugira estratégias para recuperá-los.">
+                <span class="bubble-icon">🛍️</span>
+                <span>Recuperar Carrinhos</span>
+            </button>
+            <button class="prompt-bubble" data-prompt="Quais produtos estão com estoque baixo e precisam de reposição?">
+                <span class="bubble-icon">📦</span>
+                <span>Verificar Estoque</span>
+            </button>
+            <button class="prompt-bubble" data-prompt="Como está o desempenho da loja este mês?">
+                <span class="bubble-icon">📊</span>
+                <span>Análise Mensal</span>
+            </button>
+            <button class="prompt-bubble" data-prompt="Sugira estratégias para aumentar as vendas.">
+                <span class="bubble-icon">📈</span>
+                <span>Estratégias de Vendas</span>
+            </button>
+            <button class="prompt-bubble" data-prompt="Gere um relatório dos pedidos pendentes.">
+                <span class="bubble-icon">📋</span>
+                <span>Pedidos Pendentes</span>
+            </button>
+            <button class="prompt-bubble" data-prompt="Quais são os produtos mais vendidos?">
+                <span class="bubble-icon">🏆</span>
+                <span>Top Produtos</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMessage(content, isUser = false) {
+    const div = document.createElement('div');
+    div.className = `chat-message ${isUser ? 'user' : 'assistant'}`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.textContent = isUser ? '👤' : '🤖';
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.innerHTML = content;
+    
+    if (isUser) {
+        div.appendChild(messageContent);
+        div.appendChild(avatar);
+    } else {
+        div.appendChild(avatar);
+        div.appendChild(messageContent);
+    }
+    
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    addMessage(message, true);
+    chatInput.value = '';
+    sendBtn.disabled = true;
+    
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'chat-message assistant loading';
+    loadingDiv.innerHTML = `
+        <div class="message-avatar">🤖</div>
+        <div class="message-content">
+            <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    `;
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    try {
+        const response = await fetch('/admin/assistente/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mensagem: message })
+        });
+        
+        const data = await response.json();
+        loadingDiv.remove();
+        
+        if (data.erro) {
+            addMessage(`❌ Erro: ${data.erro}`);
+        } else {
+            addMessage(data.resposta.replace(/\n/g, '<br>'));
+        }
+    } catch (error) {
+        loadingDiv.remove();
+        addMessage('❌ Erro ao processar sua mensagem. Verifique se a chave da API está configurada.');
+    }
+    
+    sendBtn.disabled = false;
+    chatInput.focus();
+}
+
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+document.querySelectorAll('.prompt-bubble').forEach(btn => {
+    btn.addEventListener('click', () => {
+        chatInput.value = btn.dataset.prompt;
+        sendMessage();
+    });
+});
+
+// Auto-resize textarea
+chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+});
+</script>
+{% endblock %}

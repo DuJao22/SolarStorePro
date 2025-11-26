@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Criar Conta - SolarPro{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-container" data-aos="fade-up">
+            <div class="auth-header">
+                <h1>Criar sua conta</h1>
+                <p>Cadastre-se para comprar e acompanhar seus pedidos</p>
+            </div>
+            
+            <form class="auth-form" method="POST" action="{{ url_for('cadastro') }}">
+                <div class="form-group">
+                    <label for="nome">Nome completo *</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="senha">Senha *</label>
+                        <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmar_senha">Confirmar senha *</label>
+                        <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Repita a senha" required>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="termos" required> Li e aceito os <a href="#">termos de uso</a> e <a href="#">política de privacidade</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Criar Conta</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Já tem uma conta? <a href="{{ url_for('login') }}">Faça login</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

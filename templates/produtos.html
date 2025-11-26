@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Produtos - Placas Solares e Sistemas Completos | SolarPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Nossos Produtos</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Soluções completas em energia solar</p>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        <div class="products-controls">
+            <div class="filters" data-aos="fade-right">
+                <label>Categoria:</label>
+                <select id="categoryFilter" onchange="window.location.href='{{ url_for('produtos') }}?categoria=' + this.value + '&ordem={{ ordem_atual }}'">
+                    <option value="">Todas</option>
+                    {% for cat in categorias %}
+                    <option value="{{ cat.categoria }}" {% if categoria_atual == cat.categoria %}selected{% endif %}>
+                        {{ cat.categoria }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="sort" data-aos="fade-left">
+                <label>Ordenar:</label>
+                <select id="sortFilter" onchange="window.location.href='{{ url_for('produtos') }}?categoria={{ categoria_atual }}&ordem=' + this.value">
+                    <option value="nome" {% if ordem_atual == 'nome' %}selected{% endif %}>Nome A-Z</option>
+                    <option value="preco_asc" {% if ordem_atual == 'preco_asc' %}selected{% endif %}>Menor Preço</option>
+                    <option value="preco_desc" {% if ordem_atual == 'preco_desc' %}selected{% endif %}>Maior Preço</option>
+                    <option value="potencia_desc" {% if ordem_atual == 'potencia_desc' %}selected{% endif %}>Maior Potência</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="products-grid">
+            {% for produto in produtos %}
+            <div class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='images/products/' + produto.imagem.split('/')[-1]) }}" 
+                         alt="{{ produto.nome }}"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/400x300/0B6A4A/FFFFFF?text={{ produto.nome[:20] }}'">
+                    <span class="product-badge">{{ produto.garantia }} anos</span>
+                    {% if produto.estoque < 10 %}
+                    <span class="product-badge badge-warning">Últimas unidades</span>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <span class="product-category">{{ produto.categoria }}</span>
+                    <h3 class="product-name">{{ produto.nome }}</h3>
+                    <p class="product-desc">{{ produto.descricao[:100] }}...</p>
+                    <div class="product-specs">
+                        <span class="spec">⚡ {{ produto.potencia_watts }}W</span>
+                        <span class="spec">📊 {{ produto.eficiencia }}%</span>
+                        <span class="spec">✓ {{ produto.garantia }} anos</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-label">A partir de</span>
+                            <span class="price-value">{{ produto.preco|format_price }}</span>
+                        </div>
+                        <div class="product-actions">
+                            <a href="{{ url_for('produto', id=produto.id) }}" class="btn btn-outline">Ver Detalhes</a>
+                            <button class="btn btn-primary add-to-cart" 
+                                    data-id="{{ produto.id }}"
+                                    data-nome="{{ produto.nome }}"
+                                    data-preco="{{ produto.preco }}"
+                                    data-imagem="{{ produto.imagem }}">
+                                Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if produtos|length == 0 %}
+        <div class="no-products" data-aos="fade-up">
+            <p>Nenhum produto encontrado com os filtros selecionados.</p>
+            <a href="{{ url_for('produtos') }}" class="btn btn-primary">Ver Todos os Produtos</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content" data-aos="zoom-in">
+            <h2>Precisa de Ajuda para Escolher?</h2>
+            <p>Nossos especialistas podem te ajudar a encontrar a solução perfeita</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('calculadora') }}" class="btn btn-primary btn-lg">Usar Calculadora</a>
+                <a href="{{ url_for('contato') }}" class="btn btn-outline btn-lg">Falar com Especialista</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

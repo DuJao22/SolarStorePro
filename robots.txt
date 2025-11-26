@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Sitemap: https://seu-dominio.com/sitemap.xml
+
+User-agent: *
+Disallow: /admin/
+Disallow: /checkout
+Disallow: /api/

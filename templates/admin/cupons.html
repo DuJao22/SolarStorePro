@@ -1,0 +1,63 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Cupons - Admin SolarPro{% endblock %}
+{% block page_title %}Cupons de Desconto{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+    <a href="{{ url_for('admin_cupom_novo') }}" class="btn btn-primary">+ Novo Cupom</a>
+</div>
+
+<div class="dashboard-card">
+    <div class="card-body">
+        {% if cupons %}
+        <table class="data-table full-width">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Desconto</th>
+                    <th>Valor Mínimo</th>
+                    <th>Uso</th>
+                    <th>Validade</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cupom in cupons %}
+                <tr>
+                    <td><strong>{{ cupom.codigo }}</strong></td>
+                    <td>{{ cupom.descricao or '-' }}</td>
+                    <td>
+                        {% if cupom.tipo == 'percentual' %}
+                        {{ cupom.valor }}%
+                        {% else %}
+                        {{ cupom.valor|format_price }}
+                        {% endif %}
+                    </td>
+                    <td>{{ cupom.valor_minimo|format_price }}</td>
+                    <td>{{ cupom.quantidade_usada }}/{{ cupom.quantidade_total or '∞' }}</td>
+                    <td>
+                        {% if cupom.data_fim %}
+                        {{ cupom.data_fim }}
+                        {% else %}
+                        Sem limite
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if cupom.ativo %}
+                        <span class="badge badge-success">Ativo</span>
+                        {% else %}
+                        <span class="badge badge-danger">Inativo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-text">Nenhum cupom cadastrado.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

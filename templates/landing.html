@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Completo para Vendas de Energia Solar - R$ 549/mês</title>
+    <meta name="description" content="Sistema profissional de e-commerce para sua empresa de energia solar. Landing page, site completo, hospedagem e manutenção por apenas R$ 549/mês.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0B6A4A;
+            --secondary: #FFC857;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --gray: #f5f5f5;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #0B6A4A;
+            color: white;
+            padding: 2rem 1rem 6rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            object-fit: cover;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(11, 106, 74, 0.75);
+            z-index: 1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.03)"/></svg>');
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .countdown-bar {
+            background: rgba(255, 200, 87, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 2px solid var(--secondary);
+        }
+
+        .countdown {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .countdown-item {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+
+        .countdown-item span {
+            display: block;
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .price-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            margin: 2rem auto;
+            border: 3px solid var(--secondary);
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            opacity: 0.7;
+            font-size: 1.5rem;
+        }
+
+        .new-price {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--secondary);
+            line-height: 1;
+            margin: 1rem 0;
+        }
+
+        .price-suffix {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .cta-primary {
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 200, 87, 0.4);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 200, 87, 0.6);
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Problems Section */
+        .problems {
+            padding: 5rem 2rem;
+            background: var(--dark);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--secondary);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .problem-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .problem-card h3 {
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--gray) 0%, white 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-top: 5px solid var(--primary);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 2rem;
+            background: var(--primary);
+            color: white;
+        }
+
+        .pricing-table {
+            background: white;
+            color: var(--dark);
+            max-width: 900px;
+            margin: 3rem auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .pricing-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #f0b429 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .pricing-header h3 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .pricing-features {
+            padding: 3rem 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list li {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .check-icon {
+            color: #4CAF50;
+            font-size: 1.5rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 2rem;
+            background: var(--gray);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stars {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Guarantee */
+        .guarantee {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .guarantee-box {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 3px solid var(--secondary);
+        }
+
+        .guarantee-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+
+        .faq-item {
+            background: var(--gray);
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #e8e8e8;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #095539 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .urgency {
+            background: rgba(255,200,87,0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 600px;
+            border: 2px solid var(--secondary);
+        }
+
+        /* Form */
+        .lead-form {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .lead-form input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .lead-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Sticky CTA */
+        .sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--dark);
+            padding: 1rem;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .sticky-cta.show {
+            display: block;
+        }
+
+        .sticky-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .sticky-text {
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .new-price {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .sticky-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .countdown {
+                font-size: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+            }
+        }
+
+        .comparison {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .comparison-table {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .comparison-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--gray);
+        }
+
+        .highlight-col {
+            background: rgba(11, 106, 74, 0.05);
+            font-weight: 700;
+        }
+
+        /* Responsividade da tabela de comparação */
+        @media (max-width: 768px) {
+            .comparison {
+                padding: 3rem 1rem;
+            }
+
+            .comparison-table {
+                margin: 2rem auto;
+                border-radius: 15px;
+                overflow-x: auto;
+            }
+
+            .comparison-table table {
+                min-width: 100%;
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th {
+                padding: 1rem 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .comparison-table td {
+                padding: 1rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th:first-child,
+            .comparison-table td:first-child {
+                position: sticky;
+                left: 0;
+                background: white;
+                z-index: 1;
+                min-width: 100px;
+            }
+
+            .comparison-table th:first-child {
+                background: var(--primary);
+            }
+
+            .comparison-table tr:hover td:first-child {
+                background: var(--gray);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .comparison-table table {
+                font-size: 0.75rem;
+            }
+
+            .comparison-table th {
+                padding: 0.8rem 0.4rem;
+                font-size: 0.8rem;
+            }
+
+            .comparison-table td {
+                padding: 0.8rem 0.4rem;
+                font-size: 0.75rem;
+            }
+
+            .comparison-table th:first-child,
+            .comparison-table td:first-child {
+                min-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="{{ url_for('static', filename='images/projects/projeto1-depois.jpg') }}">
+            <source src="{{ url_for('static', filename='videos/solar-background.mp4') }}" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <div class="countdown-bar">
+                <div>⚡ OFERTA EXCLUSIVA - VAGAS LIMITADAS ⚡</div>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <div id="hours">00</div>
+                        <span>Horas</span>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="minutes">00</div>
+                        <span>Minutos</span>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="seconds">00</div>
+                        <span>Segundos</span>
+                    </div>
+                </div>
+            </div>
+
+            <h1>Sistema Completo de E-commerce para Sua Empresa de Energia Solar</h1>
+            <p class="hero-subtitle">Landing Page Profissional + Site Completo + Hospedagem + Manutenção Gratuita</p>
+
+            <div class="price-box">
+                <div class="old-price">De R$ 2.497/mês</div>
+                <div class="new-price">R$ 549<span class="price-suffix">/mês</span></div>
+                <div>💰 Economize R$ 1.948/mês</div>
+            </div>
+
+            <a href="#formulario" class="cta-primary">🚀 QUERO MEU SISTEMA AGORA</a>
+
+            <div class="trust-badges">
+                <div class="badge">✅ Hospedagem Inclusa</div>
+                <div class="badge">✅ Manutenção Gratuita</div>
+                <div class="badge">✅ Suporte 24/7</div>
+                <div class="badge">✅ Garantia de 30 Dias</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section class="problems">
+        <div class="container">
+            <h2 class="section-title">Você Está Perdendo Vendas Todos os Dias</h2>
+
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <h3>❌ Site Amador</h3>
+                    <p>Clientes não confiam em empresas com sites mal feitos. Você perde credibilidade e vendas.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>❌ Vendas pelo WhatsApp</h3>
+                    <p>Processar pedidos manualmente toma tempo, gera erros e limita seu crescimento.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>❌ Sem Sistema Próprio</h3>
+                    <p>Depender de marketplaces significa pagar comissões altas e perder o controle da marca.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>❌ Custos Altíssimos</h3>
+                    <p>Desenvolver um sistema do zero custa mais de R$ 30.000 e leva meses.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>❌ Manutenção Cara</h3>
+                    <p>Programadores cobram R$ 150+/hora para qualquer alteração simples no site.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>❌ Sem Autoridade Online</h3>
+                    <p>Competidores com presença digital forte estão roubando seus clientes.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3 style="font-size: 2rem; color: var(--secondary); margin-bottom: 1rem;">É Hora de Mudar Isso!</h3>
+                <a href="#formulario" class="cta-primary">Quero Parar de Perder Vendas</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution">
+        <div class="container">
+            <h2 class="section-title">A Solução Completa que Você Precisa</h2>
+            <p style="text-align: center; font-size: 1.3rem; margin-bottom: 3rem;">Sistema profissional já pronto, testado e otimizado para vender energia solar</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Landing Page de Alta Conversão</h3>
+                    <p>Design moderno e persuasivo que converte visitantes em clientes. Otimizada para vendas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🛒</div>
+                    <h3>E-commerce Completo</h3>
+                    <p>Catálogo de produtos, carrinho, checkout, pagamento integrado e gestão de pedidos.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Assistente IA Integrado</h3>
+                    <p>Chatbot inteligente que responde dúvidas e ajuda clientes 24/7, aumentando conversões.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Calculadora Solar</h3>
+                    <p>Ferramenta que mostra economia e ROI instantaneamente, facilitando a decisão de compra.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Pagamento Integrado</h3>
+                    <p>Mercado Pago integrado - aceite cartão, PIX e boleto automaticamente.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>100% Responsivo</h3>
+                    <p>Funciona perfeitamente em celular, tablet e desktop. Seus clientes compram de qualquer lugar.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Velocidade Máxima</h3>
+                    <p>Site super rápido com hospedagem premium. Carregamento instantâneo = mais vendas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>SSL e Segurança</h3>
+                    <p>Certificado SSL incluso, site 100% seguro. Clientes compram com confiança.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Painel Administrativo</h3>
+                    <p>Gerencie produtos, pedidos, clientes e relatórios em um painel intuitivo.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>SEO Otimizado</h3>
+                    <p>Configurado para aparecer no Google. Mais visibilidade = mais clientes.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
+                    <h3>Email Marketing</h3>
+                    <p>Sistema de newsletter para recuperar vendas e fidelizar clientes.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Manutenção Gratuita</h3>
+                    <p>Atualizações, correções e melhorias sem custo adicional. Sempre atualizado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">Compare: Desenvolver x Nosso Sistema</h2>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Recurso</th>
+                            <th>Desenvolver do Zero</th>
+                            <th class="highlight-col">Nosso Sistema</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Custo Inicial</strong></td>
+                            <td>R$ 30.000 - R$ 80.000</td>
+                            <td class="highlight-col">R$ 549/mês</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tempo de Entrega</strong></td>
+                            <td>3 a 6 meses</td>
+                            <td class="highlight-col">Imediato</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hospedagem</strong></td>
+                            <td>R$ 200+/mês extra</td>
+                            <td class="highlight-col">✅ Incluso</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Manutenção</strong></td>
+                            <td>R$ 500+/mês</td>
+                            <td class="highlight-col">✅ Grátis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Atualizações</strong></td>
+                            <td>R$ 150+/hora</td>
+                            <td class="highlight-col">✅ Grátis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suporte</strong></td>
+                            <td>Não incluso</td>
+                            <td class="highlight-col">✅ 24/7</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Garantia</strong></td>
+                            <td>Nenhuma</td>
+                            <td class="highlight-col">✅ 30 dias</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teste Grátis</strong></td>
+                            <td>Impossível</td>
+                            <td class="highlight-col">Removido</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing">
+        <div class="container">
+            <h2 class="section-title">Investimento Que Se Paga Sozinho</h2>
+            <p style="text-align: center; font-size: 1.3rem;">Com apenas 1 venda extra por mês, o sistema já está pago</p>
+
+            <div class="pricing-table">
+                <div class="pricing-header">
+                    <h3>Plano Profissional</h3>
+                    <div class="pricing-price">R$ 549</div>
+                    <div>/mês sem contrato de fidelidade</div>
+                </div>
+
+                <div class="pricing-features">
+                    <ul class="feature-list">
+                        <li><span class="check-icon">✅</span> Landing Page Personalizada</li>
+                        <li><span class="check-icon">✅</span> E-commerce Completo</li>
+                        <li><span class="check-icon">✅</span> Catálogo Ilimitado de Produtos</li>
+                        <li><span class="check-icon">✅</span> Assistente IA com Gemini</li>
+                        <li><span class="check-icon">✅</span> Calculadora Solar Interativa</li>
+                        <li><span class="check-icon">✅</span> Pagamento Integrado (Mercado Pago)</li>
+                        <li><span class="check-icon">✅</span> Hospedagem Premium Inclusa</li>
+                        <li><span class="check-icon">✅</span> SSL e Segurança Total</li>
+                        <li><span class="check-icon">✅</span> Manutenção e Atualizações Gratuitas</li>
+                        <li><span class="check-icon">✅</span> Painel Administrativo Completo</li>
+                        <li><span class="check-icon">✅</span> Sistema de Cupons e Descontos</li>
+                        <li><span class="check-icon">✅</span> Gestão de Clientes e Pedidos</li>
+                        <li><span class="check-icon">✅</span> Email Marketing Integrado</li>
+                        <li><span class="check-icon">✅</span> SEO Otimizado</li>
+                        <li><span class="check-icon">✅</span> Suporte Técnico 24/7</li>
+                        <li><span class="check-icon">✅</span> Relatórios e Analytics</li>
+                        <li><span class="check-icon">✅</span> Backup Automático Diário</li>
+                        <li><span class="check-icon">✅</span> Garantia de 30 Dias</li>
+                    </ul>
+
+                    <div style="text-align: center;">
+                        <a href="#formulario" class="cta-primary">Começar Agora</a>
+                        <p style="margin-top: 1rem; color: #666;">💳 Garantia de 30 dias - Risco zero</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">O Que Nossos Clientes Dizem</h2>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">RS</div>
+                        <div>
+                            <strong>Ricardo Silva</strong>
+                            <div>Solar Tech RS</div>
+                        </div>
+                    </div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Em 2 meses com o sistema, triplicamos nossas vendas online. O melhor investimento que fizemos! A calculadora solar converte muito."</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">MC</div>
+                        <div>
+                            <strong>Marina Costa</strong>
+                            <div>EcoSolar Brasil</div>
+                        </div>
+                    </div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Antes gastávamos R$ 2.000/mês com programador. Agora por R$ 549 temos tudo pronto e funcionando perfeitamente. Economia absurda!"</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">PA</div>
+                        <div>
+                            <strong>Paulo Andrade</strong>
+                            <div>Solar Energy SP</div>
+                        </div>
+                    </div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"O suporte é excepcional. Qualquer dúvida é resolvida rapidamente. O sistema é profissional e nossos clientes amam a experiência."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guarantee -->
+    <section class="guarantee">
+        <div class="container">
+            <h2 class="section-title">Garantia Blindada de 30 Dias</h2>
+
+            <div class="guarantee-box">
+                <div class="guarantee-icon">🛡️</div>
+                <h3 style="font-size: 2rem; margin-bottom: 1rem;">100% Sem Risco</h3>
+                <p style="font-size: 1.2rem; line-height: 1.8;">
+                    Teste o sistema por 30 dias completos. Se por qualquer motivo você não estiver satisfeito, 
+                    devolvemos 100% do seu investimento. Sem perguntas, sem burocracia.
+                </p>
+                <p style="margin-top: 1.5rem; font-size: 1.1rem;">
+                    <strong>+ BÔNUS:</strong> Acesso imediato sem período de teste!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">Perguntas Frequentes</h2>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Preciso ter conhecimento técnico?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Não! O sistema é 100% gerenciável sem conhecimento técnico. Nosso painel administrativo é intuitivo e oferecemos treinamento completo.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        O sistema funciona com minha marca?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Sim! Personalizamos o sistema com seu logo, cores e identidade visual. O cliente final vê apenas sua marca.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Posso cancelar quando quiser?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Sim! Não há contrato de fidelidade. Você pode cancelar a qualquer momento sem multas ou taxas.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Como funciona o pagamento?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        O sistema já vem integrado com Mercado Pago. Você recebe os pagamentos diretamente na sua conta.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Quantos produtos posso cadastrar?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Ilimitados! Cadastre quantos produtos quiser sem custo adicional.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        E se eu precisar de personalizações?
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Personalizações básicas estão incluídas. Para customizações avançadas, oferecemos pacotes especiais.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta" id="formulario">
+        <div class="container">
+            <h2>Comece Hoje - Sua Empresa Online e Vendendo</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 2rem;">Apenas 3 vagas disponíveis este mês para garantir qualidade no suporte</p>
+
+            <div class="urgency">
+                <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">⏰ ATENÇÃO: OFERTA EXPIRA EM</div>
+                <div class="countdown" id="countdown2">
+                    <div class="countdown-item">
+                        <div id="hours2">00</div>
+                        <span>Horas</span>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="minutes2">00</div>
+                        <span>Minutos</span>
+                    </div>
+                    <div class="countdown-item">
+                        <div id="seconds2">00</div>
+                        <span>Segundos</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lead-form">
+                <h3 style="color: var(--dark); margin-bottom: 1.5rem;">Preencha e Receba Acesso Imediato</h3>
+                <form id="leadForm" action="#" method="POST">
+                    <input type="text" name="nome" placeholder="Seu nome completo" required>
+                    <input type="email" name="email" placeholder="Seu melhor email" required>
+                    <input type="tel" name="telefone" placeholder="WhatsApp com DDD" required>
+                    <input type="text" name="empresa" placeholder="Nome da sua empresa" required>
+                    <button type="submit" class="cta-primary" style="width: 100%;">
+                        🚀 QUERO MEU SISTEMA AGORA
+                    </button>
+                </form>
+                <p style="color: #666; font-size: 0.9rem; margin-top: 1rem;">
+                    🔒 Seus dados estão 100% seguros conosco
+                </p>
+            </div>
+
+            <div style="margin-top: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    ✅ Acesso imediato ao sistema<br>
+                    ✅ Suporte dedicado na implementação<br>
+                    ✅ Garantia de 30 dias
+                </p>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 15px; border: 2px solid var(--secondary);">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">🎯 Quer Ver o Sistema Funcionando?</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Veja uma demonstração completa do sistema em ação</p>
+                <a href="/" class="cta-primary" style="background: white; color: var(--primary); text-decoration: none; display: inline-block;">
+                    🚀 Ver Demonstração do Sistema
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sticky CTA -->
+    <div class="sticky-cta" id="stickyCta">
+        <div class="sticky-content">
+            <div class="sticky-text">
+                💰 Sistema Completo por R$ 549/mês - Garantia 30 Dias
+            </div>
+            <a href="#formulario" class="cta-primary" style="padding: 1rem 2rem; font-size: 1rem;">
+                Começar Agora
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Countdown Timer
+        function startCountdown() {
+            const endTime = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 horas
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                ['', '2'].forEach(suffix => {
+                    const h = document.getElementById('hours' + suffix);
+                    const m = document.getElementById('minutes' + suffix);
+                    const s = document.getElementById('seconds' + suffix);
+
+                    if (h) h.textContent = String(hours).padStart(2, '0');
+                    if (m) m.textContent = String(minutes).padStart(2, '0');
+                    if (s) s.textContent = String(seconds).padStart(2, '0');
+                });
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                }
+            }
+
+            updateCountdown();
+            const countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Sticky CTA
+        window.addEventListener('scroll', () => {
+            const stickyCta = document.getElementById('stickyCta');
+            if (window.scrollY > 800) {
+                stickyCta.classList.add('show');
+            } else {
+                stickyCta.classList.remove('show');
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Form Submit
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Aqui você pode integrar com seu sistema de CRM/Email
+            alert('Obrigado! Em breve nossa equipe entrará em contato.');
+
+            // Opcional: enviar dados para seu backend
+            // fetch('/api/lead', { method: 'POST', body: new FormData(this) });
+        });
+
+        // Iniciar countdown ao carregar
+        startCountdown();
+    </script>
+
+    <!-- Developer Credits -->
+    <footer style="background: #1a1a1a; color: white; padding: 2rem; text-align: center; border-top: 3px solid var(--secondary);">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h4 style="color: var(--secondary); margin-bottom: 1rem;">💻 Sistema Desenvolvido por João Layon</h4>
+            <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                <strong>Desenvolvedor Full Stack Especialista em E-commerce</strong>
+            </p>
+            <p style="margin-bottom: 1.5rem; opacity: 0.9;">
+                Desenvolvimento de sistemas web profissionais: E-commerce, Landing Pages, Sites Institucionais, Plataformas Customizadas
+            </p>
+            <p style="margin-bottom: 1rem;">
+                <strong>Tecnologias:</strong> Python • Flask • React • Node.js • WordPress • Integrações de Pagamento • IA
+            </p>
+            <a href="https://fullstackdavi.github.io/DigitalSoluctions/index.html" target="_blank" rel="noopener" 
+               style="background: var(--secondary); color: var(--dark); padding: 1rem 2rem; border-radius: 50px; text-decoration: none; display: inline-block; font-weight: 800; margin-top: 1rem; transition: all 0.3s; box-shadow: 0 5px 20px rgba(255,200,87,0.3);">
+                🚀 Precisa de um Sistema Profissional? Ver Meus Serviços
+            </a>
+            <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.7;">
+                © 2025 Sistema SolarPro - Desenvolvido por João Layon. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

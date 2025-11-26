@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin - SolarPro{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <button class="mobile-menu-toggle" aria-label="Menu">☰</button>
+    <div class="sidebar-overlay"></div>
+    
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-icon">☀️</span>
+            <div>
+                <div class="brand-text">SolarPro</div>
+                <span class="brand-badge">Admin</span>
+            </div>
+        </div>
+        
+        <ul class="sidebar-nav">
+            <li class="nav-item">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_produtos') }}" class="nav-link {% if 'produto' in request.endpoint %}active{% endif %}">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-label">Produtos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_pedidos') }}" class="nav-link {% if 'pedido' in request.endpoint %}active{% endif %}">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-label">Pedidos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_clientes') }}" class="nav-link {% if request.endpoint == 'admin_clientes' %}active{% endif %}">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Clientes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_carrinhos_abandonados') }}" class="nav-link {% if request.endpoint == 'admin_carrinhos_abandonados' %}active{% endif %}">
+                    <span class="nav-icon">🛍️</span>
+                    <span class="nav-label">Carrinhos Abandonados</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_cupons') }}" class="nav-link {% if 'cupom' in request.endpoint %}active{% endif %}">
+                    <span class="nav-icon">🎫</span>
+                    <span class="nav-label">Cupons</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_contatos') }}" class="nav-link {% if request.endpoint == 'admin_contatos' %}active{% endif %}">
+                    <span class="nav-icon">📧</span>
+                    <span class="nav-label">Contatos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_assistente') }}" class="nav-link {% if request.endpoint == 'admin_assistente' %}active{% endif %}">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-label">Assistente IA</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_configuracoes') }}" class="nav-link {% if request.endpoint == 'admin_configuracoes' %}active{% endif %}">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Configurações</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('index') }}" class="nav-link" target="_blank">
+                    <span class="nav-icon">🌐</span>
+                    <span class="nav-label">Ver Site</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('logout') }}" class="nav-link">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-label">Sair</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <span class="alert-icon">
+                        {% if category == 'success' %}✓
+                        {% elif category == 'error' %}✗
+                        {% elif category == 'warning' %}⚠
+                        {% else %}ℹ{% endif %}
+                    </span>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="admin-header">
+            <div class="header-title">
+                <span class="header-icon">{% block header_icon %}📊{% endblock %}</span>
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="header-actions">
+                <span>Olá, {{ current_user.nome }}</span>
+            </div>
+        </div>
+
+        <div class="admin-content">
+            {% block content %}{% endblock %}
+            
+            <div class="admin-footer">
+                <p>&copy; 2024 SolarPro Admin Panel. Todos os direitos reservados.</p>
+                <div class="admin-developer-credit">
+                    <strong>💻 Sistema desenvolvido por João Layon - Desenvolvedor Full Stack</strong>
+                    <br>
+                    Especialista em E-commerce, Sistemas Web e Integrações
+                    <br>
+                    <a href="https://fullstackdavi.github.io/DigitalSoluctions/index.html" target="_blank" rel="noopener" class="admin-developer-link" style="background: var(--secondary); color: var(--dark); padding: 0.5rem 1rem; border-radius: 25px; margin-top: 0.5rem; display: inline-block; font-weight: 700;">
+                        🚀 Precisa de um Sistema como Este? Ver Meus Serviços
+                    </a>
+                    <br>
+                    <span style="font-size: 0.85rem; opacity: 0.8; margin-top: 0.5rem; display: block;">
+                        Python • Flask • React • Node.js • WordPress • E-commerce Profissional
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

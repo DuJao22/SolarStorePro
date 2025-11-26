@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Meus Pedidos - SolarPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Meus Pedidos</h1>
+    </div>
+</section>
+
+<section class="orders-section">
+    <div class="container">
+        {% if pedidos %}
+            <div class="orders-list" data-aos="fade-up">
+                {% for pedido in pedidos %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <span class="order-number">Pedido #{{ pedido.id }}</span>
+                            <span class="order-date">{{ pedido.data|format_date }}</span>
+                        </div>
+                        <span class="order-status status-{{ pedido.status_pedido }}">
+                            {{ pedido.status_pedido|replace('_', ' ')|title }}
+                        </span>
+                    </div>
+                    
+                    <div class="order-products">
+                        {% set produtos = pedido.produtos_json|from_json %}
+                        {% for item in produtos[:3] %}
+                        <div class="order-product">
+                            <span class="product-qty">{{ item.quantidade }}x</span>
+                            <span class="product-name">{{ item.nome }}</span>
+                            <span class="product-price">{{ item.subtotal|format_price }}</span>
+                        </div>
+                        {% endfor %}
+                        {% if produtos|length > 3 %}
+                        <p class="more-products">+ {{ produtos|length - 3 }} outros itens</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="order-footer">
+                        <span class="order-total">Total: <strong>{{ pedido.total|format_price }}</strong></span>
+                        <a href="{{ url_for('ver_pedido', id=pedido.id) }}" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state" data-aos="fade-up">
+                <div class="empty-icon">📦</div>
+                <h2>Nenhum pedido encontrado</h2>
+                <p>Você ainda não realizou nenhum pedido. Que tal conferir nossos produtos?</p>
+                <a href="{{ url_for('produtos') }}" class="btn btn-primary btn-lg">Ver Produtos</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

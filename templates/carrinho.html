@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Carrinho de Compras - SolarPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Carrinho de Compras</h1>
+    </div>
+</section>
+
+<section class="cart-section">
+    <div class="container">
+        <div class="cart-layout">
+            <div class="cart-main" data-aos="fade-right">
+                <div class="cart-items-list" id="cartItemsList"></div>
+            </div>
+            
+            <aside class="cart-sidebar" data-aos="fade-left">
+                <div class="cart-summary-card">
+                    <h3>Resumo do Pedido</h3>
+                    <div class="summary-details">
+                        <div class="summary-line">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">R$ 0,00</span>
+                        </div>
+                        <div class="summary-line total">
+                            <span>Total</span>
+                            <span id="cartTotalPage">R$ 0,00</span>
+                        </div>
+                    </div>
+                    
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('checkout') }}" id="checkoutBtnPage" class="btn btn-primary btn-lg btn-block">
+                        Finalizar Compra
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('login', next=url_for('checkout')) }}" class="btn btn-primary btn-lg btn-block">
+                        Fazer Login para Comprar
+                    </a>
+                    <p class="login-hint">Você precisa estar logado para finalizar a compra</p>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('produtos') }}" class="btn btn-outline btn-block">
+                        Continuar Comprando
+                    </a>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function renderCartPage() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const container = document.getElementById('cartItemsList');
+    
+    if (cart.length === 0) {
+        container.innerHTML = `
+            <div class="empty-cart">
+                <div class="empty-icon">🛒</div>
+                <h2>Seu carrinho está vazio</h2>
+                <p>Adicione produtos para continuar com a compra</p>
+                <a href="/produtos" class="btn btn-primary btn-lg">Ver Produtos</a>
+            </div>
+        `;
+        document.getElementById('cartSubtotal').textContent = 'R$ 0,00';
+        document.getElementById('cartTotalPage').textContent = 'R$ 0,00';
+        const checkoutBtn = document.getElementById('checkoutBtnPage');
+        if (checkoutBtn) checkoutBtn.style.display = 'none';
+        return;
+    }
+    
+    let html = '';
+    let total = 0;
+    
+    cart.forEach((item, index) => {
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+        
+        html += `
+            <div class="cart-page-item">
+                <img src="/static/images/products/${item.imagem}" alt="${item.nome}"
+                     onerror="this.src='https://via.placeholder.com/120x120/0B6A4A/FFFFFF?text=Produto'">
+                <div class="item-details">
+                    <h3>${item.nome}</h3>
+                    <p class="item-price">${formatPrice(item.preco)}</p>
+                </div>
+                <div class="item-quantity">
+                    <button onclick="decreaseQtyPage(${index})">-</button>
+                    <span>${item.quantidade}</span>
+                    <button onclick="increaseQtyPage(${index})">+</button>
+                </div>
+                <div class="item-subtotal">
+                    ${formatPrice(subtotal)}
+                </div>
+                <button class="remove-btn" onclick="removeItemPage(${index})">×</button>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+    document.getElementById('cartSubtotal').textContent = formatPrice(total);
+    document.getElementById('cartTotalPage').textContent = formatPrice(total);
+}
+
+function increaseQtyPage(index) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart[index].quantidade++;
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCartPage();
+    updateCartCount();
+}
+
+function decreaseQtyPage(index) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart[index].quantidade > 1) {
+        cart[index].quantidade--;
+    } else {
+        cart.splice(index, 1);
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCartPage();
+    updateCartCount();
+}
+
+function removeItemPage(index) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCartPage();
+    updateCartCount();
+}
+
+renderCartPage();
+</script>
+{% endblock %}

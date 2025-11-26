@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Finalizar Compra | SolarPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Finalizar Compra</h1>
+    </div>
+</section>
+
+<section class="checkout-section">
+    <div class="container">
+        <div class="checkout-layout">
+            <div class="checkout-form" data-aos="fade-right">
+                <div class="checkout-card">
+                    <h3>Endereço de Entrega</h3>
+                    <form id="checkoutForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cep">CEP *</label>
+                                <input type="text" id="cep" name="cep" placeholder="00000-000" required
+                                       value="{{ current_user.cep or '' if current_user.is_authenticated else '' }}">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="endereco">Endereço *</label>
+                            <input type="text" id="endereco" name="endereco" placeholder="Rua, número, complemento" required
+                                   value="{{ current_user.endereco or '' if current_user.is_authenticated else '' }}">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group flex-2">
+                                <label for="cidade">Cidade *</label>
+                                <input type="text" id="cidade" name="cidade" required
+                                       value="{{ current_user.cidade or '' if current_user.is_authenticated else '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado *</label>
+                                <select id="estado" name="estado" required>
+                                    <option value="">UF</option>
+                                    {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+                                    <option value="{{ uf }}" {{ 'selected' if current_user.is_authenticated and current_user.estado == uf else '' }}>{{ uf }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="telefone">Telefone</label>
+                                <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999"
+                                       value="{{ current_user.telefone or '' if current_user.is_authenticated else '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf">CPF</label>
+                                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00"
+                                       value="{{ current_user.cpf or '' if current_user.is_authenticated else '' }}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="checkout-card">
+                    <h3>Cupom de Desconto</h3>
+                    <div class="coupon-form">
+                        <input type="text" id="cupomInput" placeholder="Digite o código do cupom">
+                        <button type="button" id="aplicarCupom" class="btn btn-outline">Aplicar</button>
+                    </div>
+                    <p id="cupomStatus" class="coupon-status"></p>
+                </div>
+            </div>
+            
+            <aside class="checkout-sidebar" data-aos="fade-left">
+                <div class="checkout-card">
+                    <h3>Resumo do Pedido</h3>
+                    <div id="checkoutItems" class="checkout-items"></div>
+                    
+                    <div class="checkout-summary">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="subtotalValue">R$ 0,00</span>
+                        </div>
+                        <div class="summary-row" id="discountRow" style="display: none;">
+                            <span>Desconto</span>
+                            <span id="discountValue" class="text-success">-R$ 0,00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span id="totalValue">R$ 0,00</span>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="finalizarPedido" class="btn btn-primary btn-lg btn-block">
+                        Finalizar Pedido
+                    </button>
+                    
+                    <div class="security-badges">
+                        <span>🔒 Pagamento Seguro</span>
+                        <span>📦 Entrega Garantida</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    const checkoutCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let cupomAplicado = null;
+    let descontoValor = 0;
+
+    function formatPriceCheckout(value) {
+        return parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function renderCheckout() {
+        const container = document.getElementById('checkoutItems');
+        
+        if (checkoutCart.length === 0) {
+            window.location.href = '/produtos';
+            return;
+        }
+        
+        let html = '';
+        let subtotal = 0;
+        
+        checkoutCart.forEach(item => {
+            const itemTotal = item.preco * item.quantidade;
+            subtotal += itemTotal;
+            
+            html += `
+                <div class="checkout-item">
+                    <img src="/static/images/products/${item.imagem}" alt="${item.nome}" 
+                         onerror="this.src='https://via.placeholder.com/60x60/0B6A4A/FFFFFF?text=P'">
+                    <div class="item-details">
+                        <span class="item-name">${item.nome}</span>
+                        <span class="item-qty">${item.quantidade}x ${formatPriceCheckout(item.preco)}</span>
+                    </div>
+                    <span class="item-total">${formatPriceCheckout(itemTotal)}</span>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+        const total = subtotal - descontoValor;
+        document.getElementById('subtotalValue').textContent = formatPriceCheckout(subtotal);
+        document.getElementById('totalValue').textContent = formatPriceCheckout(total);
+        
+        if (descontoValor > 0) {
+            document.getElementById('discountRow').style.display = 'flex';
+            document.getElementById('discountValue').textContent = '-' + formatPriceCheckout(descontoValor);
+        }
+    }
+
+    document.getElementById('aplicarCupom').addEventListener('click', async () => {
+        const codigo = document.getElementById('cupomInput').value.trim();
+        const statusEl = document.getElementById('cupomStatus');
+        
+        if (!codigo) {
+            statusEl.textContent = 'Digite um código de cupom.';
+            statusEl.className = 'coupon-status error';
+            return;
+        }
+        
+        const subtotal = checkoutCart.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+        
+        try {
+            const response = await fetch('/validar-cupom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ codigo, total: subtotal })
+            });
+            
+            const data = await response.json();
+            
+            if (data.valido) {
+                cupomAplicado = codigo;
+                descontoValor = data.desconto;
+                statusEl.textContent = `Cupom aplicado: ${data.descricao}`;
+                statusEl.className = 'coupon-status success';
+                renderCheckout();
+            } else {
+                statusEl.textContent = data.erro;
+                statusEl.className = 'coupon-status error';
+            }
+        } catch (error) {
+            statusEl.textContent = 'Erro ao validar cupom.';
+            statusEl.className = 'coupon-status error';
+        }
+    });
+
+    document.getElementById('finalizarPedido').addEventListener('click', async () => {
+        const form = document.getElementById('checkoutForm');
+        
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        
+        const btn = document.getElementById('finalizarPedido');
+        btn.disabled = true;
+        btn.textContent = 'Processando...';
+        
+        const dados = {
+            produtos: checkoutCart,
+            endereco: document.getElementById('endereco').value,
+            cidade: document.getElementById('cidade').value,
+            estado: document.getElementById('estado').value,
+            cep: document.getElementById('cep').value,
+            telefone: document.getElementById('telefone').value,
+            cpf: document.getElementById('cpf').value,
+            cupom: cupomAplicado || ''
+        };
+        
+        try {
+            const response = await fetch('/processar-pedido', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            
+            const data = await response.json();
+            
+            if (data.sucesso) {
+                localStorage.removeItem('cart');
+                
+                const pagamentoResp = await fetch('/criar-pagamento', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pedido_id: data.pedido_id })
+                });
+                
+                const pagamentoData = await pagamentoResp.json();
+                
+                if (pagamentoData.init_point) {
+                    window.location.href = pagamentoData.init_point;
+                } else if (pagamentoData.erro) {
+                    alert('Pedido criado com sucesso! ' + pagamentoData.erro);
+                    window.location.href = '/pedido/' + data.pedido_id;
+                }
+            } else {
+                alert(data.erro || 'Erro ao processar pedido.');
+                btn.disabled = false;
+                btn.textContent = 'Finalizar Pedido';
+            }
+        } catch (error) {
+            alert('Erro ao processar pedido.');
+            btn.disabled = false;
+            btn.textContent = 'Finalizar Pedido';
+        }
+    });
+
+    renderCheckout();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Produtos - Admin SolarPro{% endblock %}
+{% block page_title %}Produtos{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+    <a href="{{ url_for('admin_produto_novo') }}" class="btn btn-primary">+ Novo Produto</a>
+</div>
+
+<div class="dashboard-card">
+    <div class="card-body">
+        <table class="data-table full-width">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produto in produtos %}
+                <tr>
+                    <td>
+                        <img src="{{ product_image_url(produto.imagem) }}" alt="{{ produto.nome }}" class="table-thumb">
+                    </td>
+                    <td>
+                        <strong>{{ produto.nome }}</strong>
+                        {% if produto.destaque %}<span class="badge badge-gold">Destaque</span>{% endif %}
+                    </td>
+                    <td>{{ produto.categoria }}</td>
+                    <td>
+                        {{ produto.preco|format_price }}
+                        {% if produto.preco_promocional %}
+                        <br><small class="text-success">Promo: {{ produto.preco_promocional|format_price }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="{{ 'text-danger' if produto.estoque <= produto.estoque_minimo else 'text-success' }}">
+                            {{ produto.estoque }} un.
+                        </span>
+                    </td>
+                    <td>
+                        {% if produto.ativo %}
+                        <span class="badge badge-success">Ativo</span>
+                        {% else %}
+                        <span class="badge badge-danger">Inativo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin_produto_editar', id=produto.id) }}" class="btn btn-sm btn-outline">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

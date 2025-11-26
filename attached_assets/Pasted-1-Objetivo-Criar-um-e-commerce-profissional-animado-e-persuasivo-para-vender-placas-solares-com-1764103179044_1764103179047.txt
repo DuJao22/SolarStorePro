@@ -1,0 +1,192 @@
+1 — Objetivo
+
+Criar um e-commerce profissional, animado e persuasivo para vender placas solares, com:
+
+apresentação institucional atraente;
+
+catálogo de produtos elegante e conversor;
+
+experiência animada, fluida e responsiva;
+
+foco em credibilidade (depoimentos, certificações, projetos);
+
+otimização para performance, SEO e conversão.
+
+2 — Estrutura de páginas (sitemap)
+
+Home (Hero + USP + produtos em destaque + provas sociais)
+
+Sobre a empresa (história, equipe, certificações, responsabilidade ambiental)
+
+Produtos (grade filtrável + vista em lista e grade)
+
+Página do produto (galeria, especificações técnicas, calculadora de ROI, upsells)
+
+Projetos / Cases (fotos antes/depois, economia gerada)
+
+Simulador / Calculadora (consumo → painel necessário → ROI estimado)
+
+Blog (conteúdo técnico e SEO)
+
+FAQ / Suporte técnico
+
+Contato / Orçamento (formulário + agendamento)
+
+Checkout seguro (cart, endereço, pagamento, confirmação)
+
+Política, garantias, assistência técnica
+
+3 — Experiência visual / UI ideas
+
+Layout de tela inteira no hero com vídeo curto de usina/placa (loop) ou ilustração animada SVG.
+
+Tipografia moderna com bom contraste (ex: Inter + Merriweather para títulos).
+
+Paleta sugerida: verde-escuro (#0B6A4A), amarelo-ouro suave (#FFC857), cinza-escuro e branco.
+
+Microinterações: hover nos cards, animação suave ao adicionar ao carrinho, progress indicator no checkout.
+
+Uso de cards com sombras suaves, bordas arredondadas (2xl) e espaçamento generoso.
+
+Fotos de produto em alta resolução, com visão 360° ou carrossel.
+
+4 — Animações (técnicas e onde usar)
+
+Hero: parallaxe leve + fade-in dos elementos (GSAP ou Framer Motion).
+
+On-scroll: elementos que surgem com translateY e opacity (AOS ou intersection observer + Framer Motion).
+
+Product cards: hover transform (scale 1.03) + shadow animado.
+
+Calculadora: animações de transição entre etapas (slide left/right).
+
+Confirmação de compra: animação modal de “check” com partículas sutis.
+
+Evite animações pesadas no mobile; sempre degrade para animação simples.
+
+5 — UX focado em conversão
+
+CTA claro e repetido: “Pedir Orçamento”, “Simular Economia”, “Comprar”.
+
+Barra de navegação sticky com CTA colorido.
+
+Breadcrumbs nas páginas de produto.
+
+Reviews com estrelas e fotos de clientes.
+
+Economia estimada na própria listagem (ex: “Economize até R$ X/ano”).
+
+Checkout em 1–2 passos: simplificar campos, permitir checkout como convidado.
+
+Upsell: painel + instalação + garantia estendida.
+
+6 — Funcionalidades técnicas
+
+Carrinho persistente (localStorage) e login opcional.
+
+Integração com pagamentos: Stripe, Pagar.me, MercadoPago (segundo sua preferência).
+
+Integração com ERP/estoque (opcional).
+
+Headless CMS para conteúdo (Sanity, Strapi ou WordPress headless).
+
+CDN para imagens (Cloudinary / Imgix) e compressão automática.
+
+Sitemap + robots.txt + schema.org/Product + rich snippets para preço/estoque.
+
+Monitoramento: Google Analytics 4, Search Console, Hotjar/FullStory.
+
+7 — Tech stack recomendado (produção profissional)
+
+Frontend: Next.js (React) + Tailwind CSS + Framer Motion
+
+Backend (e-commerce): Shopify (Headless) ou Medusa / Commerce.js ou WooCommerce Headless — avalie custo e controle.
+
+Pagamento: Stripe (global) ou gateway local.
+
+CMS: Sanity ou Contentful (para landing, blog, conteúdo dinâmico).
+
+Deploy: Vercel ou Netlify (frontend), backend em Node/Heroku/AWS.
+
+Email: SendGrid ou SparkPost para notificações.
+
+Imagens: Cloudinary + lazy-loading.
+
+8 — Exemplo de hierarquia do Hero (copy pronta)
+
+Título:
+Energia solar que reduz sua conta — e o impacto ambiental.
+
+Subtítulo:
+Placas solares de alta eficiência, instalação especializada e retorno rápido do investimento. Economize até R$ 3.200/ano — calcule em 1 minuto.
+
+CTA primário: Simular economia grátis
+CTA secundário: Ver produtos
+
+9 — Componentes e especificações de UI (lista curta)
+
+Header (logo, nav, busca, carrinho)
+
+Hero full-bleed com video/SVG
+
+Seção de benefícios com ícones (3–4)
+
+Carousel de produtos em destaque
+
+Grid filtrável (categoria, potência, preço, eficiência)
+
+Ficha técnica de produto com download de PDF
+
+Calculadora interativa
+
+Testimonials carousel + logos de clientes/parceiros
+
+Footer com links, contato, newsletter
+
+10 — SEO & Performance
+
+Titles e meta descriptions únicos por página.
+
+Schema.org (Product, Review, Organization).
+
+Imagens responsivas (srcset) e lazy-loading.
+
+Critical CSS e pré-carregamento de fontes.
+
+Lighthouse target: Performance ≥ 80, Accessibility ≥ 90.
+
+Páginas AMP para artigos se fizer sentido.
+
+11 — Processo de produção (fases)
+
+Brief completo + benchmarking (sites que você gosta).
+
+Wireframes (mobile + desktop).
+
+Design de alta fidelidade (Figma).
+
+Prototipagem animada (interactions).
+
+Desenvolvimento Frontend (Next.js + Tailwind).
+
+Integração com backend/pagamento.
+
+QA, testes de usabilidade e performance.
+
+Lançamento e acompanhamento (SEO/ads).
+
+12 — Checklist mínimo para lançamento
+
+ Página inicial responsiva com hero + CTA
+
+ 10 produtos com imagens + specs
+
+ Checkout integrado e testado
+
+ Calculadora funcionando
+
+ SSL ativo e políticas publicadas
+
+ Google Analytics + Search Console
+
+ Testes de usabilidade em mobile

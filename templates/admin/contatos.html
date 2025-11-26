@@ -1,0 +1,55 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Contatos - Admin SolarPro{% endblock %}
+{% block page_title %}Contatos{% endblock %}
+
+{% block content %}
+<div class="dashboard-card">
+    <div class="card-body">
+        {% if contatos %}
+        <table class="data-table full-width">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Assunto</th>
+                    <th>Mensagem</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contato in contatos %}
+                <tr class="{{ 'pending' if not contato.respondido else '' }}">
+                    <td>{{ contato.data|format_date }}</td>
+                    <td><strong>{{ contato.nome }}</strong></td>
+                    <td><a href="mailto:{{ contato.email }}">{{ contato.email }}</a></td>
+                    <td>{{ contato.telefone or '-' }}</td>
+                    <td>{{ contato.assunto or 'Geral' }}</td>
+                    <td class="message-cell">{{ contato.mensagem[:100] }}{% if contato.mensagem|length > 100 %}...{% endif %}</td>
+                    <td>
+                        {% if contato.respondido %}
+                        <span class="badge badge-success">Respondido</span>
+                        {% else %}
+                        <span class="badge badge-warning">Pendente</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not contato.respondido %}
+                        <form method="POST" action="{{ url_for('admin_marcar_respondido', id=contato.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-sm btn-outline">Marcar Respondido</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-text">Nenhum contato recebido.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

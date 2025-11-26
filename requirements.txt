@@ -1,0 +1,9 @@
+Flask==3.0.0
+Flask-Mail==0.9.1
+gunicorn==21.2.0
+Werkzeug==3.0.1
+Pillow
+flask-login
+mercadopago
+openai
+google-generativeai

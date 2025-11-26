@@ -1,0 +1,73 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Configurações - Admin SolarPro{% endblock %}
+{% block page_title %}Configurações{% endblock %}
+
+{% block content %}
+<form method="POST" class="settings-form">
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Integração Mercado Pago</h3>
+        </div>
+        <div class="card-body">
+            <p class="info-text">Configure as credenciais do Mercado Pago para receber pagamentos.</p>
+            
+            {% for config in configs if 'mercadopago' in config.chave %}
+            <div class="form-group">
+                <label for="config_{{ config.chave }}">{{ config.descricao }}</label>
+                {% if config.tipo == 'senha' %}
+                <input type="password" id="config_{{ config.chave }}" name="config_{{ config.chave }}" 
+                       value="{{ config.valor }}" placeholder="••••••••">
+                {% elif config.tipo == 'boolean' %}
+                <select id="config_{{ config.chave }}" name="config_{{ config.chave }}">
+                    <option value="1" {{ 'selected' if config.valor == '1' else '' }}>Sim (Sandbox)</option>
+                    <option value="0" {{ 'selected' if config.valor == '0' else '' }}>Não (Produção)</option>
+                </select>
+                {% else %}
+                <input type="text" id="config_{{ config.chave }}" name="config_{{ config.chave }}" value="{{ config.valor }}">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Assistente IA (OpenAI)</h3>
+        </div>
+        <div class="card-body">
+            <p class="info-text">Configure a chave da API OpenAI para usar o assistente inteligente.</p>
+            
+            {% for config in configs if 'openai' in config.chave %}
+            <div class="form-group">
+                <label for="config_{{ config.chave }}">{{ config.descricao }}</label>
+                <input type="password" id="config_{{ config.chave }}" name="config_{{ config.chave }}" 
+                       value="{{ config.valor }}" placeholder="sk-...">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Configurações da Loja</h3>
+        </div>
+        <div class="card-body">
+            {% for config in configs if 'loja' in config.chave or 'frete' in config.chave or 'estoque' in config.chave or 'carrinho' in config.chave %}
+            <div class="form-group">
+                <label for="config_{{ config.chave }}">{{ config.descricao }}</label>
+                {% if config.tipo == 'numero' %}
+                <input type="number" id="config_{{ config.chave }}" name="config_{{ config.chave }}" value="{{ config.valor }}">
+                {% else %}
+                <input type="text" id="config_{{ config.chave }}" name="config_{{ config.chave }}" value="{{ config.valor }}">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg">Salvar Configurações</button>
+    </div>
+</form>
+{% endblock %}

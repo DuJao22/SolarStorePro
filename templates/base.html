@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}Energia solar de alta qualidade. Reduza sua conta de luz em até 95% com placas solares profissionais.{% endblock %}">
+    <title>{% block title %}SolarPro - Energia Solar Profissional{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{{ url_for('index') }}" class="logo">
+                    <span class="logo-icon">☀</span>
+                    <span class="logo-text">Solar<strong>Pro</strong></span>
+                </a>
+
+                <nav class="nav" id="nav">
+                    <ul class="nav-menu">
+                        <li><a href="{{ url_for('index') }}" class="nav-link">Início</a></li>
+                        <li><a href="{{ url_for('produtos') }}" class="nav-link">Produtos</a></li>
+                        <li><a href="{{ url_for('calculadora') }}" class="nav-link">Calculadora</a></li>
+                        <li><a href="{{ url_for('sobre') }}" class="nav-link">Sobre</a></li>
+                        <li><a href="{{ url_for('contato') }}" class="nav-link">Contato</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="Buscar produtos..." class="search-input">
+                            <div class="search-results" id="searchResults"></div>
+                        </div>
+                        <button class="btn-icon" id="cartBtn" aria-label="Carrinho">
+                            🛒 <span class="cart-count" id="cartCount">0</span>
+                        </button>
+                        {% if current_user.is_authenticated %}
+                            <div class="user-menu">
+                                <button class="btn-icon user-btn">👤</button>
+                                <div class="user-dropdown">
+                                    <span class="user-name">{{ current_user.nome }}</span>
+                                    {% if current_user.is_admin() %}
+                                        <a href="{{ url_for('admin_dashboard') }}">Painel Admin</a>
+                                    {% endif %}
+                                    <a href="{{ url_for('minha_conta') }}">Minha Conta</a>
+                                    <a href="{{ url_for('meus_pedidos') }}">Meus Pedidos</a>
+                                    <a href="{{ url_for('logout') }}">Sair</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn btn-outline btn-sm">Entrar</a>
+                            <a href="{{ url_for('cadastro') }}" class="btn btn-primary btn-sm">Cadastrar</a>
+                        {% endif %}
+                    </div>
+                </nav>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                        <button class="flash-close">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Sobre a Empresa -->
+                <div class="footer-section">
+                    <h4>☀️ SolarPro</h4>
+                    <p>Energia solar de alta qualidade com instalação profissional. Economia real, sustentabilidade garantida.</p>
+                    <div class="footer-stats">
+                        <div class="stat-item">
+                            <strong>500+</strong>
+                            <span>Projetos Realizados</span>
+                        </div>
+                        <div class="stat-item">
+                            <strong>98%</strong>
+                            <span>Satisfação</span>
+                        </div>
+                    </div>
+                    <div class="footer-certifications">
+                        <span class="cert-badge">🏆 Certificada INMETRO</span>
+                        <span class="cert-badge">✓ Garantia Estendida</span>
+                    </div>
+                </div>
+
+                <!-- Produtos -->
+                <div class="footer-section">
+                    <h4>Produtos</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('produtos') }}?categoria=Painel Solar">⚡ Painéis Residenciais</a></li>
+                        <li><a href="{{ url_for('produtos') }}?categoria=Painel Solar">🏢 Painéis Comerciais</a></li>
+                        <li><a href="{{ url_for('produtos') }}?categoria=Inversor">🔌 Inversores</a></li>
+                        <li><a href="{{ url_for('produtos') }}?categoria=Kit Completo">📦 Kits Completos</a></li>
+                        <li><a href="{{ url_for('calculadora') }}">🧮 Calcular Economia</a></li>
+                    </ul>
+                </div>
+
+                <!-- Empresa -->
+                <div class="footer-section">
+                    <h4>Empresa</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('sobre') }}">🏢 Sobre Nós</a></li>
+                        <li><a href="{{ url_for('sobre') }}#equipe">👥 Nossa Equipe</a></li>
+                        <li><a href="{{ url_for('sobre') }}#projetos">📊 Projetos Realizados</a></li>
+                        <li><a href="{{ url_for('contato') }}">📞 Contato</a></li>
+                        <li><a href="{{ url_for('contato') }}#orcamento">💼 Solicitar Orçamento</a></li>
+                    </ul>
+                </div>
+
+                <!-- Atendimento & Contato -->
+                <div class="footer-section">
+                    <h4>Atendimento</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <span class="contact-icon">📞</span>
+                            <div>
+                                <strong>Telefone</strong>
+                                <a href="tel:+5511999999999">(11) 99999-9999</a>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="contact-icon">✉️</span>
+                            <div>
+                                <strong>Email</strong>
+                                <a href="mailto:contato@solarpro.com.br">contato@solarpro.com.br</a>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="contact-icon">📍</span>
+                            <div>
+                                <strong>Endereço</strong>
+                                <span>São Paulo, SP</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="contact-icon">🕐</span>
+                            <div>
+                                <strong>Horário</strong>
+                                <span>Seg-Sex: 8h-18h</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="footer-social">
+                        <a href="#" title="WhatsApp" class="social-link whatsapp">💬</a>
+                        <a href="#" title="Instagram" class="social-link instagram">📷</a>
+                        <a href="#" title="Facebook" class="social-link facebook">👍</a>
+                        <a href="#" title="LinkedIn" class="social-link linkedin">💼</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="footer-newsletter">
+                <div class="newsletter-content">
+                    <div class="newsletter-text">
+                        <h4>📬 Receba Ofertas Exclusivas</h4>
+                        <p>Cadastre-se e ganhe 5% OFF na primeira compra + novidades sobre energia solar</p>
+                    </div>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Seu melhor e-mail" required>
+                        <button type="submit" class="btn btn-primary">Inscrever-se</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pagamentos e Segurança -->
+            <div class="footer-trust">
+                <div class="trust-section">
+                    <h5>💳 Formas de Pagamento</h5>
+                    <div class="payment-methods">
+                        <span>Visa</span>
+                        <span>Mastercard</span>
+                        <span>Pix</span>
+                        <span>Boleto</span>
+                    </div>
+                </div>
+                <div class="trust-section">
+                    <h5>🔒 Segurança</h5>
+                    <div class="security-badges">
+                        <span>SSL Certificado</span>
+                        <span>Dados Protegidos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <p>&copy; 2025 SolarPro. Todos os direitos reservados.</p>
+                    <div class="legal-links">
+                        <a href="/termos">Termos de Uso</a>
+                        <span>•</span>
+                        <a href="/privacidade">Política de Privacidade</a>
+                        <span>•</span>
+                        <a href="/trocas">Trocas e Devoluções</a>
+                    </div>
+                </div>
+
+                <div class="developer-credit">
+                    <p>
+                        <strong>💻 Sistema Desenvolvido por</strong> 
+                        <a href="https://fullstackdavi.github.io/DigitalSoluctions/index.html" target="_blank" rel="noopener" class="developer-link">
+                            João Layon - Desenvolvedor Full Stack
+                            <span class="badge">Especialista em E-commerce</span>
+                        </a>
+                    </p>
+                    <p class="dev-skills">Python • Flask • React • Node.js • WordPress • E-commerce Profissional</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="https://fullstackdavi.github.io/DigitalSoluctions/index.html" target="_blank" class="services-link" style="background: var(--secondary); color: var(--dark); padding: 0.75rem 1.5rem; border-radius: 50px; text-decoration: none; display: inline-block; font-weight: 700; transition: all 0.3s;">
+                            🚀 Precisa de um Sistema como Este? Ver Meus Serviços →
+                        </a>
+                    </div>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                        Desenvolvimento de E-commerce, Landing Pages, Sites Institucionais e Sistemas Web Personalizados
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        document.querySelectorAll('.flash-close').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.remove();
+            });
+        });
+        setTimeout(() => {
+            document.querySelectorAll('.flash-message').forEach(msg => msg.remove());
+        }, 5000);
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

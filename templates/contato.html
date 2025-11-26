@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Contato - Solicite seu Orçamento | SolarPro{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Entre em Contato</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Nossa equipe está pronta para atender você</p>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-layout">
+            <div class="contact-info" data-aos="fade-right">
+                <h2>Fale Conosco</h2>
+                <p>Preencha o formulário ou entre em contato através dos nossos canais.</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="method-icon">📞</div>
+                        <div class="method-content">
+                            <strong>Telefone</strong>
+                            <p>(11) 4000-1234</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">📧</div>
+                        <div class="method-content">
+                            <strong>Email</strong>
+                            <p>contato@solarpro.com.br</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">📍</div>
+                        <div class="method-content">
+                            <strong>Endereço</strong>
+                            <p>Av. Paulista, 1000 - São Paulo/SP</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon">⏰</div>
+                        <div class="method-content">
+                            <strong>Horário</strong>
+                            <p>Seg-Sex: 8h às 18h<br>Sáb: 9h às 13h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form-container" data-aos="fade-left">
+                {% if sucesso %}
+                <div class="success-message">
+                    <h3>✓ Mensagem Enviada!</h3>
+                    <p>Recebemos seu contato e retornaremos em breve.</p>
+                </div>
+                {% endif %}
+                
+                <form method="POST" action="{{ url_for('contato') }}" class="contact-form">
+                    <h3>Solicite um Orçamento</h3>
+                    
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefone">Telefone *</label>
+                            <input type="tel" id="telefone" name="telefone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mensagem">Mensagem *</label>
+                        <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Conte-nos sobre seu projeto ou dúvidas..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg">Enviar Mensagem</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

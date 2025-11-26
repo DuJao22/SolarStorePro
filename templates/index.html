@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}SolarPro - Energia Solar que Reduz sua Conta e o Impacto Ambiental{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-background">
+        <video autoplay muted loop playsinline preload="auto" id="heroVideo">
+            <source src="https://media.istockphoto.com/id/1130184194/pt/v%C3%ADdeo/sunrise-and-technologic-solar-energy-panels.mp4?s=mp4-640x640-is&k=20&c=7zqaBncnijUZ_I5YMQn10JnfeUL-tc0m_3MYB4RWC38=" type="video/mp4">
+            Seu navegador não suporta vídeos HTML5.
+        </video>
+        <div class="hero-overlay"></div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <h1 class="hero-title">Energia solar que reduz sua conta — e o impacto ambiental.</h1>
+            <p class="hero-subtitle">Placas solares de alta eficiência, instalação especializada e retorno rápido do investimento. Economize até R$ 3.200/ano — calcule em 1 minuto.</p>
+            <div class="hero-cta">
+                <a href="{{ url_for('calculadora') }}" class="btn btn-primary btn-lg">Simular Economia Grátis</a>
+                <a href="{{ url_for('produtos') }}" class="btn btn-secondary btn-lg">Ver Produtos</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Role para descobrir</span>
+        <div class="scroll-arrow">↓</div>
+    </div>
+</section>
+
+<section class="benefits">
+    <div class="container">
+        <div class="benefits-grid">
+            <div class="benefit-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="benefit-icon">💰</div>
+                <h3>Economia Garantida</h3>
+                <p>Reduza até 95% da sua conta de luz com sistemas de alta eficiência</p>
+            </div>
+            <div class="benefit-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="benefit-icon">🌱</div>
+                <h3>Sustentável</h3>
+                <p>Energia limpa e renovável. Contribua para um planeta melhor</p>
+            </div>
+            <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="benefit-icon">⚡</div>
+                <h3>Alta Eficiência</h3>
+                <p>Painéis com até 22.8% de eficiência e 25 anos de garantia</p>
+            </div>
+            <div class="benefit-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="benefit-icon">🏆</div>
+                <h3>ROI Rápido</h3>
+                <p>Retorno do investimento em média de 4 a 6 anos</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="featured-products">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">Produtos em Destaque</h2>
+            <p class="section-subtitle">Selecionamos as melhores soluções para sua necessidade</p>
+        </div>
+        
+        <div class="products-grid">
+            {% for produto in produtos %}
+            <div class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='images/products/' + produto.imagem.split('/')[-1]) }}" 
+                         alt="{{ produto.nome }}" 
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/400x300/0B6A4A/FFFFFF?text={{ produto.nome[:20] }}'">
+                    <span class="product-badge">{{ produto.garantia }} anos</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">{{ produto.categoria }}</span>
+                    <h3 class="product-name">{{ produto.nome }}</h3>
+                    <p class="product-desc">{{ produto.descricao[:80] }}...</p>
+                    <div class="product-specs">
+                        <span class="spec">⚡ {{ produto.potencia_watts }}W</span>
+                        <span class="spec">📊 {{ produto.eficiencia }}%</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-label">A partir de</span>
+                            <span class="price-value">{{ produto.preco|format_price }}</span>
+                        </div>
+                        <div class="product-actions">
+                            <a href="{{ url_for('produto', id=produto.id) }}" class="btn btn-outline">Ver Detalhes</a>
+                            <button class="btn btn-primary add-to-cart" 
+                                    data-id="{{ produto.id }}"
+                                    data-nome="{{ produto.nome }}"
+                                    data-preco="{{ produto.preco }}"
+                                    data-imagem="{{ produto.imagem }}">
+                                Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="section-cta" data-aos="fade-up">
+            <a href="{{ url_for('produtos') }}" class="btn btn-primary btn-lg">Ver Todos os Produtos</a>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">O Que Nossos Clientes Dizem</h2>
+            <p class="section-subtitle">Mais de 500 projetos realizados com excelência</p>
+        </div>
+        
+        <div class="testimonials-grid">
+            {% for depoimento in depoimentos %}
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                <div class="testimonial-stars">
+                    {% for i in range(depoimento.avaliacao) %}⭐{% endfor %}
+                </div>
+                <p class="testimonial-text">"{{ depoimento.texto }}"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="{{ url_for('static', filename='images/testimonials/' + depoimento.foto) }}" 
+                             alt="{{ depoimento.nome }}"
+                             onerror="this.src='https://ui-avatars.com/api/?name={{ depoimento.nome }}&background=0B6A4A&color=fff'">
+                    </div>
+                    <div class="author-info">
+                        <strong>{{ depoimento.nome }}</strong>
+                        <span>{{ depoimento.cargo }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="projects">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-title">Projetos Realizados</h2>
+            <p class="section-subtitle">Transformando energia em economia real</p>
+        </div>
+        
+        <div class="projects-grid">
+            {% for projeto in projetos %}
+            <div class="project-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                <div class="project-images">
+                    <img src="{{ url_for('static', filename='images/projects/' + projeto.imagem_depois) }}" 
+                         alt="{{ projeto.titulo }}"
+                         onerror="this.src='https://via.placeholder.com/600x400/0B6A4A/FFFFFF?text=Projeto+Solar'">
+                </div>
+                <div class="project-info">
+                    <h3>{{ projeto.titulo }}</h3>
+                    <p>{{ projeto.descricao }}</p>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <strong>{{ projeto.potencia_instalada / 1000 }}kWp</strong>
+                            <span>Potência Instalada</span>
+                        </div>
+                        <div class="stat">
+                            <strong>R$ {{ "%.0f"|format(projeto.economia_mensal) }}</strong>
+                            <span>Economia Mensal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Developer Showcase Section -->
+<section style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 4rem 2rem; margin: 4rem 0;">
+    <div class="container" style="max-width: 1000px; margin: 0 auto; text-align: center;">
+        <div data-aos="fade-up">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
+            <h2 style="color: var(--secondary); font-size: 2.5rem; margin-bottom: 1rem;">Sistema Desenvolvido por João Layon</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 1rem;"><strong>Desenvolvedor Full Stack Especialista em E-commerce</strong></p>
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem; opacity: 0.95;">
+                Este sistema completo de e-commerce foi desenvolvido do zero com as melhores práticas de programação,
+                design responsivo, integrações de pagamento, assistente IA e otimizações para conversão.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 2rem 0; text-align: center;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛒</div>
+                    <strong>E-commerce Completo</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤖</div>
+                    <strong>IA Integrada</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">💳</div>
+                    <strong>Pagamentos</strong>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 15px;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                    <strong>Painel Admin</strong>
+                </div>
+            </div>
+
+            <div style="background: rgba(255,200,87,0.1); border: 2px solid var(--secondary); border-radius: 20px; padding: 2rem; margin: 2rem 0;">
+                <p style="font-size: 1.2rem; margin-bottom: 1rem;">
+                    <strong>Tecnologias Utilizadas:</strong>
+                </p>
+                <p style="font-size: 1rem; opacity: 0.9;">
+                    Python • Flask • JavaScript • React • Node.js • WordPress • SQLite • APIs • Integrações de Pagamento • IA (Gemini)
+                </p>
+            </div>
+
+            <a href="https://fullstackdavi.github.io/DigitalSoluctions/index.html" target="_blank" rel="noopener" 
+               class="btn btn-primary btn-lg" 
+               style="background: var(--secondary); color: var(--dark); font-size: 1.3rem; padding: 1.5rem 3rem; box-shadow: 0 10px 30px rgba(255,200,87,0.4); text-decoration: none; display: inline-block; margin-top: 1rem;">
+                🚀 Precisa de um Sistema Profissional como Este? Ver Meus Serviços
+            </a>
+
+            <p style="margin-top: 1.5rem; font-size: 1rem; opacity: 0.8;">
+                Desenvolvimento de E-commerce, Landing Pages, Sites Institucionais, Plataformas Web Customizadas e Integrações
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content" data-aos="zoom-in">
+            <h2>Pronto para Economizar com Energia Solar?</h2>
+            <p>Descubra quanto você pode economizar em menos de 1 minuto</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('calculadora') }}" class="btn btn-primary btn-lg">Calcular Minha Economia</a>
+                <a href="{{ url_for('contato') }}" class="btn btn-outline btn-lg">Falar com Especialista</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

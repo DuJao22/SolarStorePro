@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora de Economia Solar | SolarPro{% endblock %}
+
+{% block content %}
+<section class="page-header calculator-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Calculadora de Economia Solar</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Descubra quanto você pode economizar com energia solar</p>
+    </div>
+</section>
+
+<section class="calculator-section-modern">
+    <div class="container">
+        <div class="calculator-wrapper" data-aos="fade-up">
+            <div class="calculator-form-modern">
+                <div class="calculator-icon">☀️</div>
+                <h2>Simule sua Economia</h2>
+                <p class="calculator-subtitle">Preencha os dados da sua conta de energia para calcular</p>
+                
+                <div class="calculator-inputs">
+                    <div class="input-group-modern">
+                        <label for="consumo">
+                            <span class="input-icon">⚡</span>
+                            Consumo Mensal (kWh)
+                        </label>
+                        <input type="number" id="consumo" placeholder="Ex: 450" min="0" required>
+                        <span class="input-hint">Encontre esse valor na sua conta de luz</span>
+                    </div>
+                    
+                    <div class="input-group-modern">
+                        <label for="tarifa">
+                            <span class="input-icon">💲</span>
+                            Tarifa Média (R$/kWh)
+                        </label>
+                        <input type="number" id="tarifa" step="0.01" value="0.85" min="0" required>
+                        <span class="input-hint">Valor médio em São Paulo: R$ 0,85/kWh</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary btn-lg btn-glow" onclick="calcularROI()">
+                    <span class="btn-icon">🔍</span>
+                    Calcular Minha Economia
+                </button>
+            </div>
+            
+            <div class="calculator-results-modern" id="results" style="display: none;">
+                <div class="results-header">
+                    <h2>Seu Sistema Solar Ideal</h2>
+                    <button class="btn-recalculate" onclick="document.getElementById('results').style.display='none'">
+                        Recalcular
+                    </button>
+                </div>
+                
+                <div class="main-result">
+                    <div class="result-highlight">
+                        <span class="highlight-label">Economia Anual Estimada</span>
+                        <span class="highlight-value" id="economiaAnual">R$ 0,00</span>
+                        <span class="highlight-info">com sistema fotovoltaico</span>
+                    </div>
+                </div>
+                
+                <div class="results-cards">
+                    <div class="result-card-modern">
+                        <div class="card-icon">🔋</div>
+                        <div class="card-value" id="paineisNecessarios">0</div>
+                        <div class="card-label">Painéis de 550W</div>
+                    </div>
+                    
+                    <div class="result-card-modern">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-value" id="potenciaTotal">0 kWp</div>
+                        <div class="card-label">Potência Total</div>
+                    </div>
+                    
+                    <div class="result-card-modern">
+                        <div class="card-icon">📊</div>
+                        <div class="card-value" id="geracaoMensal">0 kWh</div>
+                        <div class="card-label">Geração Mensal</div>
+                    </div>
+                    
+                    <div class="result-card-modern">
+                        <div class="card-icon">💰</div>
+                        <div class="card-value" id="economiaMensal">R$ 0</div>
+                        <div class="card-label">Economia Mensal</div>
+                    </div>
+                </div>
+                
+                <div class="investment-section">
+                    <h3>Investimento e Retorno</h3>
+                    <div class="investment-cards">
+                        <div class="invest-card">
+                            <span class="invest-label">Investimento Total</span>
+                            <span class="invest-value" id="custoTotal">R$ 0,00</span>
+                        </div>
+                        <div class="invest-card">
+                            <span class="invest-label">Retorno (Payback)</span>
+                            <span class="invest-value payback" id="payback">0 anos</span>
+                        </div>
+                        <div class="invest-card highlight">
+                            <span class="invest-label">Economia em 25 anos</span>
+                            <span class="invest-value success" id="economia25Anos">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-actions">
+                    <a href="{{ url_for('produtos', categoria='Kit Completo') }}" class="btn btn-primary btn-lg">
+                        Ver Kits Disponíveis
+                    </a>
+                    <a href="{{ url_for('contato') }}" class="btn btn-outline btn-lg">
+                        Solicitar Orçamento
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="how-it-works" data-aos="fade-up">
+            <h3>Como Funciona o Cálculo?</h3>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📋</div>
+                    <h4>Análise de Consumo</h4>
+                    <p>Calculamos sua necessidade energética com base no consumo mensal informado</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🔧</div>
+                    <h4>Dimensionamento</h4>
+                    <p>Definimos a quantidade e potência dos painéis necessários para suprir sua demanda</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">📈</div>
+                    <h4>ROI Estimado</h4>
+                    <p>Calculamos economia mensal, tempo de retorno e economia total em 25 anos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function calcularROI() {
+    const consumo = parseFloat(document.getElementById('consumo').value);
+    const tarifa = parseFloat(document.getElementById('tarifa').value);
+    
+    if (!consumo || consumo <= 0) {
+        alert('Por favor, insira um consumo mensal válido');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/calcular-roi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ consumo, tarifa })
+        });
+        
+        const resultado = await response.json();
+        
+        document.getElementById('paineisNecessarios').textContent = resultado.paineis_necessarios;
+        document.getElementById('potenciaTotal').textContent = (resultado.potencia_total / 1000).toFixed(1) + ' kWp';
+        document.getElementById('geracaoMensal').textContent = resultado.geracao_mensal.toLocaleString('pt-BR') + ' kWh';
+        document.getElementById('economiaMensal').textContent = 'R$ ' + resultado.economia_mensal.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+        document.getElementById('economiaAnual').textContent = 'R$ ' + resultado.economia_anual.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        document.getElementById('custoTotal').textContent = 'R$ ' + resultado.custo_total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        document.getElementById('payback').textContent = resultado.payback_anos + ' anos';
+        document.getElementById('economia25Anos').textContent = 'R$ ' + resultado.economia_25_anos.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (error) {
+        alert('Erro ao calcular. Tente novamente.');
+        console.error('Erro:', error);
+    }
+}
+</script>
+{% endblock %}

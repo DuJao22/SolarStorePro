@@ -1,0 +1,71 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}{{ 'Editar' if cupom else 'Novo' }} Cupom - Admin SolarPro{% endblock %}
+{% block page_title %}{{ 'Editar' if cupom else 'Novo' }} Cupom{% endblock %}
+
+{% block content %}
+<div class="dashboard-card">
+    <div class="card-body">
+        <form method="POST" class="admin-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="codigo">Código do Cupom *</label>
+                    <input type="text" id="codigo" name="codigo" value="{{ cupom.codigo if cupom else '' }}" 
+                           required style="text-transform: uppercase;" placeholder="Ex: DESCONTO10">
+                </div>
+                <div class="form-group flex-2">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" id="descricao" name="descricao" value="{{ cupom.descricao if cupom else '' }}"
+                           placeholder="Ex: 10% de desconto para novos clientes">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tipo">Tipo de Desconto *</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="percentual" {{ 'selected' if not cupom or cupom.tipo == 'percentual' else '' }}>Percentual (%)</option>
+                        <option value="fixo" {{ 'selected' if cupom and cupom.tipo == 'fixo' else '' }}>Valor Fixo (R$)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Valor *</label>
+                    <input type="number" id="valor" name="valor" step="0.01" value="{{ cupom.valor if cupom else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor_minimo">Valor Mínimo do Pedido</label>
+                    <input type="number" id="valor_minimo" name="valor_minimo" step="0.01" value="{{ cupom.valor_minimo if cupom else '0' }}">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quantidade_total">Quantidade Máxima de Usos</label>
+                    <input type="number" id="quantidade_total" name="quantidade_total" value="{{ cupom.quantidade_total if cupom else '' }}"
+                           placeholder="Deixe vazio para ilimitado">
+                </div>
+                <div class="form-group">
+                    <label for="data_inicio">Data Início</label>
+                    <input type="date" id="data_inicio" name="data_inicio" value="{{ cupom.data_inicio if cupom else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="data_fim">Data Fim</label>
+                    <input type="date" id="data_fim" name="data_fim" value="{{ cupom.data_fim if cupom else '' }}">
+                </div>
+            </div>
+            
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="ativo" {{ 'checked' if not cupom or cupom.ativo else '' }}>
+                    Cupom Ativo
+                </label>
+            </div>
+            
+            <div class="form-actions">
+                <a href="{{ url_for('admin_cupons') }}" class="btn btn-outline">Cancelar</a>
+                <button type="submit" class="btn btn-primary">{{ 'Salvar Alterações' if cupom else 'Criar Cupom' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

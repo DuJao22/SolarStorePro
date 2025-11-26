@@ -1,0 +1,153 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Dashboard - Admin SolarPro{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">💰</div>
+        </div>
+        <div class="stat-value">{{ faturamento_mes|format_price }}</div>
+        <div class="stat-label">Faturamento do Mês</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">📦</div>
+        </div>
+        <div class="stat-value">{{ total_pedidos }}</div>
+        <div class="stat-label">Total de Pedidos</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">👥</div>
+        </div>
+        <div class="stat-value">{{ total_clientes }}</div>
+        <div class="stat-label">Clientes Cadastrados</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">📈</div>
+        </div>
+        <div class="stat-value">{{ pedidos_hoje }}</div>
+        <div class="stat-label">Pedidos Hoje</div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Pedidos Recentes</h3>
+            <a href="{{ url_for('admin_pedidos') }}" class="btn-link">Ver Todos</a>
+        </div>
+        <div class="card-body">
+            {% if pedidos_recentes %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos_recentes %}
+                    <tr onclick="window.location='{{ url_for('admin_pedido_detalhe', id=pedido.id) }}'">
+                        <td>#{{ pedido.id }}</td>
+                        <td>{{ pedido.cliente_nome or pedido.nome_cliente }}</td>
+                        <td>{{ pedido.total|format_price }}</td>
+                        <td><span class="badge badge-{{ pedido.status_pedido }}">{{ pedido.status_pedido|replace('_', ' ')|title }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty-text">Nenhum pedido ainda.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="dashboard-card alert-card">
+        <div class="card-header">
+            <h3>Estoque Baixo</h3>
+            <a href="{{ url_for('admin_produtos') }}" class="btn-link">Ver Produtos</a>
+        </div>
+        <div class="card-body">
+            {% if produtos_estoque_baixo %}
+            <ul class="alert-list">
+                {% for produto in produtos_estoque_baixo %}
+                <li class="alert-item">
+                    <span class="alert-name">{{ produto.nome }}</span>
+                    <span class="alert-value danger">{{ produto.estoque }} un.</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty-text success">Todos os produtos com estoque adequado!</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3>Carrinhos Abandonados</h3>
+            <a href="{{ url_for('admin_carrinhos_abandonados') }}" class="btn-link">Ver Todos</a>
+        </div>
+        <div class="card-body">
+            {% if carrinhos_abandonados %}
+            <ul class="cart-list">
+                {% for carrinho in carrinhos_abandonados %}
+                <li class="cart-item">
+                    <div class="cart-info">
+                        <span class="cart-customer">{{ carrinho.cliente_nome or 'Cliente' }}</span>
+                        <span class="cart-contact">{{ carrinho.email or carrinho.telefone or 'Sem contato' }}</span>
+                    </div>
+                    <span class="cart-value">{{ carrinho.total|format_price }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty-text success">Nenhum carrinho abandonado!</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="dashboard-card quick-actions">
+        <div class="card-header">
+            <h3>Ações Rápidas</h3>
+        </div>
+        <div class="card-body">
+            <div class="action-buttons">
+                <a href="{{ url_for('admin_produto_novo') }}" class="action-btn">
+                    <span class="action-icon">➕</span>
+                    <span>Novo Produto</span>
+                </a>
+                <a href="{{ url_for('admin_cupom_novo') }}" class="action-btn">
+                    <span class="action-icon">🎫</span>
+                    <span>Novo Cupom</span>
+                </a>
+                <a href="{{ url_for('admin_assistente') }}" class="action-btn">
+                    <span class="action-icon">🤖</span>
+                    <span>Assistente IA</span>
+                </a>
+                <a href="{{ url_for('admin_configuracoes') }}" class="action-btn">
+                    <span class="action-icon">⚙️</span>
+                    <span>Configurações</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if contatos_pendentes > 0 %}
+<div class="notification-bar">
+    <span>📧 Você tem {{ contatos_pendentes }} contato(s) não respondido(s).</span>
+    <a href="{{ url_for('admin_contatos') }}" class="btn btn-sm">Ver Contatos</a>
+</div>
+{% endif %}
+{% endblock %}

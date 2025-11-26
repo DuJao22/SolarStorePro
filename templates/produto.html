@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}{{ produto.nome }} | SolarPro{% endblock %}
+
+{% block content %}
+<section class="breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">Início</a> / 
+        <a href="{{ url_for('produtos') }}">Produtos</a> / 
+        <span>{{ produto.nome }}</span>
+    </div>
+</section>
+
+<section class="product-details">
+    <div class="container">
+        <div class="product-layout">
+            <!-- Galeria de Imagens Profissional -->
+            <div class="product-gallery" data-aos="fade-right">
+                <div class="gallery-main-wrapper">
+                    <div class="gallery-main" id="mainImage">
+                        <img src="{{ url_for('static', filename='images/products/' + produto.imagem.split('/')[-1]) }}" 
+                             alt="{{ produto.nome }}"
+                             id="currentImage"
+                             onerror="this.src='https://via.placeholder.com/800x600/0B6A4A/FFFFFF?text={{ produto.nome[:20] }}'">
+                        <button class="zoom-btn" id="zoomBtn">🔍</button>
+                    </div>
+                </div>
+
+                <!-- Miniaturas -->
+                <div class="gallery-thumbnails">
+                    <div class="thumbnail active" data-image="{{ url_for('static', filename='images/products/' + produto.imagem.split('/')[-1]) }}">
+                        <img src="{{ url_for('static', filename='images/products/' + produto.imagem.split('/')[-1]) }}" 
+                             alt="{{ produto.nome }} - Vista 1"
+                             onerror="this.src='https://via.placeholder.com/150x150/0B6A4A/FFFFFF?text=1'">
+                    </div>
+                    <div class="thumbnail" data-image="https://via.placeholder.com/800x600/0B6A4A/FFFFFF?text=Vista+Lateral">
+                        <img src="https://via.placeholder.com/150x150/0B6A4A/FFFFFF?text=2" alt="{{ produto.nome }} - Vista 2">
+                    </div>
+                    <div class="thumbnail" data-image="https://via.placeholder.com/800x600/0B6A4A/FFFFFF?text=Detalhes">
+                        <img src="https://via.placeholder.com/150x150/0B6A4A/FFFFFF?text=3" alt="{{ produto.nome }} - Vista 3">
+                    </div>
+                    <div class="thumbnail" data-image="https://via.placeholder.com/800x600/0B6A4A/FFFFFF?text=Instalado">
+                        <img src="https://via.placeholder.com/150x150/0B6A4A/FFFFFF?text=4" alt="{{ produto.nome }} - Vista 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações do Produto -->
+            <div class="product-content" data-aos="fade-left">
+                <div class="product-header">
+                    <span class="product-category">{{ produto.categoria }}</span>
+                    <h1 class="product-title">{{ produto.nome }}</h1>
+
+                    <div class="product-rating">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <span class="rating-text">(4.9/5 - 127 avaliações)</span>
+                    </div>
+                </div>
+
+                <div class="product-price-section">
+                    <div class="price-main">
+                        <span class="price-label">Preço:</span>
+                        <span class="price-value">{{ produto.preco|format_price }}</span>
+                    </div>
+                    <p class="price-installment">ou em até <strong>12x de {{ (produto.preco / 12)|format_price }}</strong> sem juros</p>
+                    <p class="price-discount">💰 <strong>5% OFF</strong> no PIX: {{ (produto.preco * 0.95)|format_price }}</p>
+                </div>
+
+                <div class="product-highlights">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">⚡</div>
+                        <div class="highlight-info">
+                            <strong>{{ produto.potencia_watts }}W</strong>
+                            <span>Potência</span>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">📊</div>
+                        <div class="highlight-info">
+                            <strong>{{ produto.eficiencia }}%</strong>
+                            <span>Eficiência</span>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">✓</div>
+                        <div class="highlight-info">
+                            <strong>{{ produto.garantia }} anos</strong>
+                            <span>Garantia</span>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">📦</div>
+                        <div class="highlight-info">
+                            <strong>{{ produto.estoque }} un.</strong>
+                            <span>Em estoque</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-description">
+                    <p>{{ produto.descricao }}</p>
+                </div>
+
+                <div class="product-actions">
+                    <button class="btn btn-primary btn-lg btn-add-cart" 
+                            data-id="{{ produto.id }}"
+                            data-nome="{{ produto.nome }}"
+                            data-preco="{{ produto.preco }}"
+                            data-imagem="{{ produto.imagem }}">
+                        🛒 Adicionar ao Carrinho
+                    </button>
+                    <a href="{{ url_for('contato') }}" class="btn btn-outline btn-lg">📞 Solicitar Orçamento</a>
+                </div>
+
+                <div class="product-badges">
+                    <div class="badge-item">✓ Entrega em todo Brasil</div>
+                    <div class="badge-item">✓ Frete grátis acima de R$ 5.000</div>
+                    <div class="badge-item">✓ Instalação disponível</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs de Informações -->
+        <div class="product-tabs" data-aos="fade-up">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="specs">Especificações Técnicas</button>
+                <button class="tab-btn" data-tab="warranty">Garantia</button>
+                <button class="tab-btn" data-tab="install">Instalação</button>
+                <button class="tab-btn" data-tab="reviews">Avaliações</button>
+            </div>
+
+            <div class="tabs-content">
+                <div class="tab-panel active" id="specs">
+                    <h3>Especificações Técnicas</h3>
+                    {% set specs = produto.especificacoes|safe %}
+                    {% if specs %}
+                    {% set specs_dict = specs|from_json %}
+                    <div class="specs-grid">
+                        {% for key, value in specs_dict.items() %}
+                        <div class="spec-item">
+                            <strong>{{ key|replace('_', ' ')|title }}:</strong>
+                            <span>{{ value }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="tab-panel" id="warranty">
+                    <h3>Garantia de {{ produto.garantia }} Anos</h3>
+                    <div class="warranty-content">
+                        <ul class="warranty-list">
+                            <li>✓ Garantia de {{ produto.garantia }} anos contra defeitos de fabricação</li>
+                            <li>✓ Garantia de potência: 90% após 10 anos, 80% após 25 anos</li>
+                            <li>✓ Suporte técnico nacional especializado</li>
+                            <li>✓ Peças de reposição originais disponíveis</li>
+                            <li>✓ Certificação INMETRO e normas internacionais IEC</li>
+                            <li>✓ Assistência técnica autorizada em todo o Brasil</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-panel" id="install">
+                    <h3>Instalação Profissional</h3>
+                    <div class="install-content">
+                        <p>Oferecemos serviço completo de instalação com equipe especializada:</p>
+                        <ul class="install-list">
+                            <li>✓ Equipe técnica certificada e treinada</li>
+                            <li>✓ Projeto estrutural e elétrico detalhado</li>
+                            <li>✓ Homologação junto à concessionária de energia</li>
+                            <li>✓ Garantia de instalação de 5 anos</li>
+                            <li>✓ Treinamento de operação e manutenção</li>
+                            <li>✓ Monitoramento remoto de performance</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tab-panel" id="reviews">
+                    <h3>Avaliações de Clientes</h3>
+                    <div class="reviews-summary">
+                        <div class="review-score">
+                            <div class="score-number">4.9</div>
+                            <div class="score-stars">⭐⭐⭐⭐⭐</div>
+                            <div class="score-text">127 avaliações</div>
+                        </div>
+                    </div>
+                    <div class="reviews-list">
+                        <div class="review-item">
+                            <div class="review-header">
+                                <strong>Carlos Silva</strong>
+                                <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p>Excelente produto! Instalei há 6 meses e já estou economizando muito na conta de luz. Recomendo!</p>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-header">
+                                <strong>Maria Santos</strong>
+                                <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                            </div>
+                            <p>Qualidade superior, instalação rápida e suporte excelente. Muito satisfeita com a compra.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produtos Relacionados -->
+        {% if relacionados %}
+        <div class="related-products" data-aos="fade-up">
+            <h2>Produtos Relacionados</h2>
+            <div class="products-grid">
+                {% for rel in relacionados %}
+                <div class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    <div class="product-image">
+                        <img src="{{ url_for('static', filename='images/products/' + rel.imagem.split('/')[-1]) }}" 
+                             alt="{{ rel.nome }}"
+                             onerror="this.src='https://via.placeholder.com/400x300/0B6A4A/FFFFFF?text={{ rel.nome[:20] }}'">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ rel.nome }}</h3>
+                        <div class="product-price">
+                            <span class="price-value">{{ rel.preco|format_price }}</span>
+                        </div>
+                        <a href="{{ url_for('produto', id=rel.id) }}" class="btn btn-outline btn-sm">Ver Detalhes</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Lightbox para Zoom -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <div class="lightbox-content">
+        <img src="" alt="" id="lightboxImage">
+        <div class="lightbox-controls">
+            <button class="lightbox-btn" id="prevImage">‹</button>
+            <button class="lightbox-btn" id="nextImage">›</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Galeria de Imagens
+const thumbnails = document.querySelectorAll('.thumbnail');
+const currentImage = document.getElementById('currentImage');
+let currentIndex = 0;
+
+thumbnails.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => {
+        thumbnails.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        currentImage.src = thumb.dataset.image;
+        currentIndex = index;
+    });
+});
+
+// Lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImage = document.getElementById('lightboxImage');
+const zoomBtn = document.getElementById('zoomBtn');
+const lightboxClose = document.getElementById('lightboxClose');
+const prevBtn = document.getElementById('prevImage');
+const nextBtn = document.getElementById('nextImage');
+
+function openLightbox() {
+    lightbox.classList.add('active');
+    lightboxImage.src = currentImage.src;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function showPrevImage() {
+    currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+    thumbnails[currentIndex].click();
+    lightboxImage.src = currentImage.src;
+}
+
+function showNextImage() {
+    currentIndex = (currentIndex + 1) % thumbnails.length;
+    thumbnails[currentIndex].click();
+    lightboxImage.src = currentImage.src;
+}
+
+zoomBtn.addEventListener('click', openLightbox);
+currentImage.addEventListener('click', openLightbox);
+lightboxClose.addEventListener('click', closeLightbox);
+prevBtn.addEventListener('click', showPrevImage);
+nextBtn.addEventListener('click', showNextImage);
+
+lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+});
+
+document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrevImage();
+    if (e.key === 'ArrowRight') showNextImage();
+});
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+// Adicionar ao Carrinho
+document.querySelector('.btn-add-cart')?.addEventListener('click', function() {
+    const id = this.dataset.id;
+    const nome = this.dataset.nome;
+    const preco = this.dataset.preco;
+    const imagem = this.dataset.imagem;
+    addToCart(id, nome, preco, imagem);
+});
+</script>
+{% endblock %}

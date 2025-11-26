@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}Sobre a SolarPro - Energia Solar Profissional{% endblock %}
+
+{% block extra_css %}
+<style>
+.about-story {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.about-content h2 {
+    font-size: 2.5rem;
+    color: var(--primary-green);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--dark-gray);
+    margin-bottom: 1.5rem;
+}
+
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    border-color: var(--primary-green);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(11, 106, 74, 0.15);
+}
+
+.stat-box strong {
+    display: block;
+    font-size: 2.5rem;
+    color: var(--primary-green);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.stat-box span {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.about-image {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.about-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(11, 106, 74, 0.1) 0%, transparent 100%);
+    z-index: 1;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.about-image:hover img {
+    transform: scale(1.05);
+}
+
+.mission-vision {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.mv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.mv-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 2.5rem;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.mv-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    border-color: var(--secondary-gold);
+}
+
+.mv-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.mv-card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-green);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.mv-card p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #64748b;
+}
+
+.certifications {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #095539 100%);
+    color: var(--white);
+    text-align: center;
+}
+
+.certifications h2 {
+    color: var(--white);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.certifications > p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    margin-bottom: 3rem;
+}
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.cert-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.cert-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+    border-color: var(--secondary-gold);
+}
+
+.cert-icon {
+    font-size: 3rem;
+    color: var(--secondary-gold);
+    margin-bottom: 1rem;
+}
+
+.cert-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+}
+
+.cert-card p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.sustainability {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.sustainability-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.sustainability-content h2 {
+    font-size: 2.5rem;
+    color: var(--primary-green);
+    margin-bottom: 1.5rem;
+}
+
+.sustainability-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--dark-gray);
+    margin-bottom: 2rem;
+}
+
+.impact-stats {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--primary-green);
+}
+
+.impact-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.impact-item:last-child {
+    border-bottom: none;
+}
+
+.impact-item strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--primary-green);
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+}
+
+.impact-item span {
+    font-size: 0.95rem;
+    color: #64748b;
+}
+
+.sustainability-list {
+    list-style: none;
+    padding: 0;
+}
+
+.sustainability-list li {
+    padding: 0.75rem 0;
+    font-size: 1.05rem;
+    color: var(--dark-gray);
+}
+
+.sustainability-image {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.sustainability-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .about-layout,
+    .sustainability-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .about-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .cert-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-up">Sobre a SolarPro</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Pioneiros em energia solar sustentável</p>
+    </div>
+</section>
+
+<section class="about-story">
+    <div class="container">
+        <div class="about-layout">
+            <div class="about-content" data-aos="fade-right">
+                <h2>Nossa História</h2>
+                <p>Fundada em 2018, a SolarPro nasceu com o propósito de democratizar o acesso à energia solar no Brasil. Começamos com uma pequena equipe apaixonada por sustentabilidade e tecnologia, e hoje somos referência nacional em soluções fotovoltaicas.</p>
+                <p>Com mais de 500 projetos realizados e 15MW de potência instalada, ajudamos residências, comércios e indústrias a reduzirem seus custos energéticos em até 95%, contribuindo para um futuro mais sustentável.</p>
+                <div class="about-stats">
+                    <div class="stat-box">
+                        <strong>500+</strong>
+                        <span>Projetos Concluídos</span>
+                    </div>
+                    <div class="stat-box">
+                        <strong>15MW</strong>
+                        <span>Potência Instalada</span>
+                    </div>
+                    <div class="stat-box">
+                        <strong>98%</strong>
+                        <span>Satisfação dos Clientes</span>
+                    </div>
+                    <div class="stat-box">
+                        <strong>25 anos</strong>
+                        <span>Garantia dos Painéis</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image" data-aos="fade-left">
+                <img src="https://via.placeholder.com/600x400/0B6A4A/FFFFFF?text=Equipe+SolarPro" alt="Equipe SolarPro">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mission-vision">
+    <div class="container">
+        <div class="mv-grid">
+            <div class="mv-card" data-aos="fade-up">
+                <div class="mv-icon">🎯</div>
+                <h3>Missão</h3>
+                <p>Tornar a energia solar acessível a todos, promovendo economia real e sustentabilidade ambiental através de soluções de alta qualidade e atendimento excepcional.</p>
+            </div>
+            <div class="mv-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="mv-icon">👁️</div>
+                <h3>Visão</h3>
+                <p>Ser a referência nacional em soluções fotovoltaicas, reconhecida pela excelência técnica, inovação e compromisso com a transição energética sustentável.</p>
+            </div>
+            <div class="mv-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="mv-icon">💎</div>
+                <h3>Valores</h3>
+                <p>Transparência, qualidade, sustentabilidade, inovação, compromisso com o cliente e responsabilidade socioambiental.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="certifications">
+    <div class="container">
+        <h2 data-aos="fade-up">Certificações e Qualidade</h2>
+        <p data-aos="fade-up" data-aos-delay="100">Trabalhamos apenas com produtos certificados e instalação profissional</p>
+        
+        <div class="cert-grid">
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="cert-icon">✓</div>
+                <h4>INMETRO</h4>
+                <p>Todos os produtos certificados</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="cert-icon">✓</div>
+                <h4>IEC 61215</h4>
+                <p>Padrão internacional</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="cert-icon">✓</div>
+                <h4>ISO 9001</h4>
+                <p>Gestão de qualidade</p>
+            </div>
+            <div class="cert-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="cert-icon">✓</div>
+                <h4>NR-10</h4>
+                <p>Equipe capacitada</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sustainability">
+    <div class="container">
+        <div class="sustainability-layout">
+            <div class="sustainability-content" data-aos="fade-right">
+                <h2>Compromisso Ambiental</h2>
+                <p>Nossa responsabilidade vai além da instalação. Acreditamos que cada projeto solar é um passo em direção a um futuro mais limpo e sustentável.</p>
+                
+                <div class="impact-stats">
+                    <div class="impact-item">
+                        <strong>12.000 toneladas</strong>
+                        <span>de CO₂ evitadas por ano</span>
+                    </div>
+                    <div class="impact-item">
+                        <strong>Equivalente a</strong>
+                        <span>60.000 árvores plantadas</span>
+                    </div>
+                    <div class="impact-item">
+                        <strong>18 GWh</strong>
+                        <span>de energia limpa gerada</span>
+                    </div>
+                </div>
+                
+                <ul class="sustainability-list">
+                    <li>✓ Descarte consciente de materiais</li>
+                    <li>✓ Parceria com programas de reciclagem</li>
+                    <li>✓ Compensação de carbono em todas as instalações</li>
+                    <li>✓ Apoio a projetos de reflorestamento</li>
+                </ul>
+            </div>
+            <div class="sustainability-image" data-aos="fade-left">
+                <img src="https://via.placeholder.com/600x400/0B6A4A/FFFFFF?text=Sustentabilidade" alt="Sustentabilidade">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content" data-aos="zoom-in">
+            <h2>Faça Parte da Revolução Solar</h2>
+            <p>Junte-se a centenas de clientes satisfeitos que já economizam com energia limpa</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('calculadora') }}" class="btn btn-primary btn-lg">Calcular Minha Economia</a>
+                <a href="{{ url_for('contato') }}" class="btn btn-outline btn-lg">Falar com Especialista</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

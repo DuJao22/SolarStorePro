@@ -1,0 +1,66 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Carrinhos Abandonados - Admin SolarPro{% endblock %}
+{% block page_title %}Carrinhos Abandonados{% endblock %}
+
+{% block content %}
+<div class="page-info">
+    <p>Carrinhos que não foram convertidos em pedidos. Use o Assistente IA para gerar estratégias de recuperação.</p>
+</div>
+
+<div class="dashboard-card">
+    <div class="card-body">
+        {% if carrinhos %}
+        <table class="data-table full-width">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Valor</th>
+                    <th>Última Atividade</th>
+                    <th>Produtos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carrinho in carrinhos %}
+                <tr>
+                    <td><strong>{{ carrinho.cliente_nome or 'Visitante' }}</strong></td>
+                    <td>
+                        {% if carrinho.email %}
+                        <a href="mailto:{{ carrinho.email }}">{{ carrinho.email }}</a>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if carrinho.telefone %}
+                        <a href="https://wa.me/55{{ carrinho.telefone|replace('(', '')|replace(')', '')|replace('-', '')|replace(' ', '') }}" target="_blank">
+                            {{ carrinho.telefone }}
+                        </a>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td class="highlight">{{ carrinho.total|format_price }}</td>
+                    <td>{{ carrinho.data_atualizacao|format_date }}</td>
+                    <td>
+                        {% set produtos = carrinho.produtos_json|from_json %}
+                        {{ produtos|length }} item(s)
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="action-hint">
+            <a href="{{ url_for('admin_assistente') }}" class="btn btn-primary">
+                Usar Assistente IA para Recuperar Vendas
+            </a>
+        </div>
+        {% else %}
+        <p class="empty-text success">Nenhum carrinho abandonado! Todas as visitas estão convertendo.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
