@@ -9,6 +9,10 @@ from functools import wraps
 import os
 import uuid
 from gemini_service import gemini_service
+from database import init_db
+
+# Inicializar banco de dados ao importar o app (necessário para Gunicorn/Render)
+init_db()
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/images/products'
@@ -1232,6 +1236,4 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    from database import init_db
-    init_db()
     app.run(host='0.0.0.0', port=5000, debug=True)

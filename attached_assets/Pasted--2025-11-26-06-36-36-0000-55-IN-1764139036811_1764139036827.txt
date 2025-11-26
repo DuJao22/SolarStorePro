@@ -1,0 +1,38 @@
+==> ///////////////////////////////////////////////////////////
+[2025-11-26 06:36:36 +0000] [55] [INFO] Starting gunicorn 21.2.0
+[2025-11-26 06:36:36 +0000] [55] [INFO] Listening at: http://0.0.0.0:10000 (55)
+[2025-11-26 06:36:36 +0000] [55] [INFO] Using worker: sync
+[2025-11-26 06:36:36 +0000] [56] [INFO] Booting worker with pid: 56
+[2025-11-26 06:36:36,871] ERROR in app: Exception on / [HEAD]
+Traceback (most recent call last):
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/render/project/src/app.py", line 140, in index
+    produtos_destaque = conn.execute('SELECT * FROM produtos WHERE ativo = 1 AND destaque = 1 ORDER BY RANDOM() LIMIT 6').fetchall()
+                        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: produtos
+[Gemini] Usando chave 1 de 5
+127.0.0.1 - - [26/Nov/2025:06:36:36 +0000] "HEAD / HTTP/1.1" 500 0 "-" "Go-http-client/1.1"
+[2025-11-26 06:36:40,976] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/opt/render/project/src/.venv/lib/python3.13/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/render/project/src/app.py", line 140, in index
+    produtos_destaque = conn.execute('SELECT * FROM produtos WHERE ativo = 1 AND destaque = 1 ORDER BY RANDOM() LIMIT 6').fetchall()
+                        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: produtos
+127.0.0.1 - - [26/Nov/2025:06:36:40 +0000] "GET / HTTP/1.1" 500 265 "-" "Go-http-client/2.0"
