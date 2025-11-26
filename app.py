@@ -283,6 +283,10 @@ def sobre():
 def landing_saas():
     return render_template('landing.html')
 
+@app.route('/sistema-completo')
+def landing_sistema():
+    return render_template('landing_sistema.html')
+
 @app.route('/contato', methods=['GET', 'POST'])
 def contato():
     if request.method == 'POST':

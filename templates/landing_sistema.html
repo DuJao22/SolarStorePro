@@ -1,0 +1,965 @@
+
+{% extends "base.html" %}
+
+{% block title %}Sistema Completo para Empresas de Energia Solar - SolarPro{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary: #0B6A4A;
+        --secondary: #FFC857;
+        --dark: #1a1a1a;
+        --light: #ffffff;
+        --gray: #f5f5f5;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero-landing {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0B6A4A 0%, #063325 100%);
+        color: white;
+        padding: 8rem 2rem 4rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-landing::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 50%, rgba(255,200,87,0.1) 0%, transparent 50%);
+        animation: pulse 15s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .hero-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 10;
+    }
+
+    .badge-urgencia {
+        display: inline-block;
+        background: rgba(255,200,87,0.2);
+        border: 2px solid var(--secondary);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        animation: shake 3s infinite;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .hero-landing h1 {
+        font-size: 4rem;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        font-weight: 900;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .hero-landing h1 span {
+        color: var(--secondary);
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 3rem;
+        opacity: 0.95;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 900px;
+        margin: 3rem auto;
+    }
+
+    .stat-box {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 16px;
+        border: 2px solid rgba(255,255,255,0.2);
+        transition: all 0.3s;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-10px);
+        border-color: var(--secondary);
+    }
+
+    .stat-box strong {
+        display: block;
+        font-size: 3rem;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .cta-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        background: var(--secondary);
+        color: var(--dark);
+        padding: 1.5rem 3rem;
+        border-radius: 50px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 0 10px 40px rgba(255,200,87,0.4);
+        transition: all 0.3s;
+        animation: bounce-cta 2s infinite;
+    }
+
+    @keyframes bounce-cta {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .cta-hero:hover {
+        transform: scale(1.05) translateY(-5px);
+        box-shadow: 0 15px 50px rgba(255,200,87,0.6);
+    }
+
+    /* Problema Section */
+    .problema-section {
+        padding: 6rem 2rem;
+        background: var(--dark);
+        color: white;
+    }
+
+    .problema-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 3rem auto 0;
+    }
+
+    .problema-card {
+        background: linear-gradient(135deg, rgba(255,107,107,0.1) 0%, rgba(255,107,107,0.05) 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        border-left: 4px solid #ff6b6b;
+        transition: all 0.3s;
+    }
+
+    .problema-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(255,107,107,0.2);
+    }
+
+    .problema-card .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Features Showcase */
+    .features-section {
+        padding: 6rem 2rem;
+        background: var(--light);
+    }
+
+    .feature-showcase {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        max-width: 1200px;
+        margin: 4rem auto;
+        align-items: center;
+    }
+
+    .feature-showcase:nth-child(even) {
+        direction: rtl;
+    }
+
+    .feature-showcase:nth-child(even) > * {
+        direction: ltr;
+    }
+
+    .feature-image {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        transition: all 0.5s;
+    }
+
+    .feature-image:hover {
+        transform: scale(1.05) rotate(2deg);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+    }
+
+    .feature-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .feature-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--secondary);
+        color: var(--dark);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+    }
+
+    .feature-content h3 {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        margin: 2rem 0;
+    }
+
+    .feature-list li {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        background: var(--gray);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s;
+    }
+
+    .feature-list li:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateX(10px);
+    }
+
+    .feature-list li::before {
+        content: '✓';
+        font-size: 1.5rem;
+        color: var(--primary);
+        font-weight: 900;
+    }
+
+    .feature-list li:hover::before {
+        color: var(--secondary);
+    }
+
+    /* Comparação */
+    .comparacao-section {
+        padding: 6rem 2rem;
+        background: linear-gradient(135deg, var(--gray) 0%, white 100%);
+    }
+
+    .comparacao-table {
+        max-width: 1000px;
+        margin: 3rem auto;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+
+    .comparacao-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .comparacao-table th {
+        padding: 2rem;
+        font-size: 1.5rem;
+        background: var(--dark);
+        color: white;
+    }
+
+    .comparacao-table td {
+        padding: 1.5rem 2rem;
+        text-align: center;
+        border-bottom: 1px solid var(--gray);
+        font-size: 1.1rem;
+    }
+
+    .comparacao-table tr:hover {
+        background: rgba(11,106,74,0.05);
+    }
+
+    .col-destaque {
+        background: rgba(255,200,87,0.1);
+        font-weight: 700;
+    }
+
+    .check-icon {
+        color: #28a745;
+        font-size: 1.5rem;
+    }
+
+    .x-icon {
+        color: #dc3545;
+        font-size: 1.5rem;
+    }
+
+    /* Depoimentos Carousel */
+    .depoimentos-section {
+        padding: 6rem 2rem;
+        background: var(--primary);
+        color: white;
+    }
+
+    .depoimentos-carousel {
+        max-width: 900px;
+        margin: 3rem auto;
+        position: relative;
+    }
+
+    .depoimento-card {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        padding: 3rem;
+        border-radius: 20px;
+        border: 2px solid rgba(255,255,255,0.2);
+        text-align: center;
+    }
+
+    .depoimento-stars {
+        font-size: 2rem;
+        color: var(--secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    .depoimento-texto {
+        font-size: 1.3rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        font-style: italic;
+    }
+
+    .depoimento-autor {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .autor-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+    /* Pricing */
+    .pricing-section {
+        padding: 6rem 2rem;
+        background: var(--dark);
+        color: white;
+    }
+
+    .pricing-card {
+        max-width: 800px;
+        margin: 3rem auto;
+        background: white;
+        color: var(--dark);
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        transform: scale(1);
+        transition: all 0.5s;
+    }
+
+    .pricing-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+    }
+
+    .pricing-header {
+        background: linear-gradient(135deg, var(--secondary) 0%, #f0b429 100%);
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+
+    .pricing-badge {
+        background: var(--primary);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .pricing-price {
+        font-size: 5rem;
+        font-weight: 900;
+        margin: 1rem 0;
+    }
+
+    .pricing-period {
+        font-size: 1.2rem;
+        opacity: 0.8;
+    }
+
+    .pricing-features {
+        padding: 3rem;
+    }
+
+    .pricing-features ul {
+        list-style: none;
+        margin-bottom: 2rem;
+    }
+
+    .pricing-features li {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--gray);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .pricing-features li::before {
+        content: '✓';
+        color: #28a745;
+        font-size: 1.5rem;
+        font-weight: 900;
+    }
+
+    /* CTA Final */
+    .cta-final {
+        padding: 8rem 2rem;
+        background: linear-gradient(135deg, var(--primary) 0%, #063325 100%);
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-final::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,200,87,0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .cta-final-content {
+        position: relative;
+        z-index: 10;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .garantia-box {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 2px solid var(--secondary);
+        margin: 2rem 0;
+    }
+
+    /* Floating Action Button */
+    .fab-whatsapp {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 70px;
+        height: 70px;
+        background: #25D366;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+        z-index: 1000;
+        cursor: pointer;
+        animation: pulse-whatsapp 2s infinite;
+    }
+
+    @keyframes pulse-whatsapp {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .fab-whatsapp:hover {
+        transform: scale(1.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-landing h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+
+        .hero-stats {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .problema-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .feature-showcase {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .feature-showcase:nth-child(even) {
+            direction: ltr;
+        }
+
+        .comparacao-table {
+            overflow-x: auto;
+        }
+
+        .comparacao-table th,
+        .comparacao-table td {
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-landing" data-aos="fade-up">
+    <div class="hero-content">
+        <div class="badge-urgencia">
+            🔥 APENAS 5 VAGAS DISPONÍVEIS ESTE MÊS
+        </div>
+        
+        <h1 data-aos="fade-up" data-aos-delay="100">
+            Sistema Completo de <span>E-commerce</span><br>
+            Para Empresas de Energia Solar
+        </h1>
+        
+        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Pare de perder vendas! Tenha um e-commerce profissional, calculadora solar, 
+            assistente IA e gestão completa por uma fração do preço de desenvolver do zero.
+        </p>
+
+        <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-box">
+                <strong>95%</strong>
+                <span>Redução de Custos</span>
+            </div>
+            <div class="stat-box">
+                <strong>10x</strong>
+                <span>Mais Conversões</span>
+            </div>
+            <div class="stat-box">
+                <strong>24/7</strong>
+                <span>Vendas Automáticas</span>
+            </div>
+        </div>
+
+        <a href="#pricing" class="cta-hero" data-aos="zoom-in" data-aos-delay="400">
+            🚀 QUERO MEU SISTEMA AGORA
+        </a>
+    </div>
+</section>
+
+<!-- Problema Section -->
+<section class="problema-section">
+    <div class="container">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem; color: var(--secondary);" data-aos="fade-up">
+            Você Está Perdendo Dinheiro Todos os Dias
+        </h2>
+        <p style="text-align: center; font-size: 1.3rem; margin-bottom: 3rem; opacity: 0.9;" data-aos="fade-up" data-aos-delay="100">
+            Veja os problemas que custam vendas para sua empresa:
+        </p>
+
+        <div class="problema-grid">
+            <div class="problema-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon">❌</div>
+                <h3>Vendas Manuais</h3>
+                <p>Processar pedidos pelo WhatsApp toma tempo, gera erros e limita seu crescimento.</p>
+            </div>
+
+            <div class="problema-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="icon">💸</div>
+                <h3>Custos Altíssimos</h3>
+                <p>Desenvolver um sistema do zero custa R$ 30.000+ e leva meses para ficar pronto.</p>
+            </div>
+
+            <div class="problema-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon">📉</div>
+                <h3>Sem Presença Online</h3>
+                <p>Competidores com e-commerce profissional estão roubando seus clientes.</p>
+            </div>
+
+            <div class="problema-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="icon">🔧</div>
+                <h3>Manutenção Cara</h3>
+                <p>Programadores cobram R$ 150+/hora para qualquer alteração simples.</p>
+            </div>
+
+            <div class="problema-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="icon">⏰</div>
+                <h3>Tempo Perdido</h3>
+                <p>Horas respondendo as mesmas perguntas sobre produtos e instalação.</p>
+            </div>
+
+            <div class="problema-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="icon">📊</div>
+                <h3>Sem Controle</h3>
+                <p>Impossível acompanhar vendas, estoque e receita em tempo real.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Showcase -->
+<section class="features-section">
+    <div class="container">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem; color: var(--primary);" data-aos="fade-up">
+            Tudo Que Você Precisa em Um Só Sistema
+        </h2>
+        <p style="text-align: center; font-size: 1.3rem; margin-bottom: 3rem; opacity: 0.7;" data-aos="fade-up" data-aos-delay="100">
+            Funcionalidades profissionais que convertem visitantes em clientes
+        </p>
+
+        <!-- Feature 1 -->
+        <div class="feature-showcase" data-aos="fade-right">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='images/projects/projeto1-depois.jpg') }}" alt="E-commerce Completo">
+                <div class="feature-badge">100% Responsivo</div>
+            </div>
+            <div class="feature-content">
+                <h3>🛒 E-commerce Completo</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    Catálogo profissional de produtos com carrinho, checkout e pagamento integrado
+                </p>
+                <ul class="feature-list">
+                    <li>Catálogo ilimitado de produtos</li>
+                    <li>Galeria de imagens com zoom</li>
+                    <li>Sistema de carrinho inteligente</li>
+                    <li>Checkout em 2 passos</li>
+                    <li>Pagamento via Mercado Pago</li>
+                    <li>Gestão completa de pedidos</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-showcase" data-aos="fade-left">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='images/projects/projeto2-depois.jpg') }}" alt="Calculadora Solar">
+                <div class="feature-badge">Alta Conversão</div>
+            </div>
+            <div class="feature-content">
+                <h3>📊 Calculadora Solar Interativa</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    Ferramenta que converte visitantes mostrando economia instantânea
+                </p>
+                <ul class="feature-list">
+                    <li>Cálculo automático de ROI</li>
+                    <li>Simulação de economia em 25 anos</li>
+                    <li>Recomendação de produtos</li>
+                    <li>Payback detalhado</li>
+                    <li>Compartilhamento de resultados</li>
+                    <li>Design persuasivo</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-showcase" data-aos="fade-right">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='images/projects/projeto3-depois.jpg') }}" alt="Assistente IA">
+                <div class="feature-badge">IA Integrada</div>
+            </div>
+            <div class="feature-content">
+                <h3>🤖 Assistente IA com Gemini</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    Chatbot inteligente que atende clientes 24/7 e aumenta conversões
+                </p>
+                <ul class="feature-list">
+                    <li>Responde dúvidas automaticamente</li>
+                    <li>Recomenda produtos personalizados</li>
+                    <li>Calcula economia em tempo real</li>
+                    <li>Funciona 24 horas por dia</li>
+                    <li>Aprende com cada interação</li>
+                    <li>Libera sua equipe para vendas</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-showcase" data-aos="fade-left">
+            <div class="feature-image">
+                <img src="{{ url_for('static', filename='images/projects/projeto4-depois.jpg') }}" alt="Painel Admin">
+                <div class="feature-badge">Gestão Total</div>
+            </div>
+            <div class="feature-content">
+                <h3>📈 Painel Administrativo Completo</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    Gerencie tudo em um só lugar com interface intuitiva
+                </p>
+                <ul class="feature-list">
+                    <li>Dashboard com estatísticas em tempo real</li>
+                    <li>Gestão de produtos e estoque</li>
+                    <li>Acompanhamento de pedidos</li>
+                    <li>Relatórios de vendas</li>
+                    <li>Sistema de cupons e promoções</li>
+                    <li>Recuperação de carrinhos abandonados</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparação -->
+<section class="comparacao-section">
+    <div class="container">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem; color: var(--primary);" data-aos="fade-up">
+            Compare: Desenvolver vs. Nosso Sistema
+        </h2>
+        
+        <div class="comparacao-table" data-aos="fade-up" data-aos-delay="200">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recurso</th>
+                        <th>Desenvolver</th>
+                        <th>SolarPro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Custo Inicial</strong></td>
+                        <td>R$ 30.000 - R$ 80.000</td>
+                        <td class="col-destaque">R$ 549/mês</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tempo</strong></td>
+                        <td>3 a 6 meses</td>
+                        <td class="col-destaque">Imediato</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hospedagem</strong></td>
+                        <td>R$ 200+/mês</td>
+                        <td class="col-destaque">✓ Incluso</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manutenção</strong></td>
+                        <td>R$ 500+/mês</td>
+                        <td class="col-destaque">✓ Grátis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Atualizações</strong></td>
+                        <td>R$ 150+/hora</td>
+                        <td class="col-destaque">✓ Grátis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Suporte</strong></td>
+                        <td><span class="x-icon">✗</span></td>
+                        <td class="col-destaque"><span class="check-icon">✓</span> 24/7</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Assistente IA</strong></td>
+                        <td><span class="x-icon">✗</span></td>
+                        <td class="col-destaque"><span class="check-icon">✓</span> Incluso</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Garantia</strong></td>
+                        <td><span class="x-icon">✗</span></td>
+                        <td class="col-destaque"><span class="check-icon">✓</span> 30 dias</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Depoimentos -->
+<section class="depoimentos-section">
+    <div class="container">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem;" data-aos="fade-up">
+            O Que Nossos Clientes Dizem
+        </h2>
+        
+        <div class="depoimentos-carousel" data-aos="fade-up" data-aos-delay="200">
+            <div class="depoimento-card">
+                <div class="depoimento-stars">⭐⭐⭐⭐⭐</div>
+                <p class="depoimento-texto">
+                    "Em 2 meses com o sistema, triplicamos nossas vendas online. O melhor investimento 
+                    que fizemos! A calculadora solar converte muito e o assistente IA responde 90% das dúvidas."
+                </p>
+                <div class="depoimento-autor">
+                    <div class="autor-avatar">RS</div>
+                    <div>
+                        <strong style="display: block;">Ricardo Silva</strong>
+                        <span style="opacity: 0.8;">Solar Tech RS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing-section" id="pricing">
+    <div class="container">
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 1rem;" data-aos="fade-up">
+            Investimento Que Se Paga Sozinho
+        </h2>
+        <p style="text-align: center; font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9;" data-aos="fade-up" data-aos-delay="100">
+            Com apenas 1 venda extra por mês, o sistema já está pago
+        </p>
+
+        <div class="pricing-card" data-aos="zoom-in" data-aos-delay="200">
+            <div class="pricing-header">
+                <div class="pricing-badge">OFERTA LIMITADA</div>
+                <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">Sistema Completo</h3>
+                <div class="pricing-price">R$ 549</div>
+                <div class="pricing-period">/mês sem fidelidade</div>
+            </div>
+
+            <div class="pricing-features">
+                <ul>
+                    <li>E-commerce Completo e Responsivo</li>
+                    <li>Calculadora Solar Interativa</li>
+                    <li>Assistente IA com Gemini</li>
+                    <li>Painel Administrativo</li>
+                    <li>Pagamento Integrado (Mercado Pago)</li>
+                    <li>Hospedagem Premium Inclusa</li>
+                    <li>SSL e Segurança Total</li>
+                    <li>Manutenção e Atualizações Gratuitas</li>
+                    <li>Sistema de Cupons e Descontos</li>
+                    <li>Email Marketing Integrado</li>
+                    <li>Gestão de Estoque</li>
+                    <li>Recuperação de Carrinhos</li>
+                    <li>Relatórios e Analytics</li>
+                    <li>Backup Automático</li>
+                    <li>Suporte 24/7</li>
+                    <li>Garantia de 30 Dias</li>
+                </ul>
+
+                <a href="{{ url_for('contato') }}" class="cta-hero" style="width: 100%; justify-content: center; animation: none;">
+                    🚀 COMEÇAR AGORA
+                </a>
+
+                <p style="text-align: center; margin-top: 1.5rem; opacity: 0.7;">
+                    💳 Garantia de 30 dias - Risco zero
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Final -->
+<section class="cta-final">
+    <div class="cta-final-content">
+        <h2 style="font-size: 3.5rem; margin-bottom: 1rem;" data-aos="fade-up">
+            Pare de Perder Vendas Hoje
+        </h2>
+        <p style="font-size: 1.5rem; margin-bottom: 2rem; opacity: 0.95;" data-aos="fade-up" data-aos-delay="100">
+            Apenas 5 vagas disponíveis este mês para garantir qualidade no suporte
+        </p>
+
+        <div class="garantia-box" data-aos="fade-up" data-aos-delay="200">
+            <h3 style="font-size: 2rem; margin-bottom: 1rem;">🛡️ Garantia Blindada de 30 Dias</h3>
+            <p style="font-size: 1.2rem; line-height: 1.8;">
+                Teste o sistema por 30 dias completos. Se não estiver satisfeito, 
+                devolvemos 100% do seu investimento. Sem perguntas, sem burocracia.
+            </p>
+        </div>
+
+        <a href="{{ url_for('contato') }}" class="cta-hero" style="animation: bounce-cta 2s infinite;" data-aos="zoom-in" data-aos-delay="300">
+            🚀 GARANTIR MINHA VAGA AGORA
+        </a>
+
+        <div style="margin-top: 3rem; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;" data-aos="fade-up" data-aos-delay="400">
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                <div>Acesso Imediato</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                <div>Sem Fidelidade</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                <div>Suporte Dedicado</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                <div>Garantia 30 Dias</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/5511999999999?text=Quero%20conhecer%20o%20sistema%20SolarPro" 
+   class="fab-whatsapp" 
+   target="_blank" 
+   title="Fale conosco no WhatsApp">
+    💬
+</a>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
+</script>
+{% endblock %}
