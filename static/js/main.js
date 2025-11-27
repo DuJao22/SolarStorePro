@@ -40,6 +40,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
         observer.observe(heroVideo);
     }
+
+    // Detectar toque para melhor UX mobile
+    const isTouchDevice = () => {
+        return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+    };
+
+    if (isTouchDevice()) {
+        document.body.classList.add('touch-device');
+        
+        // Melhorar cliques em elementos pequenos
+        document.querySelectorAll('.action-btn, .btn-icon').forEach(el => {
+            el.style.minHeight = '44px';
+            el.style.minWidth = '44px';
+        });
+    }
+
+    // Prevenir zoom duplo-toque em iOS
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // Otimizar scroll performance
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                handleScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    function handleScroll() {
+        const header = document.getElementById('header');
+        if (header) {
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        }
+    }
 });
 
 
