@@ -1,0 +1,267 @@
+================================================================================
+                    FUNIL DE VENDAS WHATSAPP - SISTEMA SOLARPRO
+                         Script Completo para Conversao X1
+================================================================================
+
+--------------------------------------------------------------------------------
+                         FASE 1: ABORDAGEM INICIAL
+--------------------------------------------------------------------------------
+
+MENSAGEM 1 - Abertura com Curiosidade:
+--------------------------------------
+Oi [NOME], tudo bem?
+
+Vi que voce trabalha com energia solar em [CIDADE] e queria te fazer uma pergunta rapida:
+
+Quanto tempo voce perde por mes fazendo orcamentos manuais pros seus clientes?
+
+(AGUARDE A RESPOSTA - isso gera engajamento)
+
+
+MENSAGEM 2 - Apos a resposta:
+-----------------------------
+Cara, entendo demais...
+
+Olha, eu desenvolvi um sistema que faz isso em segundos. O cliente entra, coloca a conta de luz dele, e o sistema ja calcula tudo automaticamente:
+
+- Quantidade de placas
+- Economia mensal
+- Tempo de retorno
+- Orcamento completo
+
+E o melhor: ja fica no seu site, com sua marca, pronto pra vender 24h.
+
+Posso te mostrar como funciona em 2 minutos?
+
+
+--------------------------------------------------------------------------------
+                         FASE 2: DEMONSTRACAO DE VALOR
+--------------------------------------------------------------------------------
+
+MENSAGEM 3 - Apos aceitar ver:
+------------------------------
+Show! Olha so o que o sistema faz:
+
+- E-commerce completo com sua marca
+- Calculadora solar inteligente (o cliente simula sozinho)
+- Assistente IA que responde duvidas automaticamente
+- Painel admin pra voce controlar tudo
+- Integracao de pagamento pronta
+
+[ENVIE PRINT OU VIDEO CURTO DO SISTEMA AQUI]
+
+Empresas que usam isso tao fechando de 3 a 5 vendas a mais por mes so por ter a calculadora no site.
+
+Como ta seu processo de vendas hoje?
+
+
+--------------------------------------------------------------------------------
+                    FASE 3: APRESENTAR O PLANO DE R$549
+--------------------------------------------------------------------------------
+
+MENSAGEM 4 - Oferta Principal:
+------------------------------
+[NOME], esse sistema normalmente custaria uns R$30.000 pra desenvolver do zero...
+
+Mas eu faco a implantacao completa por apenas R$549/mes.
+
+Isso inclui:
+- Sistema 100% configurado
+- Hospedagem premium
+- Suporte dedicado
+- Atualizacoes constantes
+- Treinamento completo
+
+Se voce fechar UMA venda a mais por mes por causa do sistema, ja pagou o investimento e sobra lucro.
+
+Quer que eu configure pra voce essa semana?
+
+
+--------------------------------------------------------------------------------
+                         FASE 4: QUEBRA DE OBJECOES
+--------------------------------------------------------------------------------
+
+OBJECAO: "Ta caro" ou "Preciso pensar"
+--------------------------------------
+Entendo, [NOME]. Deixa eu te fazer uma conta rapida:
+
+Uma venda de sistema solar da quanto de lucro pra voce? R$3.000? R$5.000?
+
+O sistema custa R$549/mes. Se ele te ajudar a fechar UMA venda a mais, voce ja tem retorno de 5x a 10x.
+
+E olha: empresas que usam calculadora solar no site aumentam em media 40% as conversoes.
+
+Qual seria o momento ideal pra gente implantar isso pra voce?
+
+
+OBJECAO: "Nao tenho dinheiro agora"
+-----------------------------------
+Cara, eu entendo que o momento pode nao ser o ideal pra investimento fixo...
+
+Mas olha, eu tenho uma proposta diferente pra quem ta nessa situacao:
+
+E se voce recebesse o sistema COMPLETO, 100% gratuito, sem pagar nada?
+
+Eu ganho uma pequena comissao so quando voce vender. Se voce nao vender, eu nao ganho nada.
+
+Ou seja: ZERO risco pra voce. Voce so "paga" quando tiver dinheiro entrando.
+
+Faz sentido pra voce?
+
+
+OBJECAO: "Ja tenho um site"
+---------------------------
+Legal! E seu site atual tem calculadora solar integrada?
+
+A maioria dos sites de energia solar sao apenas "cartao de visita digital". Nao vendem sozinhos.
+
+O diferencial do meu sistema e que ele VENDE por voce 24h. O cliente entra, simula a economia dele, ve o orcamento e ja pode fechar.
+
+Posso te mostrar a diferenca em 2 minutos?
+
+
+OBJECAO: "Vou pensar e te retorno"
+----------------------------------
+Claro, [NOME]! Fica a vontade.
+
+So uma duvida: o que te faria decidir hoje? E alguma funcionalidade especifica ou e mais sobre o momento financeiro?
+
+Pergunto porque dependendo, posso ter uma solucao diferente pra te apresentar.
+
+
+--------------------------------------------------------------------------------
+                    FASE 5: DOWNGRADE PARA PLANO COMISSIONADO
+--------------------------------------------------------------------------------
+
+QUANDO USAR:
+- Apos 2 tentativas de fechar no plano de R$549
+- Quando a objecao for claramente financeira
+- Quando o lead esta interessado mas inseguro
+
+SCRIPT DO PLANO COMISSIONADO:
+-----------------------------
+[NOME], vou ser sincero contigo:
+
+Eu acredito tanto no potencial do sistema que vou te fazer uma proposta ousada:
+
+- Voce recebe o sistema completo GRATIS
+- Zero mensalidade
+- Zero taxa de adesao
+- Todas as funcionalidades liberadas
+
+Em troca, eu ganho uma comissao acordada entre nos sobre cada venda que voce fizer no sistema.
+
+Funciona assim: voce vende R$50.000 no mes, eu ganho X% disso. Voce nao vende nada, eu nao ganho nada.
+
+E um ganha-ganha. Voce nao arrisca um real e eu so ganho se voce ganhar.
+
+Bora marcar uma call de 15 min pra fechar os detalhes?
+
+
+--------------------------------------------------------------------------------
+                         GATILHOS MENTAIS PARA USAR
+--------------------------------------------------------------------------------
+
+ESCASSEZ:
+"So consigo atender 5 novos clientes esse mes por causa do suporte personalizado"
+
+PROVA SOCIAL:
+"O Joao de BH implantou mes passado e ja fechou 3 vendas pelo sistema"
+
+AUTORIDADE:
+"Desenvolvo sistemas ha X anos e esse e focado 100% em solar"
+
+RECIPROCIDADE:
+"Deixa eu te mandar um video rapido mostrando como funciona, sem compromisso"
+
+URGENCIA:
+"Se fechar essa semana, consigo implantar ate sexta e voce ja comeca a captar leads no fim de semana"
+
+
+--------------------------------------------------------------------------------
+                         TECNICAS DE FECHAMENTO
+--------------------------------------------------------------------------------
+
+FECHAMENTO ASSUMPTIVO (pra quem mostrou interesse):
+---------------------------------------------------
+Show, [NOME]! Entao vou precisar de:
+- Nome completo da empresa
+- Logo em alta resolucao
+- Suas cores preferidas
+
+Me manda aqui que ja comeco a configurar hoje!
+
+
+FECHAMENTO ALTERNATIVO:
+-----------------------
+Entao, [NOME], qual faz mais sentido pra voce agora:
+
+1 - Plano mensal de R$549 com suporte VIP
+2 - Plano gratuito com comissao sobre vendas
+
+Qual voce prefere?
+
+
+FECHAMENTO POR COMPROMISSO:
+---------------------------
+[NOME], se eu conseguir liberar uma condicao especial de implantacao essa semana, voce fecharia hoje?
+
+
+--------------------------------------------------------------------------------
+                         FOLLOW-UP (Se nao responder)
+--------------------------------------------------------------------------------
+
+DIA +1:
+-------
+E ai [NOME], conseguiu pensar sobre o sistema?
+
+Qualquer duvida que tiver, pode mandar aqui!
+
+
+DIA +3:
+-------
+[NOME], lembrei de voce porque acabou de sair uma atualizacao no sistema com uma funcionalidade nova de orcamento automatico.
+
+Ainda faz sentido conversarmos sobre isso?
+
+
+DIA +7:
+-------
+Opa [NOME], tudo certo?
+
+Sei que a rotina e corrida, mas queria saber se ainda faz sentido aquela conversa sobre o sistema de energia solar.
+
+Se o momento nao for agora, sem problema! Me avisa quando for melhor.
+
+
+--------------------------------------------------------------------------------
+                         RESUMO DO FUNIL
+--------------------------------------------------------------------------------
+
+ETAPA 1: Abordagem com pergunta (gera engajamento)
+ETAPA 2: Apresenta a solucao (sem falar preco ainda)
+ETAPA 3: Demonstra valor (video/print do sistema)
+ETAPA 4: Apresenta plano de R$549/mes
+ETAPA 5: Quebra objecoes (usa gatilhos mentais)
+ETAPA 6: Se persistir objecao financeira -> Oferece plano gratuito comissionado
+ETAPA 7: Fechamento (assumptivo ou alternativo)
+ETAPA 8: Follow-up em D+1, D+3, D+7
+
+--------------------------------------------------------------------------------
+                         DICAS EXTRAS
+--------------------------------------------------------------------------------
+
+1. SEMPRE personalize com o nome e cidade do lead
+2. Use audios curtos (30-60 seg) para criar conexao
+3. Responda rapido (em ate 5 minutos se possivel)
+4. Nao mande textao de uma vez - divida em mensagens curtas
+5. Use emojis com moderacao (1-2 por mensagem no maximo)
+6. Sempre termine com uma pergunta para manter a conversa
+7. Se o lead sumir, espere 24h antes do primeiro follow-up
+8. Nunca seja insistente demais - 3 follow-ups no maximo
+9. Grave cases de sucesso para usar como prova social
+10. Tenha prints/videos do sistema prontos para enviar rapido
+
+================================================================================
+                    BOA SORTE NAS VENDAS! BORA CONVERTER!
+================================================================================
