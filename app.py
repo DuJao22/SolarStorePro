@@ -975,7 +975,8 @@ def admin_clientes():
     conn = get_db_connection()
     clientes = conn.execute('''SELECT u.*, 
                               (SELECT COUNT(*) FROM pedidos WHERE usuario_id = u.id) as total_pedidos,
-                              (SELECT COALESCE(SUM(total), 0) FROM pedidos WHERE usuario_id = u.id AND status_pagamento = 'aprovado') as total_gasto
+                              (SELECT COALESCE(SUM(total), 0) FROM pedidos WHERE usuario_id = u.id AND status_pagamento = 'aprovado') as total_gasto,
+                              (SELECT COUNT(*) FROM lista_desejos WHERE usuario_id = u.id) as itens_desejo
                               FROM usuarios u WHERE tipo = 'cliente' ORDER BY data_cadastro DESC''').fetchall()
     conn.close()
     return render_template('admin/clientes.html', clientes=clientes)

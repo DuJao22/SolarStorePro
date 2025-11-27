@@ -6,31 +6,45 @@
 {% block content %}
 <div class="dashboard-card">
     <div class="card-body">
+        <div style="margin-bottom: 1.5rem;">
+            <p><strong>Total de Clientes:</strong> {{ clientes|length }}</p>
+        </div>
+
         {% if clientes %}
-        <table class="data-table full-width">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Pedidos</th>
-                    <th>Total Gasto</th>
-                    <th>Cadastro</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cliente in clientes %}
-                <tr>
-                    <td><strong>{{ cliente.nome }}</strong></td>
-                    <td>{{ cliente.email }}</td>
-                    <td>{{ cliente.telefone or '-' }}</td>
-                    <td>{{ cliente.total_pedidos }}</td>
-                    <td>{{ cliente.total_gasto|format_price }}</td>
-                    <td>{{ cliente.data_cadastro|format_date if cliente.data_cadastro else '-' }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div style="overflow-x: auto;">
+            <table class="data-table full-width">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>CPF</th>
+                        <th>Cidade/Estado</th>
+                        <th>Pedidos</th>
+                        <th>Total Gasto</th>
+                        <th>Lista Desejos</th>
+                        <th>Cadastro</th>
+                        <th>Último Acesso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td><strong>{{ cliente.nome }}</strong></td>
+                        <td><small>{{ cliente.email }}</small></td>
+                        <td>{{ cliente.telefone or '-' }}</td>
+                        <td>{{ cliente.cpf or '-' }}</td>
+                        <td>{{ cliente.cidade or '-' }}{{ '/' + cliente.estado if cliente.estado else '' }}</td>
+                        <td style="text-align: center;">{{ cliente.total_pedidos }}</td>
+                        <td><strong>{{ cliente.total_gasto|format_price }}</strong></td>
+                        <td style="text-align: center;">{{ cliente.itens_desejo }}</td>
+                        <td><small>{{ cliente.data_cadastro|format_date if cliente.data_cadastro else '-' }}</small></td>
+                        <td><small>{{ cliente.ultimo_acesso|format_date if cliente.ultimo_acesso else 'Nunca' }}</small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
         <p class="empty-text">Nenhum cliente cadastrado ainda.</p>
         {% endif %}
