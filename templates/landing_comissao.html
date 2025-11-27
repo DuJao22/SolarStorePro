@@ -900,18 +900,9 @@
                         <input type="tel" name="telefone" placeholder="WhatsApp com DDD *" required
                                style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
                     </div>
-                    <div style="margin-bottom: 1.5rem;">
+                    <div style="margin-bottom: 2rem;">
                         <input type="text" name="cidade" placeholder="Sua cidade/estado *" required
                                style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
-                    </div>
-                    <div style="margin-bottom: 2rem;">
-                        <select name="experiencia" required
-                                style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
-                            <option value="">Você já trabalha com energia solar? *</option>
-                            <option value="sim">Sim, já vendo/instalo</option>
-                            <option value="nao_mas_quero">Não, mas quero começar</option>
-                            <option value="outro_segmento">Trabalho em outro segmento</option>
-                        </select>
                     </div>
                     <button type="submit" class="cta-mega" style="width: 100%; justify-content: center; animation: none;">
                         🚀 GARANTIR MINHA VAGA GRÁTIS AGORA
@@ -997,37 +988,32 @@ document.querySelectorAll('.faq-question').forEach(question => {
     });
 });
 
-// Form Submit
-document.getElementById('formParceria').addEventListener('submit', async function(e) {
+// Form Submit - Redireciona para WhatsApp com mensagem personalizada
+document.getElementById('formParceria').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
     
-    try {
-        const response = await fetch('/contato', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                nome: data.nome,
-                email: data.email,
-                telefone: data.telefone,
-                assunto: 'Parceria - Sistema Grátis + Comissão',
-                mensagem: `Cidade: ${data.cidade}\nExperiência: ${data.experiencia}\n\nInteressado na parceria de sistema gratuito + comissão.`
-            })
-        });
-        
-        if (response.ok) {
-            alert('✅ PARABÉNS! Sua vaga foi garantida!\n\nEntraremos em contato em até 24h para ativar seu sistema.\n\nVerifique seu email e WhatsApp!');
-            this.reset();
-        } else {
-            alert('Erro ao enviar. Tente novamente ou entre em contato via WhatsApp.');
-        }
-    } catch (error) {
-        alert('Erro ao enviar. Tente novamente ou entre em contato via WhatsApp.');
-    }
+    const numeroWhatsApp = '5511999999999';
+    
+    const mensagem = `Olá! Meu nome é ${data.nome} e sou dono de uma empresa de energia solar na cidade de ${data.cidade}.
+
+Vim pela landing page do SolarPro e tenho interesse em adquirir o sistema GRATUITO para minha empresa!
+
+Entendo que vocês ganham uma comissão sobre cada venda que eu realizar no sistema e acho essa proposta muito justa.
+
+Meus dados:
+- Nome: ${data.nome}
+- Email: ${data.email}
+- WhatsApp: ${data.telefone}
+- Cidade: ${data.cidade}
+
+Gostaria de saber mais sobre a parceria e como funciona o sistema completo. Aguardo retorno!`;
+    
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    
+    window.open(urlWhatsApp, '_blank');
 });
 
 // Smooth scroll
