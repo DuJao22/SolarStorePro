@@ -1,0 +1,998 @@
+
+{% extends "base.html" %}
+
+{% block title %}Sistema GRÁTIS + Ganhe com Cada Venda - SolarPro{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary: #0B6A4A;
+        --secondary: #FFC857;
+        --dark: #1a1a1a;
+        --light: #ffffff;
+        --success: #28a745;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* Hero Explosivo */
+    .hero-explosivo {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0B6A4A 0%, #063325 100%);
+        color: white;
+        padding: 8rem 2rem 4rem;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-explosivo::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,200,87,0.15) 0%, transparent 70%);
+        animation: pulse-bg 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-bg {
+        0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        50% { transform: scale(1.1) rotate(10deg); opacity: 0.8; }
+    }
+
+    .hero-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        z-index: 10;
+    }
+
+    .badge-explosivo {
+        display: inline-block;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 900;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        animation: shake-badge 3s infinite;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    @keyframes shake-badge {
+        0%, 100% { transform: translateX(0) rotate(0deg); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-8px) rotate(-2deg); }
+        20%, 40%, 60%, 80% { transform: translateX(8px) rotate(2deg); }
+    }
+
+    .hero-explosivo h1 {
+        font-size: 4.5rem;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        font-weight: 900;
+        text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+
+    .hero-explosivo h1 .destaque {
+        color: var(--secondary);
+        font-size: 5rem;
+        display: block;
+        animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% { text-shadow: 0 0 20px rgba(255,200,87,0.8), 0 0 40px rgba(255,200,87,0.6); }
+        50% { text-shadow: 0 0 30px rgba(255,200,87,1), 0 0 60px rgba(255,200,87,0.8); }
+    }
+
+    .hero-subtitle {
+        font-size: 1.8rem;
+        margin-bottom: 3rem;
+        opacity: 0.95;
+        font-weight: 500;
+    }
+
+    .valor-box {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(20px);
+        padding: 3rem;
+        border-radius: 30px;
+        border: 3px solid var(--secondary);
+        margin: 3rem auto;
+        max-width: 700px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .valor-antigo {
+        text-decoration: line-through;
+        font-size: 2rem;
+        opacity: 0.6;
+        margin-bottom: 1rem;
+    }
+
+    .valor-novo {
+        font-size: 6rem;
+        font-weight: 900;
+        color: var(--secondary);
+        line-height: 1;
+        margin: 1rem 0;
+        animation: pulse-valor 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-valor {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .comissao-destaque {
+        background: linear-gradient(135deg, var(--success) 0%, #20c997 100%);
+        padding: 1.5rem 2rem;
+        border-radius: 20px;
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(40,167,69,0.4);
+    }
+
+    .cta-mega {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        background: linear-gradient(135deg, var(--secondary) 0%, #f0b429 100%);
+        color: var(--dark);
+        padding: 2rem 4rem;
+        border-radius: 60px;
+        font-size: 1.8rem;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 15px 50px rgba(255,200,87,0.5);
+        transition: all 0.3s;
+        animation: bounce-cta 3s infinite;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    @keyframes bounce-cta {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-15px) scale(1.05); }
+    }
+
+    .cta-mega:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 20px 60px rgba(255,200,87,0.7);
+    }
+
+    .contador-urgencia {
+        background: rgba(255,107,107,0.2);
+        padding: 2rem;
+        border-radius: 20px;
+        border: 2px solid #ff6b6b;
+        margin: 3rem 0;
+    }
+
+    .timer {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .timer-box {
+        background: rgba(255,255,255,0.1);
+        padding: 1.5rem 2rem;
+        border-radius: 15px;
+        min-width: 120px;
+    }
+
+    .timer-box .numero {
+        font-size: 4rem;
+        font-weight: 900;
+        color: var(--secondary);
+        display: block;
+    }
+
+    .timer-box .label {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    /* Benefícios Explosivos */
+    .beneficios-section {
+        padding: 6rem 2rem;
+        background: var(--light);
+    }
+
+    .beneficios-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 3rem auto;
+    }
+
+    .beneficio-card {
+        background: linear-gradient(135deg, var(--light) 0%, #f8f9fa 100%);
+        padding: 3rem 2rem;
+        border-radius: 25px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+        border: 3px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .beneficio-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(11,106,74,0.05) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .beneficio-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        border-color: var(--primary);
+    }
+
+    .beneficio-card:hover::before {
+        opacity: 1;
+    }
+
+    .beneficio-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .beneficio-card h3 {
+        font-size: 1.8rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .beneficio-valor {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--success);
+        margin: 1rem 0;
+    }
+
+    /* Prova Social */
+    .prova-social {
+        padding: 6rem 2rem;
+        background: linear-gradient(135deg, var(--primary) 0%, #063325 100%);
+        color: white;
+    }
+
+    .resultados-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 3rem auto;
+    }
+
+    .resultado-box {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .resultado-numero {
+        font-size: 4rem;
+        font-weight: 900;
+        color: var(--secondary);
+        display: block;
+    }
+
+    /* Como Funciona */
+    .como-funciona {
+        padding: 6rem 2rem;
+        background: var(--light);
+    }
+
+    .passos-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+        max-width: 1200px;
+        margin: 3rem auto;
+    }
+
+    .passo-card {
+        background: white;
+        padding: 3rem 2rem;
+        border-radius: 25px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        position: relative;
+        border: 3px solid var(--primary);
+    }
+
+    .passo-numero {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary) 0%, #0a5540 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 900;
+        color: white;
+        box-shadow: 0 5px 20px rgba(11,106,74,0.4);
+    }
+
+    .passo-icon {
+        font-size: 4rem;
+        margin: 2rem 0 1.5rem;
+    }
+
+    .passo-card h3 {
+        font-size: 1.5rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    /* FAQ */
+    .faq-section {
+        padding: 6rem 2rem;
+        background: var(--light);
+    }
+
+    .faq-list {
+        max-width: 900px;
+        margin: 3rem auto;
+    }
+
+    .faq-item {
+        background: white;
+        margin-bottom: 1.5rem;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        border: 2px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .faq-item:hover {
+        border-color: var(--primary);
+    }
+
+    .faq-question {
+        padding: 2rem;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .faq-question:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .faq-answer {
+        padding: 0 2rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s;
+    }
+
+    .faq-item.active .faq-answer {
+        padding: 2rem;
+        max-height: 500px;
+    }
+
+    /* CTA Final */
+    .cta-final {
+        padding: 8rem 2rem;
+        background: linear-gradient(135deg, var(--dark) 0%, #2d2d2d 100%);
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-final::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,200,87,0.1) 0%, transparent 70%);
+        animation: rotate-bg 20s linear infinite;
+    }
+
+    @keyframes rotate-bg {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .garantia-box {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(15px);
+        padding: 3rem;
+        border-radius: 30px;
+        border: 3px solid var(--success);
+        max-width: 800px;
+        margin: 3rem auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .garantia-icon {
+        font-size: 6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+        .hero-explosivo h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-explosivo h1 .destaque {
+            font-size: 3rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+
+        .valor-novo {
+            font-size: 4rem;
+        }
+
+        .cta-mega {
+            font-size: 1.3rem;
+            padding: 1.5rem 2.5rem;
+        }
+
+        .beneficios-grid,
+        .resultados-grid,
+        .passos-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .timer {
+            gap: 1rem;
+        }
+
+        .timer-box {
+            min-width: 80px;
+            padding: 1rem;
+        }
+
+        .timer-box .numero {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+
+<meta property="og:title" content="Sistema GRÁTIS + Ganhe Comissão - SolarPro">
+<meta property="og:description" content="Receba um sistema completo de e-commerce GRÁTIS e ganhe até R$ 500 por venda realizada. Zero custo inicial!">
+<meta property="og:image" content="{{ url_for('static', filename='images/og-image.svg', _external=True) }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Explosivo -->
+<section class="hero-explosivo">
+    <div class="hero-content">
+        <div class="badge-explosivo">
+            🔥 ÚLTIMA CHANCE - APENAS 10 VAGAS HOJE
+        </div>
+
+        <h1 data-aos="zoom-in">
+            Receba um Sistema Completo
+            <span class="destaque">100% GRÁTIS</span>
+            + Ganhe até R$ 500 por Venda!
+        </h1>
+
+        <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+            E-commerce profissional + IA + Calculadora Solar + Painel Admin.<br>
+            <strong>ZERO investimento inicial. ZERO mensalidade. ZERO risco.</strong>
+        </p>
+
+        <div class="valor-box" data-aos="zoom-in" data-aos-delay="300">
+            <div class="valor-antigo">Valor Normal: R$ 2.329,90/mês</div>
+            <div class="valor-novo">R$ 0,00</div>
+            <div class="comissao-destaque">
+                💰 + Ganhe de R$ 150 a R$ 500 de COMISSÃO por cada venda!
+            </div>
+        </div>
+
+        <div class="contador-urgencia" data-aos="fade-up" data-aos-delay="400">
+            <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">⏰ OFERTA EXPIRA EM:</h3>
+            <div class="timer" id="timer">
+                <div class="timer-box">
+                    <span class="numero" id="horas">12</span>
+                    <span class="label">Horas</span>
+                </div>
+                <div class="timer-box">
+                    <span class="numero" id="minutos">00</span>
+                    <span class="label">Minutos</span>
+                </div>
+                <div class="timer-box">
+                    <span class="numero" id="segundos">00</span>
+                    <span class="label">Segundos</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="#formulario" class="cta-mega" data-aos="zoom-in" data-aos-delay="500">
+            🚀 QUERO MEU SISTEMA GRÁTIS AGORA
+        </a>
+
+        <p style="margin-top: 2rem; font-size: 1.1rem; opacity: 0.9;">
+            ✅ Sem cartão de crédito • ✅ Sem mensalidade • ✅ Sem pegadinhas
+        </p>
+    </div>
+</section>
+
+<!-- Benefícios Explosivos -->
+<section class="beneficios-section">
+    <div class="container">
+        <h2 style="font-size: 3.5rem; text-align: center; margin-bottom: 1rem; color: var(--primary);" data-aos="fade-up">
+            Por Que Esta É a Melhor Oportunidade da Sua Vida?
+        </h2>
+        <p style="text-align: center; font-size: 1.3rem; margin-bottom: 3rem; opacity: 0.7;" data-aos="fade-up" data-aos-delay="100">
+            Sistema profissional que custaria R$ 30.000+ para desenvolver + Renda passiva garantida
+        </p>
+
+        <div class="beneficios-grid">
+            <div class="beneficio-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="beneficio-icon">💎</div>
+                <h3>Sistema Premium GRÁTIS</h3>
+                <div class="beneficio-valor">R$ 30.000</div>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    E-commerce completo, calculadora solar, assistente IA, painel admin. 
+                    Tudo que você precisa para vender sem investir 1 real.
+                </p>
+            </div>
+
+            <div class="beneficio-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="beneficio-icon">💰</div>
+                <h3>Comissão por Venda</h3>
+                <div class="beneficio-valor">Até R$ 500</div>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Ganhe de R$ 150 a R$ 500 em cada venda realizada. 
+                    Quanto mais vende, mais ganha. Pagamento garantido.
+                </p>
+            </div>
+
+            <div class="beneficio-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="beneficio-icon">🚀</div>
+                <h3>Renda Passiva Real</h3>
+                <div class="beneficio-valor">R$ 15.000+/mês</div>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Venda 10 sistemas/mês = R$ 3.000 em comissões. 
+                    Venda 30/mês = R$ 15.000. Você no controle.
+                </p>
+            </div>
+
+            <div class="beneficio-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="beneficio-icon">🎯</div>
+                <h3>Zero Investimento</h3>
+                <div class="beneficio-valor">R$ 0,00</div>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Sem taxa de adesão. Sem mensalidade. Sem custos ocultos. 
+                    100% gratuito para sempre.
+                </p>
+            </div>
+
+            <div class="beneficio-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="beneficio-icon">🛡️</div>
+                <h3>Zero Risco</h3>
+                <div class="beneficio-valor">Garantido</div>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Não gostou? Cancele quando quiser. Sem multas. 
+                    Sem burocracia. Você não perde nada.
+                </p>
+            </div>
+
+            <div class="beneficio-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="beneficio-icon">⚡</div>
+                <h3>Ativo em 24h</h3>
+                <div class="beneficio-valor">Imediato</div>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Configure tudo em menos de 1 dia. 
+                    Comece a vender e ganhar comissões hoje mesmo.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Prova Social -->
+<section class="prova-social">
+    <div class="container">
+        <h2 style="font-size: 3.5rem; text-align: center; margin-bottom: 1rem;" data-aos="fade-up">
+            Resultados Reais de Quem Já Está Ganhando
+        </h2>
+
+        <div class="resultados-grid">
+            <div class="resultado-box" data-aos="fade-up" data-aos-delay="0">
+                <span class="resultado-numero">R$ 47.890</span>
+                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Em comissões nos últimos 30 dias</p>
+            </div>
+
+            <div class="resultado-box" data-aos="fade-up" data-aos-delay="100">
+                <span class="resultado-numero">142</span>
+                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Parceiros ativos gerando renda</p>
+            </div>
+
+            <div class="resultado-box" data-aos="fade-up" data-aos-delay="200">
+                <span class="resultado-numero">R$ 3.200</span>
+                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Comissão média por parceiro/mês</p>
+            </div>
+
+            <div class="resultado-box" data-aos="fade-up" data-aos-delay="300">
+                <span class="resultado-numero">98%</span>
+                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Taxa de satisfação dos parceiros</p>
+            </div>
+        </div>
+
+        <div style="max-width: 900px; margin: 4rem auto; padding: 3rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 25px; border: 2px solid rgba(255,255,255,0.2);" data-aos="fade-up">
+            <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: var(--dark);">MC</div>
+                <div>
+                    <strong style="font-size: 1.5rem; display: block;">Marina Costa</strong>
+                    <span style="opacity: 0.9;">Parceira desde Janeiro/2024</span>
+                </div>
+            </div>
+            <p style="font-size: 1.3rem; line-height: 1.8; font-style: italic;">
+                "Em 3 meses já ganhei R$ 12.400 em comissões. O sistema vende sozinho! 
+                Não investi nada e já estou lucrando mais que no meu emprego. Melhor decisão que tomei!"
+            </p>
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                <strong style="color: var(--secondary); font-size: 1.2rem;">Resultado: R$ 12.400 em comissões | 38 vendas realizadas</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Como Funciona -->
+<section class="como-funciona">
+    <div class="container">
+        <h2 style="font-size: 3.5rem; text-align: center; margin-bottom: 1rem; color: var(--primary);" data-aos="fade-up">
+            Como Funciona? É Simples Demais!
+        </h2>
+
+        <div class="passos-grid">
+            <div class="passo-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="passo-numero">1</div>
+                <div class="passo-icon">📝</div>
+                <h3>Cadastre-se GRÁTIS</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Preencha o formulário abaixo em 2 minutos. 
+                    Sem cartão de crédito. Sem pegadinhas.
+                </p>
+            </div>
+
+            <div class="passo-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="passo-numero">2</div>
+                <div class="passo-icon">🚀</div>
+                <h3>Receba Seu Sistema</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Em até 24h você recebe tudo configurado: 
+                    e-commerce, produtos, calculadora e IA.
+                </p>
+            </div>
+
+            <div class="passo-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="passo-numero">3</div>
+                <div class="passo-icon">💰</div>
+                <h3>Venda e Ganhe!</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Cada venda gera comissão automática de R$ 150 a R$ 500. 
+                    Pagamento garantido via PIX.
+                </p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;" data-aos="zoom-in">
+            <p style="font-size: 1.5rem; margin-bottom: 2rem; font-weight: 600;">
+                ⚡ Quanto Você Pode Ganhar?
+            </p>
+            <div style="background: linear-gradient(135deg, var(--primary) 0%, #0a5540 100%); color: white; padding: 3rem; border-radius: 25px; max-width: 800px; margin: 0 auto; box-shadow: 0 15px 50px rgba(0,0,0,0.2);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; text-align: center;">
+                    <div>
+                        <div style="font-size: 3rem; font-weight: 900; color: var(--secondary);">5</div>
+                        <div style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0.5rem;">vendas/mês</div>
+                        <div style="font-size: 2rem; font-weight: 700;">R$ 1.500</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 3rem; font-weight: 900; color: var(--secondary);">10</div>
+                        <div style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0.5rem;">vendas/mês</div>
+                        <div style="font-size: 2rem; font-weight: 700;">R$ 3.000</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 3rem; font-weight: 900; color: var(--secondary);">30</div>
+                        <div style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0.5rem;">vendas/mês</div>
+                        <div style="font-size: 2rem; font-weight: 700;">R$ 15.000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+    <div class="container">
+        <h2 style="font-size: 3.5rem; text-align: center; margin-bottom: 1rem; color: var(--primary);" data-aos="fade-up">
+            Perguntas Frequentes
+        </h2>
+
+        <div class="faq-list">
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question">
+                    Realmente é 100% gratuito?
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SIM! Zero custo de adesão, zero mensalidade, zero taxas ocultas. Você recebe o sistema completo gratuitamente e só ganha quando vende.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question">
+                    Como funciona a comissão?
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Você ganha de R$ 150 a R$ 500 por cada venda realizada através do seu sistema. Quanto maior o valor da venda, maior sua comissão. Pagamento via PIX em até 48h após confirmação do pedido.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question">
+                    Preciso ter experiência técnica?
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>NÃO! O sistema vem 100% configurado e pronto para usar. Você só precisa divulgar e vender. Fornecemos treinamento completo e suporte dedicado.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question">
+                    Existe algum contrato de fidelidade?
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>NÃO! Você pode cancelar quando quiser, sem multas ou burocracias. Não há compromisso de tempo mínimo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question">
+                    Quanto tempo leva para começar a ganhar?
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Você pode fazer sua primeira venda em 24h! Assim que seu sistema estiver ativo, já pode começar a divulgar e vender. Muitos parceiros fazem a primeira venda na primeira semana.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question">
+                    O que está incluído no sistema?
+                    <span>▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>TUDO! E-commerce completo, calculadora solar, assistente IA com Gemini, painel administrativo, integração de pagamento, hospedagem premium, suporte 24/7 e atualizações gratuitas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Final -->
+<section class="cta-final" id="formulario">
+    <div class="container">
+        <div style="max-width: 900px; margin: 0 auto; position: relative; z-index: 10;">
+            <h2 style="font-size: 4rem; margin-bottom: 1.5rem;" data-aos="zoom-in">
+                Garanta Sua Vaga AGORA!
+            </h2>
+            <p style="font-size: 1.8rem; margin-bottom: 3rem; opacity: 0.95;" data-aos="zoom-in" data-aos-delay="100">
+                Apenas <strong style="color: var(--secondary);">10 vagas disponíveis hoje</strong> para garantir qualidade no suporte
+            </p>
+
+            <div class="garantia-box" data-aos="zoom-in" data-aos-delay="200">
+                <div class="garantia-icon">🛡️</div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Garantia Blindada de 30 Dias</h3>
+                <p style="font-size: 1.3rem; line-height: 1.8;">
+                    Teste o sistema por 30 dias. Se não vender nada ou não gostar por qualquer motivo, 
+                    você cancela sem complicações. <strong>ZERO risco para você.</strong>
+                </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.95); padding: 3rem; border-radius: 25px; margin: 3rem 0; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" data-aos="zoom-in" data-aos-delay="300">
+                <h3 style="color: var(--dark); font-size: 2rem; margin-bottom: 2rem;">Cadastro Rápido - 2 Minutos</h3>
+                <form id="formParceria" style="text-align: left;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="text" name="nome" placeholder="Seu nome completo *" required
+                               style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="email" name="email" placeholder="Seu melhor email *" required
+                               style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="tel" name="telefone" placeholder="WhatsApp com DDD *" required
+                               style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="text" name="cidade" placeholder="Sua cidade/estado *" required
+                               style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <select name="experiencia" required
+                                style="width: 100%; padding: 1.25rem; border: 2px solid #ddd; border-radius: 12px; font-size: 1.1rem;">
+                            <option value="">Você já trabalha com energia solar? *</option>
+                            <option value="sim">Sim, já vendo/instalo</option>
+                            <option value="nao_mas_quero">Não, mas quero começar</option>
+                            <option value="outro_segmento">Trabalho em outro segmento</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="cta-mega" style="width: 100%; justify-content: center; animation: none;">
+                        🚀 GARANTIR MINHA VAGA GRÁTIS AGORA
+                    </button>
+                    <p style="text-align: center; margin-top: 1.5rem; color: #666; font-size: 0.95rem;">
+                        🔒 Seus dados estão 100% seguros conosco
+                    </p>
+                </form>
+            </div>
+
+            <div style="margin-top: 4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center;" data-aos="fade-up" data-aos-delay="400">
+                <div>
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+                    <div style="font-size: 1.1rem;">Sistema Completo GRÁTIS</div>
+                </div>
+                <div>
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+                    <div style="font-size: 1.1rem;">Comissão Garantida</div>
+                </div>
+                <div>
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+                    <div style="font-size: 1.1rem;">Suporte Dedicado</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 3rem; font-size: 1.2rem; opacity: 0.9;">
+                <strong>ATENÇÃO:</strong> Esta oferta pode ser encerrada a qualquer momento devido à alta demanda.<br>
+                Garanta sua vaga enquanto ainda há tempo!
+            </p>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({
+    duration: 800,
+    once: true,
+    offset: 100
+});
+
+// Timer de urgência
+function iniciarTimer() {
+    const endTime = new Date().getTime() + (12 * 60 * 60 * 1000); // 12 horas
+
+    function atualizarTimer() {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+
+        const horas = Math.floor(distance / (1000 * 60 * 60));
+        const minutos = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('horas').textContent = String(horas).padStart(2, '0');
+        document.getElementById('minutos').textContent = String(minutos).padStart(2, '0');
+        document.getElementById('segundos').textContent = String(segundos).padStart(2, '0');
+
+        if (distance < 0) {
+            clearInterval(timerInterval);
+            document.getElementById('horas').textContent = '00';
+            document.getElementById('minutos').textContent = '00';
+            document.getElementById('segundos').textContent = '00';
+        }
+    }
+
+    atualizarTimer();
+    const timerInterval = setInterval(atualizarTimer, 1000);
+}
+
+iniciarTimer();
+
+// FAQ Toggle
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+        const item = question.parentElement;
+        const wasActive = item.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        
+        if (!wasActive) {
+            item.classList.add('active');
+        }
+    });
+});
+
+// Form Submit
+document.getElementById('formParceria').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/contato', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                nome: data.nome,
+                email: data.email,
+                telefone: data.telefone,
+                assunto: 'Parceria - Sistema Grátis + Comissão',
+                mensagem: `Cidade: ${data.cidade}\nExperiência: ${data.experiencia}\n\nInteressado na parceria de sistema gratuito + comissão.`
+            })
+        });
+        
+        if (response.ok) {
+            alert('✅ PARABÉNS! Sua vaga foi garantida!\n\nEntraremos em contato em até 24h para ativar seu sistema.\n\nVerifique seu email e WhatsApp!');
+            this.reset();
+        } else {
+            alert('Erro ao enviar. Tente novamente ou entre em contato via WhatsApp.');
+        }
+    } catch (error) {
+        alert('Erro ao enviar. Tente novamente ou entre em contato via WhatsApp.');
+    }
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+</script>
+{% endblock %}

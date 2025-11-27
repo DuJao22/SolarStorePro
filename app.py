@@ -287,6 +287,10 @@ def landing_saas():
 def landing_sistema():
     return render_template('landing_sistema.html')
 
+@app.route('/parceria-gratuita')
+def landing_parceria():
+    return render_template('landing_comissao.html')
+
 @app.route('/contato', methods=['GET', 'POST'])
 def contato():
     if request.method == 'POST':
