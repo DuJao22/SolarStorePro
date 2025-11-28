@@ -364,7 +364,13 @@
         <div class="stat-mini">
             <div class="stat-mini-label">Estoque Baixo</div>
             <div class="stat-mini-value" style="color: #dc3545;">
-                {{ produtos|selectattr('ativo', 'equalto', 1)|select('<=', 'estoque', 'estoque_minimo')|list|length }}
+                {% set estoque_baixo = [] %}
+                {% for produto in produtos %}
+                    {% if produto.ativo == 1 and produto.estoque <= produto.estoque_minimo %}
+                        {% set _ = estoque_baixo.append(produto) %}
+                    {% endif %}
+                {% endfor %}
+                {{ estoque_baixo|length }}
             </div>
         </div>
     </div>
