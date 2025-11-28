@@ -1086,6 +1086,18 @@ def admin_marcar_respondido(id):
     flash('Contato marcado como respondido.', 'success')
     return redirect(url_for('admin_contatos'))
 
+@app.route('/admin/contato/<int:contato_id>/status', methods=['POST'])
+@admin_required
+def admin_atualizar_status_contato(contato_id):
+    status = request.form.get('status', 'pendente')
+    respondido = 1 if status == 'respondido' else 0
+    conn = get_db_connection()
+    conn.execute('UPDATE contatos SET respondido = ? WHERE id = ?', (respondido, contato_id))
+    conn.commit()
+    conn.close()
+    flash(f'Status do contato atualizado para {status}.', 'success')
+    return redirect(url_for('admin_contatos'))
+
 # ============== ASSISTENTE IA ==============
 
 @app.route('/admin/assistente')
