@@ -14,9 +14,9 @@
     <div class="container">
         <div class="products-controls">
             <div class="filters" data-aos="fade-right">
-                <label>Categoria:</label>
-                <select id="categoryFilter" onchange="window.location.href='{{ url_for('produtos') }}?categoria=' + this.value + '&ordem={{ ordem_atual }}'">
-                    <option value="">Todas</option>
+                <label for="categoryFilter">Categoria:</label>
+                <select id="categoryFilter" name="categoria" onchange="window.location.href='{{ url_for('produtos') }}?categoria=' + this.value + '&ordem={{ ordem_atual }}'">
+                    <option value="">Todas as Categorias</option>
                     {% for cat in categorias %}
                     <option value="{{ cat.categoria }}" {% if categoria_atual == cat.categoria %}selected{% endif %}>
                         {{ cat.categoria }}
@@ -26,8 +26,8 @@
             </div>
             
             <div class="sort" data-aos="fade-left">
-                <label>Ordenar:</label>
-                <select id="sortFilter" onchange="window.location.href='{{ url_for('produtos') }}?categoria={{ categoria_atual }}&ordem=' + this.value">
+                <label for="sortFilter">Ordenar por:</label>
+                <select id="sortFilter" name="ordem" onchange="window.location.href='{{ url_for('produtos') }}?categoria={{ categoria_atual }}&ordem=' + this.value">
                     <option value="nome" {% if ordem_atual == 'nome' %}selected{% endif %}>Nome A-Z</option>
                     <option value="preco_asc" {% if ordem_atual == 'preco_asc' %}selected{% endif %}>Menor Preço</option>
                     <option value="preco_desc" {% if ordem_atual == 'preco_desc' %}selected{% endif %}>Maior Preço</option>
@@ -38,25 +38,35 @@
         
         <div class="products-grid">
             {% for produto in produtos %}
-            <div class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+            <article class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 if loop.index0 < 6 else 0 }}">
                 <div class="product-image">
                     <img src="{{ url_for('static', filename='images/products/' + produto.imagem.split('/')[-1]) }}" 
-                         alt="{{ produto.nome }}"
+                         alt="{{ produto.nome }} - {{ produto.categoria }}"
                          loading="lazy"
+                         width="400"
+                         height="300"
                          onerror="this.src='https://via.placeholder.com/400x300/0B6A4A/FFFFFF?text={{ produto.nome[:20] }}'">
-                    <span class="product-badge">{{ produto.garantia }} anos</span>
-                    {% if produto.estoque < 10 %}
-                    <span class="product-badge badge-warning">Últimas unidades</span>
+                    <span class="product-badge" title="Garantia de {{ produto.garantia }} anos">
+                        🛡️ {{ produto.garantia }} anos
+                    </span>
+                    {% if produto.estoque < 10 and produto.estoque > 0 %}
+                    <span class="product-badge badge-warning" title="Estoque limitado">
+                        ⚠️ Últimas unidades
+                    </span>
+                    {% elif produto.estoque == 0 %}
+                    <span class="product-badge badge-warning" title="Produto esgotado">
+                        ❌ Esgotado
+                    </span>
                     {% endif %}
                 </div>
                 <div class="product-info">
                     <span class="product-category">{{ produto.categoria }}</span>
                     <h3 class="product-name">{{ produto.nome }}</h3>
-                    <p class="product-desc">{{ produto.descricao[:100] }}...</p>
+                    <p class="product-desc">{{ produto.descricao[:100] }}{% if produto.descricao|length > 100 %}...{% endif %}</p>
                     <div class="product-specs">
-                        <span class="spec">⚡ {{ produto.potencia_watts }}W</span>
-                        <span class="spec">📊 {{ produto.eficiencia }}%</span>
-                        <span class="spec">✓ {{ produto.garantia }} anos</span>
+                        <span class="spec" title="Potência">⚡ {{ produto.potencia_watts }}W</span>
+                        <span class="spec" title="Eficiência">📊 {{ produto.eficiencia }}%</span>
+                        <span class="spec" title="Garantia">✓ {{ produto.garantia }} anos</span>
                     </div>
                     <div class="product-footer">
                         <div class="product-price">
@@ -64,18 +74,24 @@
                             <span class="price-value">{{ produto.preco|format_price }}</span>
                         </div>
                         <div class="product-actions">
-                            <a href="{{ url_for('produto', id=produto.id) }}" class="btn btn-outline">Ver Detalhes</a>
+                            <a href="{{ url_for('produto', id=produto.id) }}" 
+                               class="btn btn-outline"
+                               aria-label="Ver detalhes de {{ produto.nome }}">
+                                Ver Detalhes
+                            </a>
                             <button class="btn btn-primary add-to-cart" 
                                     data-id="{{ produto.id }}"
                                     data-nome="{{ produto.nome }}"
                                     data-preco="{{ produto.preco }}"
-                                    data-imagem="{{ produto.imagem }}">
-                                Adicionar
+                                    data-imagem="{{ produto.imagem }}"
+                                    aria-label="Adicionar {{ produto.nome }} ao carrinho"
+                                    {% if produto.estoque == 0 %}disabled{% endif %}>
+                                {% if produto.estoque == 0 %}Esgotado{% else %}Adicionar{% endif %}
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
             {% endfor %}
         </div>
         
