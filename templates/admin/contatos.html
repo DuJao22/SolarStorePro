@@ -1,94 +1,621 @@
+
 {% extends "admin/base_admin.html" %}
 
 {% block title %}Contatos - Admin SolarPro{% endblock %}
-{% block page_title %}Contatos{% endblock %}
-{% block header_icon %}📧{% endblock %}
-
-{% block extra_css %}
-<style>
-.message-cell {
-    max-width: 300px;
-    word-wrap: break-word;
-}
-
-.pending {
-    background: rgba(255, 243, 205, 0.3);
-}
-
-@media (max-width: 768px) {
-    .message-cell {
-        max-width: 100%;
-    }
-
-    .data-table td[data-label="Mensagem"]::before {
-        align-self: flex-start;
-    }
-
-    .data-table td[data-label="Mensagem"] {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .data-table td[data-label="Ação"] form {
-        width: 100%;
-    }
-
-    .data-table td[data-label="Ação"] .btn {
-        width: 100%;
-    }
-}
-</style>
-{% endblock %}
 
 {% block content %}
-<div class="dashboard-card">
-    <div class="card-body">
+<div class="admin-header">
+    <div class="header-content">
+        <div class="header-title">
+            <div class="title-icon">📧</div>
+            <div>
+                <h1>Gestão de Contatos</h1>
+                <p class="header-subtitle">Visualize e gerencie todas as mensagens recebidas</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="search-bar">
+                <input type="text" id="searchContatos" placeholder="🔍 Buscar por nome, email ou telefone..." class="search-input">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-content">
+    <!-- Estatísticas Rápidas -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #4285f4, #5a9bff);">
+                <span style="font-size: 2rem;">📩</span>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Total de Contatos</span>
+                <span class="stat-value">{{ contatos|length }}</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #0B6A4A, #0a5540);">
+                <span style="font-size: 2rem;">✅</span>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Respondidos</span>
+                <span class="stat-value">
+                    {{ contatos|selectattr('status', 'equalto', 'respondido')|list|length }}
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                <span style="font-size: 2rem;">⏳</span>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Pendentes</span>
+                <span class="stat-value">
+                    {{ contatos|selectattr('status', 'equalto', 'pendente')|list|length }}
+                </span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                <span style="font-size: 2rem;">📈</span>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Taxa de Resposta</span>
+                <span class="stat-value">
+                    {% if contatos|length > 0 %}
+                        {{ ((contatos|selectattr('status', 'equalto', 'respondido')|list|length / contatos|length) * 100)|round(1) }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <label for="filterStatus">Status:</label>
+            <select id="filterStatus" class="filter-select">
+                <option value="">Todos</option>
+                <option value="pendente">Pendentes</option>
+                <option value="respondido">Respondidos</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filterAssunto">Assunto:</label>
+            <select id="filterAssunto" class="filter-select">
+                <option value="">Todos</option>
+                <option value="Parceria">Parceria</option>
+                <option value="Orcamento">Orçamento</option>
+                <option value="Duvida">Dúvida</option>
+                <option value="Suporte">Suporte</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="sortOrder">Ordenar por:</label>
+            <select id="sortOrder" class="filter-select">
+                <option value="data_desc">Mais Recentes</option>
+                <option value="data_asc">Mais Antigos</option>
+                <option value="nome">Nome (A-Z)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Lista de Contatos -->
+    <div class="table-card">
         {% if contatos %}
-        <table class="data-table full-width">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Assunto</th>
-                    <th>Mensagem</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for contato in contatos %}
-                <tr class="{{ 'pending' if not contato.respondido else '' }}">
-                    <td data-label="Data">{{ contato.data|format_date }}</td>
-                    <td data-label="Nome"><strong>{{ contato.nome }}</strong></td>
-                    <td data-label="Email"><a href="mailto:{{ contato.email }}">{{ contato.email }}</a></td>
-                    <td data-label="Telefone">{{ contato.telefone or '-' }}</td>
-                    <td data-label="Assunto">{{ contato.assunto or 'Geral' }}</td>
-                    <td data-label="Mensagem" class="message-cell">{{ contato.mensagem[:100] }}{% if contato.mensagem|length > 100 %}...{% endif %}</td>
-                    <td data-label="Status">
-                        {% if contato.respondido %}
-                        <span class="badge badge-success">Respondido</span>
-                        {% else %}
-                        <span class="badge badge-warning">Pendente</span>
-                        {% endif %}
-                    </td>
-                    <td data-label="Ação">
-                        {% if not contato.respondido %}
-                        <form method="POST" action="{{ url_for('admin_marcar_respondido', id=contato.id) }}" style="display: inline;">
-                            <button type="submit" class="btn btn-sm btn-outline">Marcar Respondido</button>
-                        </form>
-                        {% else %}
-                        <span style="color: #28a745; font-size: 0.9rem;">✓ Concluído</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 140px;">
+                                <span class="th-content">📅 Data</span>
+                            </th>
+                            <th style="width: 180px;">
+                                <span class="th-content">👤 Nome</span>
+                            </th>
+                            <th style="width: 220px;">
+                                <span class="th-content">📧 Email</span>
+                            </th>
+                            <th style="width: 140px;">
+                                <span class="th-content">📱 Telefone</span>
+                            </th>
+                            <th style="width: 150px;">
+                                <span class="th-content">📋 Assunto</span>
+                            </th>
+                            <th>
+                                <span class="th-content">💬 Mensagem</span>
+                            </th>
+                            <th style="width: 120px;">
+                                <span class="th-content">📊 Status</span>
+                            </th>
+                            <th style="width: 140px;" class="text-center">
+                                <span class="th-content">⚙️ Ações</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="contatosTable">
+                        {% for contato in contatos %}
+                        <tr class="contato-row" data-status="{{ contato.status }}" data-assunto="{{ contato.assunto }}">
+                            <td>
+                                <div class="date-cell">
+                                    <div class="date-day">{{ contato.data_contato.strftime('%d/%m/%Y') }}</div>
+                                    <div class="date-time">{{ contato.data_contato.strftime('%H:%M') }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="name-cell">
+                                    <strong>{{ contato.nome }}</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="mailto:{{ contato.email }}" class="email-link">
+                                    {{ contato.email }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="tel:{{ contato.telefone }}" class="phone-link">
+                                    {{ contato.telefone }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="assunto-badge assunto-{{ contato.assunto|lower }}">
+                                    {{ contato.assunto }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="message-cell">
+                                    <p class="message-preview">{{ contato.mensagem[:100] }}{% if contato.mensagem|length > 100 %}...{% endif %}</p>
+                                    {% if contato.mensagem|length > 100 %}
+                                        <button class="btn-link" onclick="showFullMessage({{ loop.index0 }})">Ver mais</button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ contato.status }}">
+                                    {{ 'Respondido' if contato.status == 'respondido' else 'Pendente' }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="https://wa.me/55{{ contato.telefone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}" 
+                                       target="_blank" 
+                                       class="btn-action btn-whatsapp" 
+                                       title="Contatar via WhatsApp">
+                                        💬
+                                    </a>
+                                    <button class="btn-action btn-info" 
+                                            onclick="showContactDetails({{ loop.index0 }})" 
+                                            title="Ver detalhes">
+                                        👁️
+                                    </button>
+                                    <form method="POST" action="{{ url_for('admin_atualizar_status_contato', contato_id=contato.id) }}" style="display: inline;">
+                                        <input type="hidden" name="status" value="{{ 'pendente' if contato.status == 'respondido' else 'respondido' }}">
+                                        <button type="submit" 
+                                                class="btn-action {{ 'btn-pending' if contato.status == 'respondido' else 'btn-success' }}" 
+                                                title="{{ 'Marcar como pendente' if contato.status == 'respondido' else 'Marcar como respondido' }}">
+                                            {{ '⏳' if contato.status == 'respondido' else '✅' }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-        <p class="empty-text">Nenhum contato recebido.</p>
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h3>Nenhum contato recebido</h3>
+                <p>Quando os clientes enviarem mensagens pelo formulário de contato, elas aparecerão aqui.</p>
+            </div>
         {% endif %}
     </div>
 </div>
+
+<!-- Modal de Detalhes do Contato -->
+<div id="contactModal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h2>📧 Detalhes do Contato</h2>
+            <button class="modal-close" onclick="closeContactModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="contactModalBody">
+            <!-- Conteúdo será inserido via JavaScript -->
+        </div>
+    </div>
+</div>
+
+<script>
+const contatosData = {{ contatos|tojson }};
+
+// Busca
+document.getElementById('searchContatos').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('.contato-row');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+});
+
+// Filtro por status
+document.getElementById('filterStatus').addEventListener('change', function(e) {
+    const status = e.target.value;
+    const rows = document.querySelectorAll('.contato-row');
+    
+    rows.forEach(row => {
+        if (!status || row.dataset.status === status) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+// Filtro por assunto
+document.getElementById('filterAssunto').addEventListener('change', function(e) {
+    const assunto = e.target.value;
+    const rows = document.querySelectorAll('.contato-row');
+    
+    rows.forEach(row => {
+        if (!assunto || row.dataset.assunto.includes(assunto)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+// Ordenação
+document.getElementById('sortOrder').addEventListener('change', function(e) {
+    const tbody = document.getElementById('contatosTable');
+    const rows = Array.from(tbody.querySelectorAll('.contato-row'));
+    
+    rows.sort((a, b) => {
+        switch(e.target.value) {
+            case 'data_asc':
+                return a.children[0].textContent.localeCompare(b.children[0].textContent);
+            case 'data_desc':
+                return b.children[0].textContent.localeCompare(a.children[0].textContent);
+            case 'nome':
+                return a.children[1].textContent.localeCompare(b.children[1].textContent);
+        }
+    });
+    
+    rows.forEach(row => tbody.appendChild(row));
+});
+
+function showContactDetails(index) {
+    const contato = contatosData[index];
+    const modalBody = document.getElementById('contactModalBody');
+    
+    modalBody.innerHTML = `
+        <div class="contact-details-grid">
+            <div class="detail-section">
+                <h3>👤 Informações do Contato</h3>
+                <div class="detail-item">
+                    <strong>Nome:</strong>
+                    <span>${contato.nome}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Email:</strong>
+                    <a href="mailto:${contato.email}">${contato.email}</a>
+                </div>
+                <div class="detail-item">
+                    <strong>Telefone:</strong>
+                    <a href="tel:${contato.telefone}">${contato.telefone}</a>
+                </div>
+                <div class="detail-item">
+                    <strong>Data:</strong>
+                    <span>${new Date(contato.data_contato).toLocaleString('pt-BR')}</span>
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h3>📋 Detalhes da Mensagem</h3>
+                <div class="detail-item">
+                    <strong>Assunto:</strong>
+                    <span class="assunto-badge assunto-${contato.assunto.toLowerCase()}">${contato.assunto}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Status:</strong>
+                    <span class="status-badge status-${contato.status}">${contato.status === 'respondido' ? 'Respondido' : 'Pendente'}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detail-section full-width">
+            <h3>💬 Mensagem Completa</h3>
+            <div class="message-full">
+                ${contato.mensagem}
+            </div>
+        </div>
+        
+        <div class="modal-actions">
+            <a href="https://wa.me/55${contato.telefone.replace(/\D/g, '')}" target="_blank" class="btn btn-success">
+                💬 Responder via WhatsApp
+            </a>
+            <a href="mailto:${contato.email}" class="btn btn-primary">
+                📧 Responder via Email
+            </a>
+        </div>
+    `;
+    
+    document.getElementById('contactModal').style.display = 'flex';
+}
+
+function closeContactModal() {
+    document.getElementById('contactModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('contactModal');
+    if (event.target === modal) {
+        closeContactModal();
+    }
+}
+</script>
+
+<style>
+.filters-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.filter-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-select:hover,
+.filter-select:focus {
+    border-color: #0B6A4A;
+    outline: none;
+}
+
+.date-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-day {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.date-time {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.name-cell strong {
+    color: #1f2937;
+}
+
+.email-link,
+.phone-link {
+    color: #0B6A4A;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.email-link:hover,
+.phone-link:hover {
+    text-decoration: underline;
+}
+
+.assunto-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.assunto-parceria {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.assunto-orcamento,
+.assunto-orçamento {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.assunto-duvida,
+.assunto-dúvida {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.assunto-suporte {
+    background: #fce7f3;
+    color: #9f1239;
+}
+
+.message-cell {
+    max-width: 300px;
+}
+
+.message-preview {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #0B6A4A;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 0.25rem;
+    text-decoration: underline;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: white;
+}
+
+.btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.btn-pending {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.btn-pending:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.contact-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.detail-section {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.detail-section.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-section h3 {
+    margin-bottom: 1rem;
+    color: #0B6A4A;
+    font-size: 1.1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item strong {
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+.message-full {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+@media (max-width: 1024px) {
+    .contact-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-section {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+    }
+}
+</style>
 {% endblock %}
