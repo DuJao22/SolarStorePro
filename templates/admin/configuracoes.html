@@ -253,6 +253,176 @@ input:checked + .toggle-slider:before {
 
 {% block content %}
 <form method="POST" class="config-grid">
+    <!-- Informações da Loja Section -->
+    <div class="config-section">
+        <div class="config-section-header">
+            <div class="config-section-icon">🏪</div>
+            <div class="config-section-title">
+                <h3>Informações da Loja</h3>
+                <p>Configure os dados da sua empresa exibidos em todo o site</p>
+            </div>
+            <span class="config-badge active">✓ Essencial</span>
+        </div>
+        <div class="config-section-body">
+            <div class="config-field">
+                <label for="loja_nome" class="config-label">
+                    <span class="config-label-icon">🏢</span>
+                    Nome da Loja
+                </label>
+                <input 
+                    type="text" 
+                    id="loja_nome" 
+                    name="loja_nome" 
+                    class="config-input"
+                    value="{{ config.loja_nome or 'SolarPro' }}"
+                    placeholder="SolarPro Energia Solar"
+                >
+                <span class="config-help">
+                    Nome da sua empresa exibido no site, emails e documentos
+                </span>
+            </div>
+
+            <div class="config-field">
+                <label for="loja_razao_social" class="config-label">
+                    <span class="config-label-icon">📋</span>
+                    Razão Social
+                </label>
+                <input 
+                    type="text" 
+                    id="loja_razao_social" 
+                    name="loja_razao_social" 
+                    class="config-input"
+                    value="{{ config.loja_razao_social or '' }}"
+                    placeholder="SolarPro Energia Solar Ltda"
+                >
+            </div>
+
+            <div class="config-field">
+                <label for="loja_cnpj" class="config-label">
+                    <span class="config-label-icon">🆔</span>
+                    CNPJ
+                </label>
+                <input 
+                    type="text" 
+                    id="loja_cnpj" 
+                    name="loja_cnpj" 
+                    class="config-input"
+                    value="{{ config.loja_cnpj or '' }}"
+                    placeholder="00.000.000/0000-00"
+                >
+            </div>
+
+            <div class="config-field">
+                <label for="loja_email" class="config-label">
+                    <span class="config-label-icon">📧</span>
+                    Email de Contato
+                </label>
+                <input 
+                    type="email" 
+                    id="loja_email" 
+                    name="loja_email" 
+                    class="config-input"
+                    value="{{ config.loja_email or 'contato@solarpro.com' }}"
+                    placeholder="contato@solarpro.com"
+                >
+                <span class="config-help">
+                    Email principal exibido no rodapé e página de contato
+                </span>
+            </div>
+
+            <div class="config-field">
+                <label for="loja_telefone" class="config-label">
+                    <span class="config-label-icon">📞</span>
+                    Telefone
+                </label>
+                <input 
+                    type="tel" 
+                    id="loja_telefone" 
+                    name="loja_telefone" 
+                    class="config-input"
+                    value="{{ config.loja_telefone or '(11) 99999-9999' }}"
+                    placeholder="(11) 99999-9999"
+                >
+            </div>
+
+            <div class="config-field">
+                <label for="loja_whatsapp" class="config-label">
+                    <span class="config-label-icon">💬</span>
+                    WhatsApp
+                </label>
+                <input 
+                    type="tel" 
+                    id="loja_whatsapp" 
+                    name="loja_whatsapp" 
+                    class="config-input"
+                    value="{{ config.loja_whatsapp or '5511999999999' }}"
+                    placeholder="5511999999999"
+                >
+                <span class="config-help">
+                    Número com código do país (55) + DDD + número (sem espaços)
+                </span>
+            </div>
+
+            <div class="config-field">
+                <label for="loja_endereco" class="config-label">
+                    <span class="config-label-icon">📍</span>
+                    Endereço Completo
+                </label>
+                <input 
+                    type="text" 
+                    id="loja_endereco" 
+                    name="loja_endereco" 
+                    class="config-input"
+                    value="{{ config.loja_endereco or '' }}"
+                    placeholder="Av. Paulista, 1000 - São Paulo/SP"
+                >
+            </div>
+
+            <div class="config-field">
+                <label for="loja_cidade" class="config-label">
+                    <span class="config-label-icon">🏙️</span>
+                    Cidade
+                </label>
+                <input 
+                    type="text" 
+                    id="loja_cidade" 
+                    name="loja_cidade" 
+                    class="config-input"
+                    value="{{ config.loja_cidade or 'São Paulo' }}"
+                    placeholder="São Paulo"
+                >
+            </div>
+
+            <div class="config-field">
+                <label for="loja_estado" class="config-label">
+                    <span class="config-label-icon">🗺️</span>
+                    Estado
+                </label>
+                <select id="loja_estado" name="loja_estado" class="config-input">
+                    <option value="">Selecione</option>
+                    {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+                    <option value="{{ uf }}" {{ 'selected' if config.loja_estado == uf else '' }}>{{ uf }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="config-field">
+                <label for="loja_horario" class="config-label">
+                    <span class="config-label-icon">🕐</span>
+                    Horário de Atendimento
+                </label>
+                <input 
+                    type="text" 
+                    id="loja_horario" 
+                    name="loja_horario" 
+                    class="config-input"
+                    value="{{ config.loja_horario or 'Seg-Sex: 8h às 18h | Sáb: 8h às 12h' }}"
+                    placeholder="Seg-Sex: 8h às 18h"
+                >
+            </div>
+        </div>
+    </div>
+
     <!-- Mercado Pago Section -->
     <div class="config-section">
         <div class="config-section-header">

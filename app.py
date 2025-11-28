@@ -134,7 +134,19 @@ def utility_processor():
                 return sum(p.get('quantidade', 0) for p in produtos)
         return 0
     
-    return dict(product_image_url=product_image_url, get_cart_count=get_cart_count)
+    def get_loja_config():
+        """Retorna todas as configurações da loja para usar nos templates"""
+        conn = get_db_connection()
+        configs = conn.execute('SELECT chave, valor FROM configuracoes WHERE chave LIKE "loja_%"').fetchall()
+        conn.close()
+        config_dict = {c['chave']: c['valor'] for c in configs}
+        return config_dict
+    
+    return dict(
+        product_image_url=product_image_url, 
+        get_cart_count=get_cart_count,
+        loja=get_loja_config()
+    )
 
 # ============== ROTAS PÚBLICAS ==============
 
@@ -1001,18 +1013,33 @@ def admin_carrinhos_abandonados():
 @admin_required
 def admin_configuracoes():
     if request.method == 'POST':
-        for key in request.form:
-            if key.startswith('config_'):
-                chave = key.replace('config_', '')
-                set_config(chave, request.form[key])
+        # Salvar todas as configurações do formulário
+        config_keys = [
+            'mercadopago_access_token', 'mercadopago_public_key', 'openai_api_key',
+            'loja_nome', 'loja_razao_social', 'loja_cnpj', 'loja_email', 'loja_telefone',
+            'loja_whatsapp', 'loja_endereco', 'loja_cidade', 'loja_estado', 'loja_horario'
+        ]
+        
+        for key in config_keys:
+            valor = request.form.get(key, '').strip()
+            set_config(key, valor)
+        
+        # Checkbox do sandbox
+        sandbox = '1' if request.form.get('mercadopago_sandbox') else '0'
+        set_config('mercadopago_sandbox', sandbox)
+        
         log_admin_action(current_user.id, 'Configurações atualizadas')
         flash('Configurações salvas com sucesso!', 'success')
         return redirect(url_for('admin_configuracoes'))
     
     conn = get_db_connection()
-    configs = conn.execute('SELECT * FROM configuracoes ORDER BY chave').fetchall()
+    configs_list = conn.execute('SELECT * FROM configuracoes ORDER BY chave').fetchall()
     conn.close()
-    return render_template('admin/configuracoes.html', configs=configs)
+    
+    # Converter para dict para facilitar acesso no template
+    config = {c['chave']: c['valor'] for c in configs_list}
+    
+    return render_template('admin/configuracoes.html', config=config)
 
 @app.route('/admin/cupons')
 @admin_required
