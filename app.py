@@ -755,10 +755,10 @@ def pagamento_sucesso(pedido_id):
     payment_id = request.args.get('payment_id')
     
     conn = get_db_connection()
-    # Atualiza status para 'pago' para contabilizar no dashboard
-    conn.execute('''UPDATE pedidos SET status_pagamento = ?, status_pedido = ?, mercadopago_id = ?, data_pagamento = ?
+    # Atualiza ambos os status para manter consistência
+    conn.execute('''UPDATE pedidos SET status_pagamento = ?, status_pedido = ?, mercadopago_id = ?, mercadopago_status = ?, data_pagamento = ?
                     WHERE id = ? AND usuario_id = ?''',
-                ('aprovado', 'pago', payment_id, datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                ('aprovado', 'pago', payment_id, 'approved', datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                  pedido_id, current_user.id))
     conn.commit()
     conn.close()

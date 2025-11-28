@@ -55,6 +55,50 @@
         min-width: 100%;
     }
 }
+
+/* Custom badge styles */
+.status-badge {
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85em;
+    text-transform: capitalize;
+}
+
+.status-aprovado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-pendente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-pago {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-processando {
+    background-color: #cfe2f3;
+    color: #0c5460;
+}
+
+.status-enviado {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-entregue {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-cancelado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 </style>
 {% endblock %}
 
@@ -95,8 +139,26 @@
                         <small>{{ pedido.email }}</small>
                     </td>
                     <td data-label="Total"><strong>{{ pedido.total|format_price }}</strong></td>
-                    <td data-label="Pagamento"><span class="badge badge-{{ pedido.status_pagamento }}">{{ pedido.status_pagamento|title }}</span></td>
-                    <td data-label="Status"><span class="badge badge-{{ pedido.status_pedido }}">{{ pedido.status_pedido|replace('_', ' ')|title }}</span></td>
+                    <td>
+                    {% if pedido.status_pedido in ['pago', 'processando', 'enviado', 'entregue'] %}
+                    <span class="status-badge status-aprovado">
+                        Aprovado
+                    </span>
+                    {% elif pedido.status_pedido == 'aguardando_pagamento' %}
+                    <span class="status-badge status-pendente">
+                        Pendente
+                    </span>
+                    {% else %}
+                    <span class="status-badge status-{{ pedido.status_pagamento or 'pendente' }}">
+                        {{ pedido.status_pagamento or 'Pendente' }}
+                    </span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="status-badge status-{{ pedido.status_pedido }}">
+                        {{ pedido.status_pedido|replace('_', ' ')|title }}
+                    </span>
+                </td>
                     <td data-label="Ações">
                         <a href="{{ url_for('admin_pedido_detalhe', id=pedido.id) }}" class="btn btn-sm btn-outline">Ver Detalhes</a>
                     </td>
