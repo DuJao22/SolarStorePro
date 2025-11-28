@@ -142,11 +142,11 @@
                     </thead>
                     <tbody id="contatosTable">
                         {% for contato in contatos %}
-                        <tr class="contato-row" data-status="{{ contato.status }}" data-assunto="{{ contato.assunto }}">
+                        <tr class="contato-row" data-status="{{ 'respondido' if contato.respondido else 'pendente' }}" data-assunto="{{ contato.assunto }}">
                             <td>
                                 <div class="date-cell">
-                                    <div class="date-day">{{ contato.data_contato.strftime('%d/%m/%Y') }}</div>
-                                    <div class="date-time">{{ contato.data_contato.strftime('%H:%M') }}</div>
+                                    <div class="date-day">{{ contato.data[:10] if contato.data else '-' }}</div>
+                                    <div class="date-time">{{ contato.data[11:16] if contato.data and contato.data|length > 11 else '' }}</div>
                                 </div>
                             </td>
                             <td>
@@ -178,8 +178,8 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="status-badge status-{{ contato.status }}">
-                                    {{ 'Respondido' if contato.status == 'respondido' else 'Pendente' }}
+                                <span class="status-badge status-{{ 'respondido' if contato.respondido else 'pendente' }}">
+                                    {{ 'Respondido' if contato.respondido else 'Pendente' }}
                                 </span>
                             </td>
                             <td>
@@ -196,11 +196,11 @@
                                         👁️
                                     </button>
                                     <form method="POST" action="{{ url_for('admin_atualizar_status_contato', contato_id=contato.id) }}" style="display: inline;">
-                                        <input type="hidden" name="status" value="{{ 'pendente' if contato.status == 'respondido' else 'respondido' }}">
+                                        <input type="hidden" name="status" value="{{ 'pendente' if contato.respondido else 'respondido' }}">
                                         <button type="submit" 
-                                                class="btn-action {{ 'btn-pending' if contato.status == 'respondido' else 'btn-success' }}" 
-                                                title="{{ 'Marcar como pendente' if contato.status == 'respondido' else 'Marcar como respondido' }}">
-                                            {{ '⏳' if contato.status == 'respondido' else '✅' }}
+                                                class="btn-action {{ 'btn-pending' if contato.respondido else 'btn-success' }}" 
+                                                title="{{ 'Marcar como pendente' if contato.respondido else 'Marcar como respondido' }}">
+                                            {{ '⏳' if contato.respondido else '✅' }}
                                         </button>
                                     </form>
                                 </div>
@@ -316,7 +316,7 @@ function showContactDetails(index) {
                 </div>
                 <div class="detail-item">
                     <strong>Data:</strong>
-                    <span>${new Date(contato.data_contato).toLocaleString('pt-BR')}</span>
+                    <span>${contato.data ? new Date(contato.data).toLocaleString('pt-BR') : '-'}</span>
                 </div>
             </div>
             
@@ -328,7 +328,7 @@ function showContactDetails(index) {
                 </div>
                 <div class="detail-item">
                     <strong>Status:</strong>
-                    <span class="status-badge status-${contato.status}">${contato.status === 'respondido' ? 'Respondido' : 'Pendente'}</span>
+                    <span class="status-badge status-${contato.respondido ? 'respondido' : 'pendente'}">${contato.respondido ? 'Respondido' : 'Pendente'}</span>
                 </div>
             </div>
         </div>
