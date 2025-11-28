@@ -2,6 +2,18 @@
 
 {% block title %}Clientes - Admin SolarPro{% endblock %}
 {% block page_title %}Clientes{% endblock %}
+{% block header_icon %}👥{% endblock %}
+
+{% block extra_css %}
+<style>
+@media (max-width: 768px) {
+    .data-table td[data-label="Total Gasto"],
+    .data-table td[data-label="Pedidos"] {
+        font-weight: 700;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="dashboard-card">
@@ -30,16 +42,16 @@
                 <tbody>
                     {% for cliente in clientes %}
                     <tr>
-                        <td><strong>{{ cliente.nome }}</strong></td>
-                        <td><small>{{ cliente.email }}</small></td>
-                        <td>{{ cliente.telefone or '-' }}</td>
-                        <td>{{ cliente.cpf or '-' }}</td>
-                        <td>{{ cliente.cidade or '-' }}{{ '/' + cliente.estado if cliente.estado else '' }}</td>
-                        <td style="text-align: center;">{{ cliente.total_pedidos }}</td>
-                        <td><strong>{{ cliente.total_gasto|format_price }}</strong></td>
-                        <td style="text-align: center;">{{ cliente.itens_desejo }}</td>
-                        <td><small>{{ cliente.data_cadastro|format_date if cliente.data_cadastro else '-' }}</small></td>
-                        <td><small>{{ cliente.ultimo_acesso|format_date if cliente.ultimo_acesso else 'Nunca' }}</small></td>
+                        <td data-label="Nome"><strong>{{ cliente.nome }}</strong></td>
+                        <td data-label="Email"><small>{{ cliente.email }}</small></td>
+                        <td data-label="Telefone">{{ cliente.telefone or '-' }}</td>
+                        <td data-label="CPF">{{ cliente.cpf or '-' }}</td>
+                        <td data-label="Cidade/Estado">{{ cliente.cidade or '-' }}{{ '/' + cliente.estado if cliente.estado else '' }}</td>
+                        <td data-label="Pedidos">{{ cliente.total_pedidos }}</td>
+                        <td data-label="Total Gasto"><strong>{{ cliente.total_gasto|format_price }}</strong></td>
+                        <td data-label="Lista Desejos">{{ cliente.itens_desejo }}</td>
+                        <td data-label="Cadastro"><small>{{ cliente.data_cadastro|format_date if cliente.data_cadastro else '-' }}</small></td>
+                        <td data-label="Último Acesso"><small>{{ cliente.ultimo_acesso|format_date if cliente.ultimo_acesso else 'Nunca' }}</small></td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -2,6 +2,61 @@
 
 {% block title %}Pedidos - Admin SolarPro{% endblock %}
 {% block page_title %}Pedidos{% endblock %}
+{% block header_icon %}🛒{% endblock %}
+
+{% block extra_css %}
+<style>
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    background: var(--white);
+    border: 2px solid #e2e8f0;
+    text-decoration: none;
+    color: var(--dark-gray);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.tab:hover {
+    border-color: var(--primary-green);
+    background: rgba(11, 106, 74, 0.05);
+}
+
+.tab.active {
+    background: var(--primary-green);
+    color: var(--white);
+    border-color: var(--primary-green);
+}
+
+@media (max-width: 768px) {
+    .filter-tabs {
+        gap: 0.5rem;
+    }
+
+    .tab {
+        padding: 0.6rem 0.875rem;
+        font-size: 0.8rem;
+        flex: 1 1 auto;
+        text-align: center;
+        min-width: calc(50% - 0.25rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .tab {
+        min-width: 100%;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="page-actions">
@@ -33,17 +88,17 @@
             <tbody>
                 {% for pedido in pedidos %}
                 <tr>
-                    <td><strong>#{{ pedido.id }}</strong></td>
-                    <td>{{ pedido.data|format_date }}</td>
-                    <td>
+                    <td data-label="Pedido"><strong>#{{ pedido.id }}</strong></td>
+                    <td data-label="Data">{{ pedido.data|format_date }}</td>
+                    <td data-label="Cliente">
                         {{ pedido.cliente_nome or pedido.nome_cliente }}<br>
                         <small>{{ pedido.email }}</small>
                     </td>
-                    <td>{{ pedido.total|format_price }}</td>
-                    <td><span class="badge badge-{{ pedido.status_pagamento }}">{{ pedido.status_pagamento|title }}</span></td>
-                    <td><span class="badge badge-{{ pedido.status_pedido }}">{{ pedido.status_pedido|replace('_', ' ')|title }}</span></td>
-                    <td>
-                        <a href="{{ url_for('admin_pedido_detalhe', id=pedido.id) }}" class="btn btn-sm btn-outline">Ver</a>
+                    <td data-label="Total"><strong>{{ pedido.total|format_price }}</strong></td>
+                    <td data-label="Pagamento"><span class="badge badge-{{ pedido.status_pagamento }}">{{ pedido.status_pagamento|title }}</span></td>
+                    <td data-label="Status"><span class="badge badge-{{ pedido.status_pedido }}">{{ pedido.status_pedido|replace('_', ' ')|title }}</span></td>
+                    <td data-label="Ações">
+                        <a href="{{ url_for('admin_pedido_detalhe', id=pedido.id) }}" class="btn btn-sm btn-outline">Ver Detalhes</a>
                     </td>
                 </tr>
                 {% endfor %}

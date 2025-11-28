@@ -2,6 +2,43 @@
 
 {% block title %}Contatos - Admin SolarPro{% endblock %}
 {% block page_title %}Contatos{% endblock %}
+{% block header_icon %}📧{% endblock %}
+
+{% block extra_css %}
+<style>
+.message-cell {
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.pending {
+    background: rgba(255, 243, 205, 0.3);
+}
+
+@media (max-width: 768px) {
+    .message-cell {
+        max-width: 100%;
+    }
+
+    .data-table td[data-label="Mensagem"]::before {
+        align-self: flex-start;
+    }
+
+    .data-table td[data-label="Mensagem"] {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .data-table td[data-label="Ação"] form {
+        width: 100%;
+    }
+
+    .data-table td[data-label="Ação"] .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="dashboard-card">
@@ -23,24 +60,26 @@
             <tbody>
                 {% for contato in contatos %}
                 <tr class="{{ 'pending' if not contato.respondido else '' }}">
-                    <td>{{ contato.data|format_date }}</td>
-                    <td><strong>{{ contato.nome }}</strong></td>
-                    <td><a href="mailto:{{ contato.email }}">{{ contato.email }}</a></td>
-                    <td>{{ contato.telefone or '-' }}</td>
-                    <td>{{ contato.assunto or 'Geral' }}</td>
-                    <td class="message-cell">{{ contato.mensagem[:100] }}{% if contato.mensagem|length > 100 %}...{% endif %}</td>
-                    <td>
+                    <td data-label="Data">{{ contato.data|format_date }}</td>
+                    <td data-label="Nome"><strong>{{ contato.nome }}</strong></td>
+                    <td data-label="Email"><a href="mailto:{{ contato.email }}">{{ contato.email }}</a></td>
+                    <td data-label="Telefone">{{ contato.telefone or '-' }}</td>
+                    <td data-label="Assunto">{{ contato.assunto or 'Geral' }}</td>
+                    <td data-label="Mensagem" class="message-cell">{{ contato.mensagem[:100] }}{% if contato.mensagem|length > 100 %}...{% endif %}</td>
+                    <td data-label="Status">
                         {% if contato.respondido %}
                         <span class="badge badge-success">Respondido</span>
                         {% else %}
                         <span class="badge badge-warning">Pendente</span>
                         {% endif %}
                     </td>
-                    <td>
+                    <td data-label="Ação">
                         {% if not contato.respondido %}
                         <form method="POST" action="{{ url_for('admin_marcar_respondido', id=contato.id) }}" style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline">Marcar Respondido</button>
                         </form>
+                        {% else %}
+                        <span style="color: #28a745; font-size: 0.9rem;">✓ Concluído</span>
                         {% endif %}
                     </td>
                 </tr>

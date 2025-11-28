@@ -2,6 +2,67 @@
 
 {% block title %}Dashboard - Admin SolarPro{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
+{% block header_icon %}📊{% endblock %}
+
+{% block extra_css %}
+<style>
+@media (max-width: 768px) {
+    .dashboard-card .card-header h3 {
+        font-size: 1rem;
+    }
+
+    .empty-text {
+        font-size: 0.9rem;
+        padding: 1.5rem 0.75rem;
+    }
+
+    .alert-list,
+    .cart-list {
+        font-size: 0.9rem;
+    }
+
+    .alert-item,
+    .cart-item {
+        padding: 0.875rem;
+        flex-wrap: wrap;
+    }
+
+    .cart-info {
+        flex: 1;
+        min-width: 60%;
+    }
+
+    .cart-customer,
+    .alert-name {
+        font-size: 0.95rem;
+    }
+
+    .cart-contact {
+        font-size: 0.8rem;
+    }
+
+    .cart-value,
+    .alert-value {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        text-align: center;
+    }
+
+    .stat-header {
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="stats-grid">
