@@ -1072,8 +1072,9 @@ def admin_cupom_novo():
 @admin_required
 def admin_contatos():
     conn = get_db_connection()
-    contatos = conn.execute('SELECT * FROM contatos ORDER BY data DESC').fetchall()
+    contatos_rows = conn.execute('SELECT * FROM contatos ORDER BY data DESC').fetchall()
     conn.close()
+    contatos = [dict(row) for row in contatos_rows]
     return render_template('admin/contatos.html', contatos=contatos)
 
 @app.route('/admin/contato/<int:id>/responder', methods=['POST'])
