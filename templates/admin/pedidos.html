@@ -524,7 +524,7 @@
                         <strong class="pedido-valor">{{ pedido.total|format_price }}</strong>
                     </td>
                     <td data-label="Pagamento">
-                        {% if pedido.status_pagamento == 'aprovado' or pedido.mercadopago_status == 'approved' %}
+                        {% if pedido.status_pagamento == 'aprovado' or pedido.mercadopago_status == 'approved' or pedido.status_pedido == 'pago' %}
                             <span class="status-badge pago">
                                 Pago
                             </span>
