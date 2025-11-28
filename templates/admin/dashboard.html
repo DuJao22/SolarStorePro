@@ -6,7 +6,109 @@
 
 {% block extra_css %}
 <style>
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.quick-action-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.75rem;
+    background: linear-gradient(135deg, var(--white) 0%, #fafbfc 100%);
+    border-radius: 16px;
+    border: 2px solid rgba(11, 106, 74, 0.08);
+    text-decoration: none;
+    color: var(--dark-gray);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-green), var(--secondary-gold));
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.quick-action-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    border-color: var(--primary-green);
+}
+
+.quick-action-card:hover::before {
+    opacity: 1;
+}
+
+.quick-action-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: var(--transition);
+}
+
+.quick-action-card:hover .quick-action-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.quick-action-content {
+    flex: 1;
+}
+
+.quick-action-content h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-bottom: 0.35rem;
+}
+
+.quick-action-content p {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+}
+
 @media (max-width: 768px) {
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .quick-action-card {
+        padding: 1.25rem;
+        gap: 1rem;
+    }
+
+    .quick-action-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.75rem;
+    }
+
+    .quick-action-content h4 {
+        font-size: 1rem;
+    }
+
+    .quick-action-content p {
+        font-size: 0.8rem;
+    }
+
     .dashboard-card .card-header h3 {
         font-size: 1rem;
     }
@@ -59,6 +161,25 @@
 
     .stat-header {
         justify-content: center;
+    }
+
+    .quick-action-card {
+        padding: 1rem;
+        gap: 0.875rem;
+    }
+
+    .quick-action-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+
+    .quick-action-content h4 {
+        font-size: 0.95rem;
+    }
+
+    .quick-action-content p {
+        font-size: 0.75rem;
     }
 }
 </style>
@@ -183,22 +304,42 @@
             <h3>Ações Rápidas</h3>
         </div>
         <div class="card-body">
-            <div class="action-buttons">
-                <a href="{{ url_for('admin_produto_novo') }}" class="action-btn">
-                    <span class="action-icon">➕</span>
-                    <span>Novo Produto</span>
+            <div class="quick-actions-grid">
+                <a href="{{ url_for('admin_produto_novo') }}" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                        <span>➕</span>
+                    </div>
+                    <div class="quick-action-content">
+                        <h4>Novo Produto</h4>
+                        <p>Adicionar produto ao catálogo</p>
+                    </div>
                 </a>
-                <a href="{{ url_for('admin_cupom_novo') }}" class="action-btn">
-                    <span class="action-icon">🎫</span>
-                    <span>Novo Cupom</span>
+                <a href="{{ url_for('admin_cupom_novo') }}" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, var(--secondary-gold) 0%, #f5b942 100%);">
+                        <span>🎫</span>
+                    </div>
+                    <div class="quick-action-content">
+                        <h4>Novo Cupom</h4>
+                        <p>Criar cupom de desconto</p>
+                    </div>
                 </a>
-                <a href="{{ url_for('admin_assistente') }}" class="action-btn">
-                    <span class="action-icon">🤖</span>
-                    <span>Assistente IA</span>
+                <a href="{{ url_for('admin_assistente') }}" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span>🤖</span>
+                    </div>
+                    <div class="quick-action-content">
+                        <h4>Assistente IA</h4>
+                        <p>Chat com inteligência artificial</p>
+                    </div>
                 </a>
-                <a href="{{ url_for('admin_configuracoes') }}" class="action-btn">
-                    <span class="action-icon">⚙️</span>
-                    <span>Configurações</span>
+                <a href="{{ url_for('admin_configuracoes') }}" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #6c757d 0%, #495057 100%);">
+                        <span>⚙️</span>
+                    </div>
+                    <div class="quick-action-content">
+                        <h4>Configurações</h4>
+                        <p>Ajustar configurações do sistema</p>
+                    </div>
                 </a>
             </div>
         </div>
