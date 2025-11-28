@@ -5,14 +5,20 @@ import time
 
 class GeminiService:
     def __init__(self):
-        self.api_keys = [
+        self.api_keys = []
+        
+        google_api_key = os.environ.get('GOOGLE_API_KEY')
+        if google_api_key:
+            self.api_keys.append(google_api_key)
+        
+        legacy_keys = [
             os.environ.get('GEMINI_API_KEY_1'),
             os.environ.get('GEMINI_API_KEY_2'),
             os.environ.get('GEMINI_API_KEY_3'),
             os.environ.get('GEMINI_API_KEY_4'),
             os.environ.get('GEMINI_API_KEY_5'),
         ]
-        self.api_keys = [k for k in self.api_keys if k]
+        self.api_keys.extend([k for k in legacy_keys if k])
         self.current_key_index = 0
         self.failed_keys = set()
         self.last_rotation = datetime.now()
