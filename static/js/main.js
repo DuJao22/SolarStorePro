@@ -108,7 +108,7 @@ function formatPrice(value) {
 let carrinho = JSON.parse(localStorage.getItem('solarpro_cart')) || [];
 
 function updateCartBadge() {
-    const badge = document.querySelector('.cart-badge');
+    const badge = document.getElementById('cartCount');
     if (badge) {
         const totalItems = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
         badge.textContent = totalItems;
