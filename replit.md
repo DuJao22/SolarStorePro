@@ -80,7 +80,7 @@ E-commerce completo e profissional para venda de placas solares com foco em conv
 ## Database Schema
 
 ### Tabela: produtos
-- id, nome, descricao, preco, potencia_watts, eficiencia, garantia, estoque, imagem, categoria
+- id, nome, descricao, custo, preco, preco_promocional, potencia_watts, eficiencia, garantia, estoque, estoque_minimo, imagem, imagens, categoria, especificacoes, ativo, destaque, vendas, data_cadastro
 
 ### Tabela: depoimentos
 - id, nome, cargo, texto, foto, avaliacao, data
@@ -109,6 +109,12 @@ Configurado com:
 - SSL automático
 
 ## Mudanças Recentes
+- 2025-11-28: Adicionada funcionalidade de contabilidade com cálculo de valor líquido
+  - Campo de custo no cadastro de produtos
+  - Cálculo automático de lucro no formulário de produto
+  - Dashboard com faturamento bruto e líquido
+  - Seção de contabilidade geral no admin
+  - Lista de produtos mais vendidos com lucro
 - 2025-11-25: Projeto inicial criado com estrutura completa
 - Desenvolvido por João Layon - Desenvolvedor Full Stack
 

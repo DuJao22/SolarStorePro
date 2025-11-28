@@ -182,6 +182,162 @@
         font-size: 0.75rem;
     }
 }
+
+.stat-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-left: 4px solid #28a745;
+}
+.stat-success .stat-value {
+    color: #28a745;
+}
+.stat-badge {
+    font-size: 0.75rem;
+    color: #1e7e34;
+    background: rgba(40, 167, 69, 0.15);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+.contabilidade-section {
+    margin-bottom: 2rem;
+}
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.contabilidade-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+.contab-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.contab-card.bruto {
+    border-left: 4px solid #6c757d;
+}
+.contab-card.custo {
+    border-left: 4px solid #dc3545;
+}
+.contab-card.lucro {
+    border-left: 4px solid #28a745;
+    background: linear-gradient(135deg, #f8fff8 0%, #e8f5e9 100%);
+}
+.contab-card.clientes {
+    border-left: 4px solid #007bff;
+}
+.contab-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+.contab-info {
+    display: flex;
+    flex-direction: column;
+}
+.contab-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+.contab-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #333;
+}
+.contab-card.lucro .contab-value {
+    color: #28a745;
+}
+.contab-card.custo .contab-value {
+    color: #dc3545;
+}
+.contab-badge {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+.contab-card.lucro .contab-badge {
+    color: #1e7e34;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: 8px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.produtos-lucro-section {
+    margin-top: 1.5rem;
+}
+.produtos-lucro-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.produto-lucro-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+.produto-lucro-item:last-child {
+    border-bottom: none;
+}
+.produto-lucro-info {
+    flex: 1;
+}
+.produto-lucro-nome {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+.produto-lucro-vendas {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+.produto-lucro-valores {
+    text-align: right;
+}
+.produto-lucro-unitario {
+    font-size: 0.85rem;
+    color: #28a745;
+}
+.produto-lucro-total {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+@media (max-width: 768px) {
+    .contabilidade-grid {
+        grid-template-columns: 1fr;
+    }
+    .contab-card {
+        padding: 1rem;
+    }
+    .contab-value {
+        font-size: 1.15rem;
+    }
+}
 </style>
 {% endblock %}
 
@@ -192,7 +348,16 @@
             <div class="stat-icon">💰</div>
         </div>
         <div class="stat-value">{{ faturamento_mes|format_price }}</div>
-        <div class="stat-label">Faturamento do Mês</div>
+        <div class="stat-label">Faturamento Bruto (Mês)</div>
+    </div>
+    
+    <div class="stat-card stat-success">
+        <div class="stat-header">
+            <div class="stat-icon">📊</div>
+        </div>
+        <div class="stat-value">{{ lucro_liquido_mes|format_price }}</div>
+        <div class="stat-label">Lucro Líquido (Mês)</div>
+        <div class="stat-badge">{{ "%.1f"|format(margem_lucro_mes) }}% margem</div>
     </div>
     
     <div class="stat-card">
@@ -205,18 +370,46 @@
     
     <div class="stat-card">
         <div class="stat-header">
-            <div class="stat-icon">👥</div>
-        </div>
-        <div class="stat-value">{{ total_clientes }}</div>
-        <div class="stat-label">Clientes Cadastrados</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
             <div class="stat-icon">📈</div>
         </div>
         <div class="stat-value">{{ pedidos_hoje }}</div>
         <div class="stat-label">Pedidos Hoje</div>
+    </div>
+</div>
+
+<div class="contabilidade-section">
+    <h2 class="section-title">Contabilidade Geral</h2>
+    <div class="contabilidade-grid">
+        <div class="contab-card bruto">
+            <div class="contab-icon">💵</div>
+            <div class="contab-info">
+                <span class="contab-label">Faturamento Bruto Total</span>
+                <span class="contab-value">{{ faturamento_total|format_price }}</span>
+            </div>
+        </div>
+        <div class="contab-card custo">
+            <div class="contab-icon">📉</div>
+            <div class="contab-info">
+                <span class="contab-label">Custo Total dos Produtos</span>
+                <span class="contab-value">{{ custo_total|format_price }}</span>
+            </div>
+        </div>
+        <div class="contab-card lucro">
+            <div class="contab-icon">✨</div>
+            <div class="contab-info">
+                <span class="contab-label">Lucro Líquido Total</span>
+                <span class="contab-value">{{ lucro_liquido_total|format_price }}</span>
+                <span class="contab-badge">{{ "%.1f"|format(margem_lucro) }}% de margem</span>
+            </div>
+        </div>
+        <div class="contab-card clientes">
+            <div class="contab-icon">👥</div>
+            <div class="contab-info">
+                <span class="contab-label">Total de Clientes</span>
+                <span class="contab-value">{{ total_clientes }}</span>
+                <span class="contab-badge">+{{ clientes_mes }} este mês</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -271,6 +464,33 @@
             </ul>
             {% else %}
             <p class="empty-text success">Todos os produtos com estoque adequado!</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="dashboard-card produtos-lucro-section">
+        <div class="card-header">
+            <h3>Produtos Mais Vendidos (Lucro)</h3>
+            <a href="{{ url_for('admin_produtos') }}" class="btn-link">Ver Todos</a>
+        </div>
+        <div class="card-body">
+            {% if produtos_mais_vendidos %}
+            <ul class="produtos-lucro-list">
+                {% for produto in produtos_mais_vendidos %}
+                <li class="produto-lucro-item">
+                    <div class="produto-lucro-info">
+                        <span class="produto-lucro-nome">{{ produto.nome[:40] }}{% if produto.nome|length > 40 %}...{% endif %}</span>
+                        <span class="produto-lucro-vendas">{{ produto.vendas }} vendas</span>
+                    </div>
+                    <div class="produto-lucro-valores">
+                        <span class="produto-lucro-unitario">{{ produto.lucro_unitario|format_price }}/un</span>
+                        <span class="produto-lucro-total">{{ produto.lucro_total|format_price }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty-text">Nenhuma venda registrada ainda.</p>
             {% endif %}
         </div>
     </div>

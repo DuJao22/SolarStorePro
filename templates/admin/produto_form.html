@@ -95,6 +95,38 @@
 .upload-status.success { color: #28a745; }
 .upload-status.error { color: #dc3545; }
 .upload-status.loading { color: #ffc107; }
+
+.lucro-display {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.lucro-display.positivo {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-color: #28a745;
+}
+.lucro-display.negativo {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border-color: #dc3545;
+}
+.lucro-valor {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+}
+.lucro-display.positivo .lucro-valor { color: #28a745; }
+.lucro-display.negativo .lucro-valor { color: #dc3545; }
+.lucro-percentual {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 600;
+}
+.lucro-display.positivo .lucro-percentual { color: #1e7e34; }
+.lucro-display.negativo .lucro-percentual { color: #bd2130; }
 </style>
 {% endblock %}
 
@@ -148,11 +180,21 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Preço (R$) <span class="required">*</span></label>
-                <input type="number" step="0.01" name="preco" class="form-control"
+                <label class="form-label">Custo (R$) <span class="required">*</span></label>
+                <input type="number" step="0.01" name="custo" class="form-control" id="custo"
+                       value="{{ produto.custo if produto and produto.custo else '' }}"
+                       placeholder="0.00"
+                       required>
+                <span class="form-hint">Valor de custo/compra do produto</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Preço de Venda (R$) <span class="required">*</span></label>
+                <input type="number" step="0.01" name="preco" class="form-control" id="preco"
                        value="{{ produto.preco if produto else '' }}"
                        placeholder="0.00"
                        required>
+                <span class="form-hint">Preço de venda ao cliente</span>
             </div>
 
             <div class="form-group">
@@ -161,6 +203,17 @@
                        value="{{ produto.preco_promocional if produto and produto.preco_promocional else '' }}"
                        placeholder="0.00">
                 <span class="form-hint">Deixe em branco se não houver promoção</span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Lucro Estimado</label>
+                <div class="lucro-display" id="lucroDisplay">
+                    <span class="lucro-valor" id="lucroValor">R$ 0,00</span>
+                    <span class="lucro-percentual" id="lucroPercentual">(0%)</span>
+                </div>
+                <span class="form-hint">Calculado automaticamente: Preço - Custo</span>
             </div>
         </div>
 
@@ -393,5 +446,31 @@ function removeImage(slot) {
     document.getElementById('imagemSlot' + slot).classList.remove('has-image');
     document.getElementById('uploadStatus' + slot).textContent = '';
 }
+
+function calcularLucro() {
+    const custo = parseFloat(document.getElementById('custo').value) || 0;
+    const preco = parseFloat(document.getElementById('preco').value) || 0;
+    const lucro = preco - custo;
+    const percentual = custo > 0 ? ((lucro / custo) * 100) : 0;
+    
+    const display = document.getElementById('lucroDisplay');
+    const valorEl = document.getElementById('lucroValor');
+    const percentualEl = document.getElementById('lucroPercentual');
+    
+    valorEl.textContent = 'R$ ' + lucro.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    percentualEl.textContent = '(' + percentual.toFixed(1).replace('.', ',') + '%)';
+    
+    display.classList.remove('positivo', 'negativo');
+    if (lucro > 0) {
+        display.classList.add('positivo');
+    } else if (lucro < 0) {
+        display.classList.add('negativo');
+    }
+}
+
+document.getElementById('custo').addEventListener('input', calcularLucro);
+document.getElementById('preco').addEventListener('input', calcularLucro);
+
+calcularLucro();
 </script>
 {% endblock %}

@@ -374,6 +374,9 @@ def migrate_db():
     try:
         c.execute('ALTER TABLE produtos ADD COLUMN imagens TEXT')
     except: pass
+    try:
+        c.execute('ALTER TABLE produtos ADD COLUMN custo REAL DEFAULT 0')
+    except: pass
     
     conn.commit()
     conn.close()

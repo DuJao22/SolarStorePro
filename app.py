@@ -803,6 +803,52 @@ def admin_dashboard():
     faturamento_total = conn.execute('''SELECT COALESCE(SUM(total), 0) FROM pedidos 
                                        WHERE status_pedido IN ('pago', 'processando', 'enviado', 'entregue')''').fetchone()[0]
     
+    # Calcular custo total e lucro líquido dos pedidos pagos
+    pedidos_pagos = conn.execute('''SELECT produtos_json FROM pedidos 
+                                    WHERE status_pedido IN ('pago', 'processando', 'enviado', 'entregue')''').fetchall()
+    
+    custo_total = 0
+    custo_mes = 0
+    pedidos_pagos_mes = conn.execute('''SELECT produtos_json FROM pedidos 
+                                        WHERE status_pedido IN ('pago', 'processando', 'enviado', 'entregue')
+                                        AND strftime('%Y-%m', data) = strftime('%Y-%m', 'now')''').fetchall()
+    
+    # Buscar custos dos produtos
+    produtos_custos = {}
+    todos_produtos = conn.execute('SELECT id, custo FROM produtos').fetchall()
+    for prod in todos_produtos:
+        produtos_custos[prod['id']] = prod['custo'] or 0
+    
+    # Calcular custo total de todos os pedidos
+    for pedido in pedidos_pagos:
+        try:
+            produtos_pedido = json.loads(pedido['produtos_json']) if pedido['produtos_json'] else []
+            for item in produtos_pedido:
+                produto_id = item.get('id') or item.get('produto_id')
+                quantidade = item.get('quantidade', 1)
+                custo_unitario = produtos_custos.get(produto_id, 0)
+                custo_total += custo_unitario * quantidade
+        except (json.JSONDecodeError, TypeError):
+            pass
+    
+    # Calcular custo do mês
+    for pedido in pedidos_pagos_mes:
+        try:
+            produtos_pedido = json.loads(pedido['produtos_json']) if pedido['produtos_json'] else []
+            for item in produtos_pedido:
+                produto_id = item.get('id') or item.get('produto_id')
+                quantidade = item.get('quantidade', 1)
+                custo_unitario = produtos_custos.get(produto_id, 0)
+                custo_mes += custo_unitario * quantidade
+        except (json.JSONDecodeError, TypeError):
+            pass
+    
+    # Calcular lucro líquido
+    lucro_liquido_total = faturamento_total - custo_total
+    lucro_liquido_mes = faturamento_mes - custo_mes
+    margem_lucro = (lucro_liquido_total / faturamento_total * 100) if faturamento_total > 0 else 0
+    margem_lucro_mes = (lucro_liquido_mes / faturamento_mes * 100) if faturamento_mes > 0 else 0
+    
     total_clientes = conn.execute('SELECT COUNT(*) FROM usuarios WHERE tipo = "cliente"').fetchone()[0]
     clientes_mes = conn.execute('''SELECT COUNT(*) FROM usuarios WHERE tipo = "cliente" 
                                   AND strftime('%Y-%m', data_cadastro) = strftime('%Y-%m', 'now')''').fetchone()[0]
@@ -829,6 +875,13 @@ def admin_dashboard():
     # Contatos não respondidos
     contatos_pendentes = conn.execute('SELECT COUNT(*) FROM contatos WHERE respondido = 0').fetchone()[0]
     
+    # Produtos mais vendidos com lucro
+    produtos_mais_vendidos = conn.execute('''SELECT id, nome, preco, custo, vendas, 
+                                              (preco - COALESCE(custo, 0)) as lucro_unitario,
+                                              (preco - COALESCE(custo, 0)) * vendas as lucro_total
+                                              FROM produtos WHERE ativo = 1 AND vendas > 0
+                                              ORDER BY vendas DESC LIMIT 5''').fetchall()
+    
     conn.close()
     
     return render_template('admin/dashboard.html',
@@ -836,12 +889,19 @@ def admin_dashboard():
                           pedidos_hoje=pedidos_hoje,
                           faturamento_mes=faturamento_mes,
                           faturamento_total=faturamento_total,
+                          custo_total=custo_total,
+                          custo_mes=custo_mes,
+                          lucro_liquido_total=lucro_liquido_total,
+                          lucro_liquido_mes=lucro_liquido_mes,
+                          margem_lucro=margem_lucro,
+                          margem_lucro_mes=margem_lucro_mes,
                           total_clientes=total_clientes,
                           clientes_mes=clientes_mes,
                           produtos_estoque_baixo=produtos_estoque_baixo,
                           pedidos_recentes=pedidos_recentes,
                           carrinhos_abandonados=carrinhos_abandonados,
-                          contatos_pendentes=contatos_pendentes)
+                          contatos_pendentes=contatos_pendentes,
+                          produtos_mais_vendidos=produtos_mais_vendidos)
 
 @app.route('/admin/produtos')
 @admin_required
@@ -883,11 +943,12 @@ def admin_produto_novo():
         imagem_principal = imagens_list[0] if imagens_list else request.form.get('imagem')
         
         conn = get_db_connection()
-        conn.execute('''INSERT INTO produtos (nome, descricao, preco, preco_promocional, potencia_watts, 
+        conn.execute('''INSERT INTO produtos (nome, descricao, custo, preco, preco_promocional, potencia_watts, 
                        eficiencia, garantia, estoque, estoque_minimo, imagem, imagens, categoria, especificacoes, 
                        ativo, destaque, data_cadastro)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                     (request.form['nome'], request.form.get('descricao'),
+                     float(request.form['custo']) if request.form.get('custo') else 0,
                      float(request.form['preco']), 
                      float(request.form['preco_promocional']) if request.form.get('preco_promocional') else None,
                      int(request.form['potencia_watts']), float(request.form['eficiencia']),
@@ -918,11 +979,12 @@ def admin_produto_editar(id):
         imagens_json = json.dumps(imagens_list) if imagens_list else None
         imagem_principal = imagens_list[0] if imagens_list else request.form.get('imagem')
         
-        conn.execute('''UPDATE produtos SET nome = ?, descricao = ?, preco = ?, preco_promocional = ?,
+        conn.execute('''UPDATE produtos SET nome = ?, descricao = ?, custo = ?, preco = ?, preco_promocional = ?,
                        potencia_watts = ?, eficiencia = ?, garantia = ?, estoque = ?, estoque_minimo = ?,
                        imagem = ?, imagens = ?, categoria = ?, especificacoes = ?, ativo = ?, destaque = ?
                        WHERE id = ?''',
                     (request.form['nome'], request.form.get('descricao'),
+                     float(request.form['custo']) if request.form.get('custo') else 0,
                      float(request.form['preco']),
                      float(request.form['preco_promocional']) if request.form.get('preco_promocional') else None,
                      int(request.form['potencia_watts']), float(request.form['eficiencia']),
