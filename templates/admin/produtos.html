@@ -1,63 +1,619 @@
+
 {% extends "admin/base_admin.html" %}
 
-{% block title %}Produtos - Admin SolarPro{% endblock %}
-{% block page_title %}Produtos{% endblock %}
+{% block title %}Gestão de Produtos - Admin SolarPro{% endblock %}
+{% block page_title %}Gestão de Produtos{% endblock %}
+{% block header_icon %}📦{% endblock %}
+
+{% block extra_css %}
+<style>
+.products-header {
+    background: linear-gradient(135deg, var(--white) 0%, #fafbfc 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid rgba(11, 106, 74, 0.08);
+}
+
+.products-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.products-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.stat-mini {
+    background: linear-gradient(135deg, rgba(11, 106, 74, 0.05) 0%, rgba(11, 106, 74, 0.02) 100%);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 2px solid rgba(11, 106, 74, 0.1);
+}
+
+.stat-mini-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.stat-mini-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary-green);
+}
+
+.filters-section {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.filter-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-select:focus {
+    border-color: var(--primary-green);
+    outline: none;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid rgba(11, 106, 74, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    border-color: var(--primary-green);
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 75%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    overflow: hidden;
+}
+
+.product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-badges {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+}
+
+.product-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+}
+
+.product-info {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-category {
+    font-size: 0.75rem;
+    color: var(--primary-green);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    flex: 1;
+}
+
+.product-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.product-spec {
+    display: flex;
+    flex-direction: column;
+}
+
+.spec-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.spec-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    margin-top: 0.25rem;
+}
+
+.product-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.price-current {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-green);
+}
+
+.price-old {
+    font-size: 1rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+}
+
+.product-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-product {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, var(--primary-green) 0%, #095539 100%);
+    color: var(--white);
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(11, 106, 74, 0.3);
+}
+
+.btn-view {
+    background: var(--white);
+    border: 2px solid var(--primary-green);
+    color: var(--primary-green);
+}
+
+.btn-view:hover {
+    background: var(--primary-green);
+    color: var(--white);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--white);
+    border-radius: 16px;
+    border: 2px dashed #e2e8f0;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.empty-state h3 {
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.empty-state p {
+    color: #64748b;
+    margin-bottom: 1.5rem;
+}
+
+.stock-alert {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.stock-ok {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .products-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-specs {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="page-actions">
-    <a href="{{ url_for('admin_produto_novo') }}" class="btn btn-primary">+ Novo Produto</a>
-</div>
+<div class="products-header">
+    <div class="products-header-top">
+        <div>
+            <h2 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Catálogo de Produtos</h2>
+            <p style="color: #64748b; font-size: 0.95rem;">Gerencie todo o portfólio de produtos da loja</p>
+        </div>
+        <a href="{{ url_for('admin_produto_novo') }}" class="btn btn-primary">
+            <span>➕</span> Adicionar Produto
+        </a>
+    </div>
 
-<div class="dashboard-card">
-    <div class="card-body">
-        <table class="data-table full-width">
-            <thead>
-                <tr>
-                    <th>Imagem</th>
-                    <th>Nome</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Estoque</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for produto in produtos %}
-                <tr>
-                    <td>
-                        <img src="{{ product_image_url(produto.imagem) }}" alt="{{ produto.nome }}" class="table-thumb">
-                    </td>
-                    <td>
-                        <strong>{{ produto.nome }}</strong>
-                        {% if produto.destaque %}<span class="badge badge-gold">Destaque</span>{% endif %}
-                    </td>
-                    <td>{{ produto.categoria }}</td>
-                    <td>
-                        {{ produto.preco|format_price }}
-                        {% if produto.preco_promocional %}
-                        <br><small class="text-success">Promo: {{ produto.preco_promocional|format_price }}</small>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <span class="{{ 'text-danger' if produto.estoque <= produto.estoque_minimo else 'text-success' }}">
-                            {{ produto.estoque }} un.
-                        </span>
-                    </td>
-                    <td>
-                        {% if produto.ativo %}
-                        <span class="badge badge-success">Ativo</span>
-                        {% else %}
-                        <span class="badge badge-danger">Inativo</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ url_for('admin_produto_editar', id=produto.id) }}" class="btn btn-sm btn-outline">Editar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="products-stats">
+        <div class="stat-mini">
+            <div class="stat-mini-label">Total de Produtos</div>
+            <div class="stat-mini-value">{{ produtos|length }}</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-label">Produtos Ativos</div>
+            <div class="stat-mini-value">{{ produtos|selectattr('ativo', 'equalto', 1)|list|length }}</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-label">Em Destaque</div>
+            <div class="stat-mini-value">{{ produtos|selectattr('destaque', 'equalto', 1)|list|length }}</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-label">Estoque Baixo</div>
+            <div class="stat-mini-value" style="color: #dc3545;">
+                {{ produtos|selectattr('ativo', 'equalto', 1)|select('<=', 'estoque', 'estoque_minimo')|list|length }}
+            </div>
+        </div>
     </div>
 </div>
+
+<div class="filters-section">
+    <div class="filters-grid">
+        <div class="filter-group">
+            <label class="filter-label">🔍 Buscar Produto</label>
+            <input type="text" id="searchInput" class="filter-select" placeholder="Digite o nome do produto..." style="cursor: text;">
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">📁 Categoria</label>
+            <select id="categoryFilter" class="filter-select">
+                <option value="">Todas as Categorias</option>
+                <option value="Painéis Solares">Painéis Solares</option>
+                <option value="Inversores">Inversores</option>
+                <option value="Kits Completos">Kits Completos</option>
+                <option value="Microinversores">Microinversores</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">📊 Status</label>
+            <select id="statusFilter" class="filter-select">
+                <option value="">Todos os Status</option>
+                <option value="ativo">Ativos</option>
+                <option value="inativo">Inativos</option>
+                <option value="destaque">Em Destaque</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">📦 Estoque</label>
+            <select id="stockFilter" class="filter-select">
+                <option value="">Todos</option>
+                <option value="ok">Estoque OK</option>
+                <option value="baixo">Estoque Baixo</option>
+                <option value="zerado">Sem Estoque</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+{% if produtos %}
+<div class="products-grid" id="productsGrid">
+    {% for produto in produtos %}
+    <div class="product-card" 
+         data-category="{{ produto.categoria }}"
+         data-status="{{ 'ativo' if produto.ativo else 'inativo' }}"
+         data-destaque="{{ 'sim' if produto.destaque else 'nao' }}"
+         data-stock="{{ 'zerado' if produto.estoque == 0 else ('baixo' if produto.estoque <= produto.estoque_minimo else 'ok') }}"
+         data-name="{{ produto.nome|lower }}">
+        
+        <div class="product-image-wrapper">
+            <img src="{{ product_image_url(produto.imagem) }}" alt="{{ produto.nome }}" class="product-image">
+            
+            <div class="product-badges">
+                {% if produto.destaque %}
+                <span class="badge badge-gold">⭐ Destaque</span>
+                {% endif %}
+                {% if produto.preco_promocional %}
+                <span class="badge badge-danger">🔥 Promoção</span>
+                {% endif %}
+            </div>
+
+            <div class="product-status">
+                {% if produto.ativo %}
+                <span class="badge badge-success">✓ Ativo</span>
+                {% else %}
+                <span class="badge badge-danger">✗ Inativo</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="product-info">
+            <div class="product-category">{{ produto.categoria }}</div>
+            <h3 class="product-name">{{ produto.nome }}</h3>
+
+            <div class="product-specs">
+                <div class="product-spec">
+                    <span class="spec-label">Potência</span>
+                    <span class="spec-value">{{ produto.potencia_watts }}W</span>
+                </div>
+                <div class="product-spec">
+                    <span class="spec-label">Eficiência</span>
+                    <span class="spec-value">{{ produto.eficiencia }}%</span>
+                </div>
+                <div class="product-spec">
+                    <span class="spec-label">Garantia</span>
+                    <span class="spec-value">{{ produto.garantia }} anos</span>
+                </div>
+                <div class="product-spec">
+                    <span class="spec-label">Estoque</span>
+                    <span class="spec-value">
+                        {% if produto.estoque == 0 %}
+                        <span style="color: #dc3545;">0 un.</span>
+                        {% elif produto.estoque <= produto.estoque_minimo %}
+                        <span style="color: #ffc107;">{{ produto.estoque }} un.</span>
+                        {% else %}
+                        <span style="color: #28a745;">{{ produto.estoque }} un.</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                {% if produto.estoque == 0 %}
+                <span class="stock-alert" style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); color: #721c24;">
+                    ⚠️ Sem Estoque
+                </span>
+                {% elif produto.estoque <= produto.estoque_minimo %}
+                <span class="stock-alert">
+                    ⚠️ Estoque Baixo
+                </span>
+                {% else %}
+                <span class="stock-alert stock-ok">
+                    ✓ Estoque OK
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="product-price">
+                {% if produto.preco_promocional %}
+                <span class="price-current">{{ produto.preco_promocional|format_price }}</span>
+                <span class="price-old">{{ produto.preco|format_price }}</span>
+                {% else %}
+                <span class="price-current">{{ produto.preco|format_price }}</span>
+                {% endif %}
+            </div>
+
+            <div class="product-actions">
+                <a href="{{ url_for('admin_produto_editar', id=produto.id) }}" class="btn-product btn-edit">
+                    ✏️ Editar
+                </a>
+                <a href="{{ url_for('produto', id=produto.id) }}" class="btn-product btn-view" target="_blank">
+                    👁️ Ver
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">📦</div>
+    <h3>Nenhum produto cadastrado</h3>
+    <p>Comece adicionando seu primeiro produto ao catálogo</p>
+    <a href="{{ url_for('admin_produto_novo') }}" class="btn btn-primary">
+        ➕ Adicionar Primeiro Produto
+    </a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const stockFilter = document.getElementById('stockFilter');
+    const productCards = document.querySelectorAll('.product-card');
+
+    function filterProducts() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const category = categoryFilter.value;
+        const status = statusFilter.value;
+        const stock = stockFilter.value;
+
+        let visibleCount = 0;
+
+        productCards.forEach(card => {
+            const name = card.dataset.name;
+            const cardCategory = card.dataset.category;
+            const cardStatus = card.dataset.status;
+            const cardDestaque = card.dataset.destaque;
+            const cardStock = card.dataset.stock;
+
+            let showCard = true;
+
+            // Filtro de busca
+            if (searchTerm && !name.includes(searchTerm)) {
+                showCard = false;
+            }
+
+            // Filtro de categoria
+            if (category && cardCategory !== category) {
+                showCard = false;
+            }
+
+            // Filtro de status
+            if (status === 'ativo' && cardStatus !== 'ativo') {
+                showCard = false;
+            } else if (status === 'inativo' && cardStatus !== 'inativo') {
+                showCard = false;
+            } else if (status === 'destaque' && cardDestaque !== 'sim') {
+                showCard = false;
+            }
+
+            // Filtro de estoque
+            if (stock && cardStock !== stock) {
+                showCard = false;
+            }
+
+            card.style.display = showCard ? 'flex' : 'none';
+            if (showCard) visibleCount++;
+        });
+
+        // Mostrar mensagem se nenhum produto for encontrado
+        const grid = document.getElementById('productsGrid');
+        let noResults = document.getElementById('noResults');
+        
+        if (visibleCount === 0) {
+            if (!noResults) {
+                noResults = document.createElement('div');
+                noResults.id = 'noResults';
+                noResults.className = 'empty-state';
+                noResults.innerHTML = `
+                    <div class="empty-icon">🔍</div>
+                    <h3>Nenhum produto encontrado</h3>
+                    <p>Tente ajustar os filtros de busca</p>
+                `;
+                grid.parentElement.appendChild(noResults);
+            }
+            grid.style.display = 'none';
+            noResults.style.display = 'block';
+        } else {
+            grid.style.display = 'grid';
+            if (noResults) {
+                noResults.style.display = 'none';
+            }
+        }
+    }
+
+    // Event listeners para os filtros
+    searchInput.addEventListener('input', filterProducts);
+    categoryFilter.addEventListener('change', filterProducts);
+    statusFilter.addEventListener('change', filterProducts);
+    stockFilter.addEventListener('change', filterProducts);
+
+    // Animação de entrada dos cards
+    productCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 50);
+    });
+});
+</script>
 {% endblock %}
