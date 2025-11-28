@@ -455,47 +455,491 @@
         margin-bottom: 1.5rem;
     }
 
-    /* Responsivo */
-    @media (max-width: 768px) {
-        .hero-explosivo h1 {
-            font-size: 2.5rem;
+    /* Responsivo Tablet */
+    @media (max-width: 1024px) {
+        .hero-explosivo {
+            padding: 6rem 1.5rem 3rem;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
         }
 
         .hero-explosivo h1 .destaque {
-            font-size: 3rem;
+            font-size: 3.5rem;
         }
 
-        .hero-subtitle {
-            font-size: 1.2rem;
-        }
-
-        .valor-novo {
-            font-size: 4rem;
-        }
-
-        .cta-mega {
-            font-size: 1.3rem;
-            padding: 1.5rem 2.5rem;
-        }
-
-        .beneficios-grid,
-        .resultados-grid,
-        .passos-grid {
-            grid-template-columns: 1fr;
+        .beneficios-grid {
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
         }
 
+        .resultados-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Responsivo Mobile */
+    @media (max-width: 768px) {
+        /* Hero Mobile */
+        .hero-explosivo {
+            min-height: auto;
+            padding: 5rem 1rem 3rem;
+        }
+
+        .badge-explosivo {
+            font-size: 0.85rem;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-explosivo h1 {
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .hero-explosivo h1 .destaque {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        .valor-box {
+            padding: 2rem 1.5rem;
+            margin: 2rem auto;
+        }
+
+        .valor-antigo {
+            font-size: 1.3rem;
+        }
+
+        .valor-novo {
+            font-size: 3rem;
+        }
+
+        .comissao-destaque {
+            padding: 1rem 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .contador-urgencia {
+            padding: 1.5rem 1rem;
+            margin: 2rem 0;
+        }
+
+        .contador-urgencia h3 {
+            font-size: 1.3rem;
+        }
+
         .timer {
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .timer-box {
-            min-width: 80px;
-            padding: 1rem;
+            min-width: 70px;
+            padding: 0.75rem 1rem;
         }
 
         .timer-box .numero {
+            font-size: 2rem;
+        }
+
+        .timer-box .label {
+            font-size: 0.8rem;
+        }
+
+        .cta-mega {
+            font-size: 1.1rem;
+            padding: 1.25rem 2rem;
+            width: 100%;
+            border-radius: 50px;
+        }
+
+        .hero-content p {
+            font-size: 0.95rem;
+        }
+
+        /* Benefícios Mobile */
+        .beneficios-section {
+            padding: 3rem 1rem;
+        }
+
+        .beneficios-section h2 {
+            font-size: 2rem;
+        }
+
+        .beneficios-section p {
+            font-size: 1rem;
+        }
+
+        .beneficios-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .beneficio-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .beneficio-icon {
+            font-size: 3rem;
+        }
+
+        .beneficio-card h3 {
+            font-size: 1.3rem;
+        }
+
+        .beneficio-valor {
+            font-size: 2rem;
+        }
+
+        .beneficio-card p {
+            font-size: 0.95rem;
+        }
+
+        /* Prova Social Mobile */
+        .prova-social {
+            padding: 3rem 1rem;
+        }
+
+        .prova-social h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .resultados-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .resultado-box {
+            padding: 1.5rem 1rem;
+        }
+
+        .resultado-numero {
             font-size: 2.5rem;
+        }
+
+        .resultado-box p {
+            font-size: 0.85rem;
+        }
+
+        /* Processo de Acordo Mobile */
+        .prova-social > div > div:nth-child(2) {
+            padding: 2rem 1.5rem;
+        }
+
+        .prova-social > div > div:nth-child(2) h3 {
+            font-size: 1.5rem;
+        }
+
+        .prova-social > div > div:nth-child(2) p {
+            font-size: 1rem;
+        }
+
+        .prova-social > div > div:nth-child(2) > div {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem;
+        }
+
+        .prova-social > div > div:nth-child(2) > div > div h4 {
+            font-size: 1.1rem;
+        }
+
+        /* Depoimento Mobile */
+        .prova-social > div > div:last-child {
+            padding: 2rem 1.5rem;
+        }
+
+        .prova-social > div > div:last-child > div {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .prova-social > div > div:last-child p {
+            font-size: 1.1rem;
+        }
+
+        /* Como Funciona Mobile */
+        .como-funciona {
+            padding: 3rem 1rem;
+        }
+
+        .como-funciona h2 {
+            font-size: 2rem;
+        }
+
+        .passos-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .passo-card {
+            padding: 2.5rem 1.5rem 2rem;
+        }
+
+        .passo-numero {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+        }
+
+        .passo-icon {
+            font-size: 3rem;
+        }
+
+        .passo-card h3 {
+            font-size: 1.3rem;
+        }
+
+        .passo-card p {
+            font-size: 0.95rem;
+        }
+
+        /* Comissão Info Mobile */
+        .como-funciona > div:last-child > div {
+            padding: 2rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .como-funciona > div:last-child > div p:first-of-type {
+            font-size: 1.1rem;
+        }
+
+        .como-funciona > div:last-child > div > div {
+            padding: 2rem 1.5rem;
+        }
+
+        .como-funciona > div:last-child > div > div h3 {
+            font-size: 1.5rem;
+        }
+
+        .como-funciona > div:last-child > div > div p {
+            font-size: 1rem;
+        }
+
+        .como-funciona > div:last-child > div > div > div:nth-child(3) {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem;
+        }
+
+        .como-funciona > div:last-child > div > div > div:nth-child(3) > div h4 {
+            font-size: 1.1rem;
+        }
+
+        .como-funciona > div:last-child > div > div p:last-child {
+            font-size: 1rem;
+        }
+
+        /* FAQ Mobile */
+        .faq-section {
+            padding: 3rem 1rem;
+        }
+
+        .faq-section h2 {
+            font-size: 2rem;
+        }
+
+        .faq-list {
+            margin: 2rem auto;
+        }
+
+        .faq-question {
+            padding: 1.25rem 1rem;
+            font-size: 1rem;
+        }
+
+        .faq-answer {
+            padding: 0 1rem;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1.25rem 1rem;
+        }
+
+        /* CTA Final Mobile */
+        .cta-final {
+            padding: 4rem 1rem;
+        }
+
+        .cta-final h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-final > div > div > p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .garantia-box {
+            padding: 2rem 1.5rem;
+            margin: 2rem auto;
+        }
+
+        .garantia-icon {
+            font-size: 4rem;
+        }
+
+        .garantia-box h3 {
+            font-size: 1.8rem;
+        }
+
+        .garantia-box p {
+            font-size: 1.1rem;
+        }
+
+        /* Formulário Mobile */
+        .cta-final > div > div > div:nth-child(4) {
+            padding: 2rem 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .cta-final > div > div > div:nth-child(4) h3 {
+            font-size: 1.5rem;
+        }
+
+        #formParceria > div {
+            margin-bottom: 1rem;
+        }
+
+        #formParceria input {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        .cta-final .cta-mega {
+            font-size: 1rem;
+            padding: 1.25rem 2rem;
+        }
+
+        /* Badges Finais Mobile */
+        .cta-final > div > div > div:nth-child(5) {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cta-final > div > div > div:nth-child(5) > div {
+            font-size: 1rem;
+        }
+
+        .cta-final > div > div > div:nth-child(5) > div > div:first-child {
+            font-size: 2.5rem;
+        }
+
+        .cta-final > div > div > p:last-child {
+            font-size: 1rem;
+            margin-top: 2rem;
+        }
+    }
+
+    /* Extra Small Mobile */
+    @media (max-width: 480px) {
+        .hero-explosivo {
+            padding: 4rem 0.75rem 2rem;
+        }
+
+        .badge-explosivo {
+            font-size: 0.75rem;
+            padding: 0.6rem 1rem;
+        }
+
+        .hero-explosivo h1 {
+            font-size: 1.6rem;
+        }
+
+        .hero-explosivo h1 .destaque {
+            font-size: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+        }
+
+        .valor-box {
+            padding: 1.5rem 1rem;
+        }
+
+        .valor-novo {
+            font-size: 2.5rem;
+        }
+
+        .comissao-destaque {
+            font-size: 1rem;
+            padding: 0.875rem 1rem;
+        }
+
+        .timer {
+            gap: 0.5rem;
+        }
+
+        .timer-box {
+            min-width: 60px;
+            padding: 0.6rem 0.75rem;
+        }
+
+        .timer-box .numero {
+            font-size: 1.75rem;
+        }
+
+        .timer-box .label {
+            font-size: 0.7rem;
+        }
+
+        .cta-mega {
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+        }
+
+        .beneficios-section h2,
+        .prova-social h2,
+        .como-funciona h2,
+        .faq-section h2 {
+            font-size: 1.75rem;
+        }
+
+        .beneficio-card,
+        .passo-card {
+            padding: 1.75rem 1.25rem;
+        }
+
+        .resultado-numero {
+            font-size: 2rem;
+        }
+
+        .resultados-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-final h2 {
+            font-size: 2rem;
+        }
+
+        .garantia-box h3 {
+            font-size: 1.5rem;
+        }
+
+        .cta-final > div > div > div:nth-child(4) {
+            padding: 1.5rem 1rem;
+        }
+    }
+
+    /* Landscape Mobile Fix */
+    @media (max-width: 768px) and (orientation: landscape) {
+        .hero-explosivo {
+            min-height: auto;
+            padding: 3rem 1rem 2rem;
+        }
+
+        .timer {
+            flex-wrap: nowrap;
         }
     }
 </style>
