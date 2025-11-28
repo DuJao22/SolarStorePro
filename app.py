@@ -755,6 +755,7 @@ def pagamento_sucesso(pedido_id):
     payment_id = request.args.get('payment_id')
     
     conn = get_db_connection()
+    # Atualiza status para 'pago' para contabilizar no dashboard
     conn.execute('''UPDATE pedidos SET status_pagamento = ?, status_pedido = ?, mercadopago_id = ?, data_pagamento = ?
                     WHERE id = ? AND usuario_id = ?''',
                 ('aprovado', 'pago', payment_id, datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -790,14 +791,17 @@ def pagamento_pendente(pedido_id):
 def admin_dashboard():
     conn = get_db_connection()
     
-    # Estatísticas gerais
-    total_pedidos = conn.execute('SELECT COUNT(*) FROM pedidos').fetchone()[0]
-    pedidos_hoje = conn.execute('''SELECT COUNT(*) FROM pedidos WHERE date(data) = date('now')''').fetchone()[0]
+    # Estatísticas gerais - contabiliza apenas pedidos pagos
+    total_pedidos = conn.execute('''SELECT COUNT(*) FROM pedidos 
+                                   WHERE status_pedido IN ('pago', 'processando', 'enviado', 'entregue')''').fetchone()[0]
+    pedidos_hoje = conn.execute('''SELECT COUNT(*) FROM pedidos 
+                                  WHERE date(data) = date('now') 
+                                  AND status_pedido IN ('pago', 'processando', 'enviado', 'entregue')''').fetchone()[0]
     faturamento_mes = conn.execute('''SELECT COALESCE(SUM(total), 0) FROM pedidos 
-                                     WHERE status_pagamento = 'aprovado' 
+                                     WHERE status_pedido IN ('pago', 'processando', 'enviado', 'entregue')
                                      AND strftime('%Y-%m', data) = strftime('%Y-%m', 'now')''').fetchone()[0]
     faturamento_total = conn.execute('''SELECT COALESCE(SUM(total), 0) FROM pedidos 
-                                       WHERE status_pagamento = 'aprovado' ''').fetchone()[0]
+                                       WHERE status_pedido IN ('pago', 'processando', 'enviado', 'entregue')''').fetchone()[0]
     
     total_clientes = conn.execute('SELECT COUNT(*) FROM usuarios WHERE tipo = "cliente"').fetchone()[0]
     clientes_mes = conn.execute('''SELECT COUNT(*) FROM usuarios WHERE tipo = "cliente" 
