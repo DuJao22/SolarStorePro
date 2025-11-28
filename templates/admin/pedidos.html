@@ -1,126 +1,506 @@
 {% extends "admin/base_admin.html" %}
 
-{% block title %}Pedidos - Admin SolarPro{% endblock %}
-{% block page_title %}Pedidos{% endblock %}
-{% block header_icon %}🛒{% endblock %}
+{% block title %}Gestão de Pedidos - Admin SolarPro{% endblock %}
+{% block page_title %}Gestão de Pedidos{% endblock %}
+{% block header_icon %}📊{% endblock %}
 
 {% block extra_css %}
 <style>
-.filter-tabs {
+/* Power BI Style Dashboard */
+.powerbi-dashboard {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.powerbi-filters {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid var(--primary-green);
 }
 
-.tab {
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-    background: var(--white);
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.75rem;
     border: 2px solid #e2e8f0;
-    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(11, 106, 74, 0.1);
+}
+
+.powerbi-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.metric-card {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary-green), var(--secondary-gold));
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, rgba(11, 106, 74, 0.1), rgba(11, 106, 74, 0.05));
+}
+
+.metric-trend {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 800;
     color: var(--dark-gray);
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #64748b;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.powerbi-table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 2px solid #f1f3f5;
+    background: linear-gradient(135deg, #fafbfc, white);
+}
+
+.toolbar-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.search-filter {
+    position: relative;
+}
+
+.search-filter input {
+    padding: 0.65rem 1rem 0.65rem 2.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
     font-size: 0.9rem;
-    transition: var(--transition);
+    width: 250px;
+    transition: all 0.3s ease;
 }
 
-.tab:hover {
+.search-filter input:focus {
+    outline: none;
     border-color: var(--primary-green);
-    background: rgba(11, 106, 74, 0.05);
+    box-shadow: 0 0 0 3px rgba(11, 106, 74, 0.1);
 }
 
-.tab.active {
-    background: var(--primary-green);
-    color: var(--white);
-    border-color: var(--primary-green);
+.search-filter::before {
+    content: '🔍';
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
 }
 
-@media (max-width: 768px) {
-    .filter-tabs {
-        gap: 0.5rem;
-    }
-
-    .tab {
-        padding: 0.6rem 0.875rem;
-        font-size: 0.8rem;
-        flex: 1 1 auto;
-        text-align: center;
-        min-width: calc(50% - 0.25rem);
-    }
+.powerbi-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-@media (max-width: 480px) {
-    .tab {
-        min-width: 100%;
-    }
+.powerbi-table thead {
+    background: linear-gradient(135deg, #f8f9fa, #f1f3f5);
+    border-bottom: 3px solid var(--primary-green);
 }
 
-/* Custom badge styles */
+.powerbi-table th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--dark-gray);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.powerbi-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: var(--dark-gray);
+    font-size: 0.95rem;
+}
+
+.powerbi-table tbody tr {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.powerbi-table tbody tr:hover {
+    background: #f8fafc;
+    transform: scale(1.01);
+}
+
 .status-badge {
-    padding: 0.3em 0.6em;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.85em;
-    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.status-aprovado {
-    background-color: #d4edda;
+.status-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: block;
+}
+
+.status-badge.pago {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
     color: #155724;
 }
 
-.status-pendente {
-    background-color: #fff3cd;
+.status-badge.pago::before {
+    background: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.status-badge.pendente {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
     color: #856404;
 }
 
-.status-pago {
-    background-color: #cce5ff;
+.status-badge.pendente::before {
+    background: #ffc107;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.status-badge.aguardando_pagamento {
+    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    color: #0c5460;
+}
+
+.status-badge.aguardando_pagamento::before {
+    background: #17a2b8;
+    box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+}
+
+.status-badge.processando {
+    background: linear-gradient(135deg, #e7f3ff, #cfe2ff);
     color: #004085;
 }
 
-.status-processando {
-    background-color: #cfe2f3;
-    color: #0c5460;
+.status-badge.processando::before {
+    background: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-.status-enviado {
-    background-color: #d1ecf1;
-    color: #0c5460;
+.status-badge.enviado {
+    background: linear-gradient(135deg, #e8daff, #d4c5f9);
+    color: #4a148c;
 }
 
-.status-entregue {
-    background-color: #d4edda;
+.status-badge.enviado::before {
+    background: #7b1fa2;
+    box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.2);
+}
+
+.status-badge.entregue {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
     color: #155724;
 }
 
-.status-cancelado {
-    background-color: #f8d7da;
+.status-badge.entregue::before {
+    background: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.status-badge.cancelado {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
     color: #721c24;
+}
+
+.status-badge.cancelado::before {
+    background: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+}
+
+.pedido-id {
+    font-weight: 700;
+    color: var(--primary-green);
+    font-size: 1rem;
+}
+
+.pedido-cliente {
+    font-weight: 600;
+}
+
+.pedido-valor {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-green);
+}
+
+.pedido-data {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.action-btn-view {
+    background: linear-gradient(135deg, var(--primary-green), #095539);
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.action-btn-view:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(11, 106, 74, 0.3);
+}
+
+.empty-state-powerbi {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.empty-state-powerbi h3 {
+    font-size: 1.5rem;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-powerbi p {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .powerbi-filters {
+        flex-direction: column;
+    }
+
+    .powerbi-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .table-toolbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .search-filter input {
+        width: 100%;
+    }
+
+    .powerbi-table thead {
+        display: none;
+    }
+
+    .powerbi-table tbody {
+        display: block;
+    }
+
+    .powerbi-table tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1rem;
+        background: white;
+    }
+
+    .powerbi-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    .powerbi-table td:last-child {
+        border-bottom: none;
+    }
+
+    .powerbi-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
 }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="page-actions">
-    <div class="filter-tabs">
-        <a href="{{ url_for('admin_pedidos') }}" class="tab {{ 'active' if not status_atual else '' }}">Todos</a>
-        <a href="{{ url_for('admin_pedidos', status='aguardando_pagamento') }}" class="tab {{ 'active' if status_atual == 'aguardando_pagamento' else '' }}">Aguardando Pagamento</a>
-        <a href="{{ url_for('admin_pedidos', status='pago') }}" class="tab {{ 'active' if status_atual == 'pago' else '' }}">Pagos</a>
-        <a href="{{ url_for('admin_pedidos', status='processando') }}" class="tab {{ 'active' if status_atual == 'processando' else '' }}">Processando</a>
-        <a href="{{ url_for('admin_pedidos', status='enviado') }}" class="tab {{ 'active' if status_atual == 'enviado' else '' }}">Enviados</a>
-        <a href="{{ url_for('admin_pedidos', status='entregue') }}" class="tab {{ 'active' if status_atual == 'entregue' else '' }}">Entregues</a>
+<div class="powerbi-dashboard">
+    {# Filters Section #}
+    <div class="powerbi-filters">
+        <div class="filter-group">
+            <label for="filter-status" class="filter-label">Status do Pedido</label>
+            <select id="filter-status" class="filter-select">
+                <option value="">Todos os Status</option>
+                <option value="aguardando_pagamento" {{ 'selected' if status_atual == 'aguardando_pagamento' }}>Aguardando Pagamento</option>
+                <option value="pago" {{ 'selected' if status_atual == 'pago' }}>Pago</option>
+                <option value="processando" {{ 'selected' if status_atual == 'processando' }}>Processando</option>
+                <option value="enviado" {{ 'selected' if status_atual == 'enviado' }}>Enviado</option>
+                <option value="entregue" {{ 'selected' if status_atual == 'entregue' }}>Entregue</option>
+                <option value="cancelado" {{ 'selected' if status_atual == 'cancelado' }}>Cancelado</option>
+            </select>
+        </div>
+        {# Add more filters here if needed, e.g., Date Range, Customer Type, etc. #}
     </div>
-</div>
 
-<div class="dashboard-card">
-    <div class="card-body">
+    {# Metrics Section #}
+    <div class="powerbi-metrics">
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">💰</div>
+                <div class="metric-trend">▲ 15%</div> {# Example trend #}
+            </div>
+            <div class="metric-value">{{ total_geral|format_price }}</div>
+            <div class="metric-label">Valor Total Vendido</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">📦</div>
+                <div class="metric-trend">▼ 5%</div> {# Example trend #}
+            </div>
+            <div class="metric-value">{{ total_pedidos }}</div>
+            <div class="metric-label">Total de Pedidos</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">🧑‍🤝‍🧑</div>
+                <div class="metric-trend">▲ 8%</div> {# Example trend #}
+            </div>
+            <div class="metric-value">{{ clientes_unicos }}</div>
+            <div class="metric-label">Clientes Únicos</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">⏳</div>
+                <div class="metric-trend">0%</div> {# Example trend #}
+            </div>
+            <div class="metric-value">{{ pedidos_pendentes }}</div>
+            <div class="metric-label">Pedidos Pendentes</div>
+        </div>
+    </div>
+
+    {# Table Section #}
+    <div class="powerbi-table-container">
+        <div class="table-toolbar">
+            <div class="toolbar-title">Detalhes dos Pedidos</div>
+            <div class="toolbar-actions">
+                <div class="search-filter">
+                    <input type="text" placeholder="Buscar pedidos...">
+                </div>
+                {# Add other actions like Export, Refresh etc. #}
+            </div>
+        </div>
+
         {% if pedidos %}
-        <table class="data-table full-width">
+        <table class="powerbi-table">
             <thead>
                 <tr>
-                    <th>Pedido</th>
+                    <th>Pedido ID</th>
                     <th>Data</th>
                     <th>Cliente</th>
                     <th>Total</th>
@@ -131,43 +511,67 @@
             </thead>
             <tbody>
                 {% for pedido in pedidos %}
-                <tr>
-                    <td data-label="Pedido"><strong>#{{ pedido.id }}</strong></td>
-                    <td data-label="Data">{{ pedido.data|format_date }}</td>
+                <tr onclick="window.location.href='{{ url_for('admin_pedido_detalhe', id=pedido.id) }}';">
+                    <td data-label="Pedido ID">
+                        <strong class="pedido-id">#{{ pedido.id }}</strong>
+                    </td>
+                    <td data-label="Data" class="pedido-data">{{ pedido.data|format_date }}</td>
                     <td data-label="Cliente">
-                        {{ pedido.cliente_nome or pedido.nome_cliente }}<br>
+                        <div class="pedido-cliente">{{ pedido.cliente_nome or pedido.nome_cliente }}</div>
                         <small>{{ pedido.email }}</small>
                     </td>
-                    <td data-label="Total"><strong>{{ pedido.total|format_price }}</strong></td>
-                    <td>
-                    {% if pedido.status_pedido in ['pago', 'processando', 'enviado', 'entregue'] %}
-                    <span class="status-badge status-aprovado">
-                        Aprovado
-                    </span>
-                    {% elif pedido.status_pedido == 'aguardando_pagamento' %}
-                    <span class="status-badge status-pendente">
-                        Pendente
-                    </span>
-                    {% else %}
-                    <span class="status-badge status-{{ pedido.status_pagamento or 'pendente' }}">
-                        {{ pedido.status_pagamento or 'Pendente' }}
-                    </span>
-                    {% endif %}
-                </td>
-                <td>
-                    <span class="status-badge status-{{ pedido.status_pedido }}">
-                        {{ pedido.status_pedido|replace('_', ' ')|title }}
-                    </span>
-                </td>
+                    <td data-label="Total">
+                        <strong class="pedido-valor">{{ pedido.total|format_price }}</strong>
+                    </td>
+                    <td data-label="Pagamento">
+                        {% if pedido.status_pagamento == 'aprovado' or pedido.mercadopago_status == 'approved' %}
+                            <span class="status-badge pago">
+                                Pago
+                            </span>
+                        {% elif pedido.status_pedido == 'aguardando_pagamento' %}
+                            <span class="status-badge aguardando_pagamento">
+                                Aguardando
+                            </span>
+                        {% elif pedido.status_pagamento == 'pendente' %}
+                            <span class="status-badge pendente">
+                                Pendente
+                            </span>
+                        {% else %}
+                            <span class="status-badge {{ pedido.status_pagamento or 'pendente' }}">
+                                {{ pedido.status_pagamento|replace('_', ' ')|title or 'Pendente' }}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td data-label="Status">
+                        {% if pedido.status_pagamento == 'aprovado' or pedido.mercadopago_status == 'approved' %}
+                            {% if pedido.status_pedido == 'aguardando_pagamento' %}
+                                <span class="status-badge pago">
+                                    Pago
+                                </span>
+                            {% else %}
+                                <span class="status-badge {{ pedido.status_pedido }}">
+                                    {{ pedido.status_pedido|replace('_', ' ')|title }}
+                                </span>
+                            {% endif %}
+                        {% else %}
+                            <span class="status-badge {{ pedido.status_pedido }}">
+                                {{ pedido.status_pedido|replace('_', ' ')|title }}
+                            </span>
+                        {% endif %}
+                    </td>
                     <td data-label="Ações">
-                        <a href="{{ url_for('admin_pedido_detalhe', id=pedido.id) }}" class="btn btn-sm btn-outline">Ver Detalhes</a>
+                        <a href="{{ url_for('admin_pedido_detalhe', id=pedido.id) }}" class="action-btn-view">Ver Detalhes</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <p class="empty-text">Nenhum pedido encontrado.</p>
+        <div class="empty-state-powerbi">
+            <div class="empty-icon">📦</div>
+            <h3>Nenhum pedido encontrado</h3>
+            <p>Não há pedidos para exibir com os filtros atuais.</p>
+        </div>
         {% endif %}
     </div>
 </div>
