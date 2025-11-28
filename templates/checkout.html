@@ -110,7 +110,7 @@
 {% block extra_js %}
 <script>
 (function() {
-    const checkoutCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const checkoutCart = JSON.parse(localStorage.getItem('solarpro_cart') || '[]');
     let cupomAplicado = null;
     let descontoValor = 0;
 
@@ -228,7 +228,7 @@
             const data = await response.json();
             
             if (data.sucesso) {
-                localStorage.removeItem('cart');
+                localStorage.removeItem('solarpro_cart');
                 
                 const pagamentoResp = await fetch('/criar-pagamento', {
                     method: 'POST',
