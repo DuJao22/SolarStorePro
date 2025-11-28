@@ -19,15 +19,35 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="cep">CEP *</label>
-                                <input type="text" id="cep" name="cep" placeholder="00000-000" required
-                                       value="{{ current_user.cep or '' if current_user.is_authenticated else '' }}">
+                                <div class="cep-input-group">
+                                    <input type="text" id="cep" name="cep" placeholder="00000-000" required maxlength="9"
+                                           value="{{ current_user.cep or '' if current_user.is_authenticated else '' }}">
+                                    <span id="cepLoading" class="cep-loading" style="display: none;">🔍</span>
+                                </div>
+                                <small id="cepStatus" class="cep-status"></small>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="endereco">Endereço *</label>
-                            <input type="text" id="endereco" name="endereco" placeholder="Rua, número, complemento" required
+                            <label for="endereco">Rua/Logradouro *</label>
+                            <input type="text" id="endereco" name="endereco" placeholder="Nome da rua" required
                                    value="{{ current_user.endereco or '' if current_user.is_authenticated else '' }}">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="numero">Número *</label>
+                                <input type="text" id="numero" name="numero" placeholder="123" required>
+                            </div>
+                            <div class="form-group flex-2">
+                                <label for="complemento">Complemento</label>
+                                <input type="text" id="complemento" name="complemento" placeholder="Apto, Bloco, etc.">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bairro">Bairro *</label>
+                            <input type="text" id="bairro" name="bairro" placeholder="Bairro" required>
                         </div>
                         
                         <div class="form-row">
@@ -118,6 +138,61 @@
         return parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
+    // Busca CEP automaticamente usando ViaCEP
+    const cepInput = document.getElementById('cep');
+    const cepStatus = document.getElementById('cepStatus');
+    const cepLoading = document.getElementById('cepLoading');
+    
+    cepInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 5) {
+            value = value.substring(0, 5) + '-' + value.substring(5, 8);
+        }
+        e.target.value = value;
+    });
+    
+    cepInput.addEventListener('blur', async function() {
+        const cep = this.value.replace(/\D/g, '');
+        
+        if (cep.length !== 8) {
+            cepStatus.textContent = '';
+            return;
+        }
+        
+        cepLoading.style.display = 'inline';
+        cepStatus.textContent = 'Buscando...';
+        cepStatus.className = 'cep-status';
+        
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await response.json();
+            
+            cepLoading.style.display = 'none';
+            
+            if (data.erro) {
+                cepStatus.textContent = 'CEP não encontrado';
+                cepStatus.className = 'cep-status error';
+                return;
+            }
+            
+            document.getElementById('endereco').value = data.logradouro || '';
+            document.getElementById('bairro').value = data.bairro || '';
+            document.getElementById('cidade').value = data.localidade || '';
+            document.getElementById('estado').value = data.uf || '';
+            
+            cepStatus.textContent = 'Endereço encontrado!';
+            cepStatus.className = 'cep-status success';
+            
+            // Foca no campo número após preencher
+            document.getElementById('numero').focus();
+            
+        } catch (error) {
+            cepLoading.style.display = 'none';
+            cepStatus.textContent = 'Erro ao buscar CEP';
+            cepStatus.className = 'cep-status error';
+        }
+    });
+
     function renderCheckout() {
         const container = document.getElementById('checkoutItems');
         
@@ -207,9 +282,19 @@
         btn.disabled = true;
         btn.textContent = 'Processando...';
         
+        const endereco = document.getElementById('endereco').value;
+        const numero = document.getElementById('numero').value;
+        const complemento = document.getElementById('complemento').value;
+        const bairro = document.getElementById('bairro').value;
+        
+        const enderecoCompleto = `${endereco}, ${numero}${complemento ? ' - ' + complemento : ''} - ${bairro}`;
+        
         const dados = {
             produtos: checkoutCart,
-            endereco: document.getElementById('endereco').value,
+            endereco: enderecoCompleto,
+            numero: numero,
+            complemento: complemento,
+            bairro: bairro,
             cidade: document.getElementById('cidade').value,
             estado: document.getElementById('estado').value,
             cep: document.getElementById('cep').value,

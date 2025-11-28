@@ -2820,6 +2820,37 @@ main {
 .coupon-status.success { color: #28a745; }
 .coupon-status.error { color: #dc3545; }
 
+.cep-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cep-input-group input {
+    flex: 1;
+}
+
+.cep-loading {
+    position: absolute;
+    right: 10px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.cep-status {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.cep-status.success { color: #28a745; }
+.cep-status.error { color: #dc3545; }
+
 .checkout-items {
     margin-bottom: 1.5rem;
 }
