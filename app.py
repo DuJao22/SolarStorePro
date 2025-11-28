@@ -1023,8 +1023,11 @@ def admin_pedidos():
     query += ' ORDER BY p.data DESC'
     
     pedidos = conn.execute(query, params).fetchall()
+    
+    total_geral = conn.execute('SELECT COALESCE(SUM(total), 0) FROM pedidos WHERE status_pagamento = ?', ('aprovado',)).fetchone()[0]
+    
     conn.close()
-    return render_template('admin/pedidos.html', pedidos=pedidos, status_atual=status)
+    return render_template('admin/pedidos.html', pedidos=pedidos, status_atual=status, total_geral=total_geral)
 
 @app.route('/admin/pedido/<int:id>')
 @admin_required
