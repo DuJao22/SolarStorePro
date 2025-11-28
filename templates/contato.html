@@ -1,94 +1,598 @@
+
 {% extends "base.html" %}
 
-{% block title %}Contato - Solicite seu Orçamento | SolarPro{% endblock %}
+{% block title %}Contato - {{ loja.loja_nome or 'SolarPro' }}{% endblock %}
 
 {% block content %}
-<section class="page-header">
+<div class="page-header">
     <div class="container">
         <h1 data-aos="fade-up">Entre em Contato</h1>
         <p data-aos="fade-up" data-aos-delay="100">Nossa equipe está pronta para atender você</p>
     </div>
-</section>
+</div>
 
 <section class="contact-section">
     <div class="container">
         <div class="contact-layout">
+            <!-- Informações de Contato -->
             <div class="contact-info" data-aos="fade-right">
-                <h2>Fale Conosco</h2>
-                <p>Preencha o formulário ou entre em contato através dos nossos canais.</p>
-                
-                <div class="contact-methods">
-                    <div class="contact-method">
-                        <div class="method-icon">📞</div>
-                        <div class="method-content">
-                            <strong>Telefone</strong>
-                            <p>{{ loja.loja_telefone or '(11) 99999-9999' }}</p>
+                <div class="info-card">
+                    <h2>Fale Conosco</h2>
+                    <p class="info-subtitle">Estamos aqui para ajudar você a economizar com energia solar</p>
+
+                    <div class="contact-methods">
+                        <div class="method-item">
+                            <div class="method-icon">📞</div>
+                            <div class="method-content">
+                                <h3>Telefone</h3>
+                                <a href="tel:+55{{ loja.loja_telefone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">
+                                    {{ loja.loja_telefone or '(11) 4000-1234' }}
+                                </a>
+                                <span class="availability">Seg-Sex: 8h-18h</span>
+                            </div>
+                        </div>
+
+                        <div class="method-item">
+                            <div class="method-icon whatsapp">💬</div>
+                            <div class="method-content">
+                                <h3>WhatsApp</h3>
+                                <a href="https://wa.me/55{{ loja.loja_telefone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}" target="_blank">
+                                    {{ loja.loja_telefone or '(11) 4000-1234' }}
+                                </a>
+                                <span class="availability">Resposta rápida garantida</span>
+                            </div>
+                        </div>
+
+                        <div class="method-item">
+                            <div class="method-icon">✉️</div>
+                            <div class="method-content">
+                                <h3>Email</h3>
+                                <a href="mailto:{{ loja.loja_email or 'contato@solarpro.com.br' }}">
+                                    {{ loja.loja_email or 'contato@solarpro.com.br' }}
+                                </a>
+                                <span class="availability">Resposta em até 24h</span>
+                            </div>
+                        </div>
+
+                        <div class="method-item">
+                            <div class="method-icon">📍</div>
+                            <div class="method-content">
+                                <h3>Endereço</h3>
+                                <p>{{ loja.loja_endereco or 'Av. Paulista, 1000' }}</p>
+                                <p>{{ loja.loja_cidade or 'São Paulo' }} - {{ loja.loja_estado or 'SP' }}</p>
+                                <span class="availability">{{ loja.loja_horario or 'Seg-Sex: 8h-18h' }}</span>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="contact-method">
-                        <div class="method-icon">📧</div>
-                        <div class="method-content">
-                            <strong>Email</strong>
-                            <p>{{ loja.loja_email or 'contato@solarpro.com' }}</p>
+
+                    <div class="social-links">
+                        <h3>Redes Sociais</h3>
+                        <div class="social-buttons">
+                            <a href="#" class="social-btn instagram" title="Instagram">
+                                <span>📷</span>
+                                <span>Instagram</span>
+                            </a>
+                            <a href="#" class="social-btn facebook" title="Facebook">
+                                <span>👍</span>
+                                <span>Facebook</span>
+                            </a>
+                            <a href="#" class="social-btn linkedin" title="LinkedIn">
+                                <span>💼</span>
+                                <span>LinkedIn</span>
+                            </a>
                         </div>
                     </div>
-                    
-                    <div class="contact-method">
-                        <div class="method-icon">📍</div>
-                        <div class="method-content">
-                            <strong>Endereço</strong>
-                            <p>{{ loja.loja_endereco or 'Av. Paulista, 1000' }} - {{ loja.loja_cidade or 'São Paulo' }}/{{ loja.loja_estado or 'SP' }}</p>
+
+                    <div class="trust-badges">
+                        <div class="badge-item">
+                            <span class="badge-icon">🏆</span>
+                            <div>
+                                <strong>500+</strong>
+                                <span>Projetos Realizados</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="contact-method">
-                        <div class="method-icon">⏰</div>
-                        <div class="method-content">
-                            <strong>Horário</strong>
-                            <p>{{ loja.loja_horario or 'Seg-Sex: 8h às 18h | Sáb: 8h às 12h' }}</p>
+                        <div class="badge-item">
+                            <span class="badge-icon">⭐</span>
+                            <div>
+                                <strong>98%</strong>
+                                <span>Satisfação</span>
+                            </div>
+                        </div>
+                        <div class="badge-item">
+                            <span class="badge-icon">✓</span>
+                            <div>
+                                <strong>25 anos</strong>
+                                <span>Garantia</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="contact-form-container" data-aos="fade-left">
-                {% if sucesso %}
-                <div class="success-message">
-                    <h3>✓ Mensagem Enviada!</h3>
-                    <p>Recebemos seu contato e retornaremos em breve.</p>
+
+            <!-- Formulário de Contato -->
+            <div class="contact-form-wrapper" data-aos="fade-left">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Envie sua Mensagem</h2>
+                        <p>Preencha o formulário e retornaremos em breve</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('contato') }}" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nome">
+                                    <span class="label-icon">👤</span>
+                                    Nome Completo
+                                </label>
+                                <input type="text" id="nome" name="nome" required placeholder="Seu nome">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">
+                                    <span class="label-icon">✉️</span>
+                                    Email
+                                </label>
+                                <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="telefone">
+                                    <span class="label-icon">📞</span>
+                                    Telefone/WhatsApp
+                                </label>
+                                <input type="tel" id="telefone" name="telefone" required placeholder="(11) 99999-9999">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="assunto">
+                                    <span class="label-icon">📋</span>
+                                    Assunto
+                                </label>
+                                <select id="assunto" name="assunto" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Orçamento">Solicitar Orçamento</option>
+                                    <option value="Dúvidas Técnicas">Dúvidas Técnicas</option>
+                                    <option value="Suporte">Suporte</option>
+                                    <option value="Parceria">Parceria/Fornecimento</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mensagem">
+                                <span class="label-icon">💬</span>
+                                Mensagem
+                            </label>
+                            <textarea id="mensagem" name="mensagem" rows="6" required placeholder="Descreva como podemos ajudar você..."></textarea>
+                        </div>
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                <span>Enviar Mensagem</span>
+                                <span class="btn-arrow">→</span>
+                            </button>
+                            <p class="privacy-note">
+                                🔒 Seus dados estão seguros e protegidos
+                            </p>
+                        </div>
+                    </form>
                 </div>
-                {% endif %}
-                
-                <form method="POST" action="{{ url_for('contato') }}" class="contact-form">
-                    <h3>Solicite um Orçamento</h3>
-                    
-                    <div class="form-group">
-                        <label for="nome">Nome Completo *</label>
-                        <input type="text" id="nome" name="nome" required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="telefone">Telefone *</label>
-                            <input type="tel" id="telefone" name="telefone" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="mensagem">Mensagem *</label>
-                        <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Conte-nos sobre seu projeto ou dúvidas..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-lg">Enviar Mensagem</button>
-                </form>
             </div>
         </div>
     </div>
 </section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>Perguntas Frequentes</h2>
+            <p>Tire suas dúvidas antes de entrar em contato</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="0">
+                <div class="faq-question">
+                    <h3>❓ Qual o prazo de instalação?</h3>
+                </div>
+                <div class="faq-answer">
+                    <p>O prazo médio de instalação é de 1 a 3 dias, dependendo do tamanho do sistema. Após a aprovação do projeto pela concessionária, iniciamos imediatamente.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="faq-question">
+                    <h3>💰 Quais as formas de pagamento?</h3>
+                </div>
+                <div class="faq-answer">
+                    <p>Aceitamos cartão de crédito (até 12x), PIX, boleto bancário e temos parcerias com instituições financeiras para financiamento com taxas especiais.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="faq-question">
+                    <h3>🔧 Vocês fazem manutenção?</h3>
+                </div>
+                <div class="faq-answer">
+                    <p>Sim! Oferecemos serviço de manutenção preventiva e corretiva. Os painéis solares requerem pouca manutenção, principalmente limpeza periódica.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="faq-question">
+                    <h3>📊 Como funciona a garantia?</h3>
+                </div>
+                <div class="faq-answer">
+                    <p>Oferecemos 25 anos de garantia de desempenho nos painéis, 10 anos nos inversores e 5 anos na instalação. Você tem total tranquilidade.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Final -->
+<section class="cta-contact">
+    <div class="container">
+        <div class="cta-content" data-aos="zoom-in">
+            <div class="cta-icon">⚡</div>
+            <h2>Pronto para Economizar?</h2>
+            <p>Fale com um especialista e descubra quanto você pode economizar</p>
+            <div class="cta-buttons">
+                <a href="https://wa.me/55{{ loja.loja_telefone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}" 
+                   target="_blank" 
+                   class="btn btn-primary btn-lg">
+                    <span>💬</span>
+                    WhatsApp Agora
+                </a>
+                <a href="{{ url_for('calculadora') }}" class="btn btn-secondary btn-lg">
+                    <span>🧮</span>
+                    Calcular Economia
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.contact-section {
+    padding: 4rem 0;
+    background: var(--light-gray);
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.info-card, .form-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+.info-card h2 {
+    color: var(--primary-green);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.info-subtitle {
+    color: var(--dark-gray);
+    opacity: 0.7;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+}
+
+.contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.method-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--light-gray);
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.method-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.method-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.method-icon.whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.method-content h3 {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.method-content a {
+    color: var(--dark-gray);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.method-content a:hover {
+    color: var(--primary-green);
+}
+
+.availability {
+    font-size: 0.85rem;
+    color: var(--dark-gray);
+    opacity: 0.6;
+}
+
+.social-links {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.social-links h3 {
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    background: var(--light-gray);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--dark-gray);
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.trust-badges {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.badge-item {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: var(--light-gray);
+    border-radius: 12px;
+}
+
+.badge-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.badge-item strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--primary-green);
+}
+
+.badge-item span {
+    font-size: 0.85rem;
+    color: var(--dark-gray);
+    opacity: 0.7;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-header h2 {
+    color: var(--primary-green);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: var(--dark-gray);
+    opacity: 0.7;
+}
+
+.contact-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-form .form-group {
+    margin-bottom: 0;
+}
+
+.contact-form label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.75rem;
+}
+
+.label-icon {
+    font-size: 1.2rem;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(11, 106, 74, 0.1);
+}
+
+.form-footer {
+    margin-top: 2rem;
+}
+
+.btn-arrow {
+    margin-left: 0.5rem;
+    transition: all 0.3s;
+}
+
+.btn:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+.privacy-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--dark-gray);
+    opacity: 0.6;
+    margin-top: 1rem;
+}
+
+.faq-section {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--light-gray);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+.faq-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.faq-question h3 {
+    color: var(--primary-green);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.faq-answer p {
+    color: var(--dark-gray);
+    line-height: 1.8;
+}
+
+.cta-contact {
+    padding: 5rem 2rem;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #095539 100%);
+    color: var(--white);
+}
+
+.cta-contact .cta-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cta-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.cta-contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.cta-contact p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+@media (max-width: 968px) {
+    .contact-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-form .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .trust-badges {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+}
+</style>
 {% endblock %}
