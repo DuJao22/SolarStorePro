@@ -118,7 +118,7 @@
             <div class="footer-content">
                 <!-- Sobre a Empresa -->
                 <div class="footer-section">
-                    <h4>☀️ SolarPro</h4>
+                    <h4>☀️ {{ loja.loja_nome or 'SolarPro' }}</h4>
                     <p>Energia solar de alta qualidade com instalação profissional. Economia real, sustentabilidade garantida.</p>
                     <div class="footer-stats">
                         <div class="stat-item">
@@ -168,28 +168,28 @@
                             <span class="contact-icon">📞</span>
                             <div>
                                 <strong>Telefone</strong>
-                                <a href="tel:+5511999999999">(11) 99999-9999</a>
+                                <a href="tel:+55{{ loja.loja_telefone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">{{ loja.loja_telefone or '(11) 99999-9999' }}</a>
                             </div>
                         </li>
                         <li>
                             <span class="contact-icon">✉️</span>
                             <div>
                                 <strong>Email</strong>
-                                <a href="mailto:contato@solarpro.com.br">contato@solarpro.com.br</a>
+                                <a href="mailto:{{ loja.loja_email or 'contato@solarpro.com' }}">{{ loja.loja_email or 'contato@solarpro.com' }}</a>
                             </div>
                         </li>
                         <li>
                             <span class="contact-icon">📍</span>
                             <div>
                                 <strong>Endereço</strong>
-                                <span>São Paulo, SP</span>
+                                <span>{{ loja.loja_cidade or 'São Paulo' }}, {{ loja.loja_estado or 'SP' }}</span>
                             </div>
                         </li>
                         <li>
                             <span class="contact-icon">🕐</span>
                             <div>
                                 <strong>Horário</strong>
-                                <span>Seg-Sex: 8h-18h</span>
+                                <span>{{ loja.loja_horario or 'Seg-Sex: 8h-18h' }}</span>
                             </div>
                         </li>
                     </ul>

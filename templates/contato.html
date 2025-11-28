@@ -22,7 +22,7 @@
                         <div class="method-icon">📞</div>
                         <div class="method-content">
                             <strong>Telefone</strong>
-                            <p>(11) 4000-1234</p>
+                            <p>{{ loja.loja_telefone or '(11) 99999-9999' }}</p>
                         </div>
                     </div>
                     
@@ -30,7 +30,7 @@
                         <div class="method-icon">📧</div>
                         <div class="method-content">
                             <strong>Email</strong>
-                            <p>contato@solarpro.com.br</p>
+                            <p>{{ loja.loja_email or 'contato@solarpro.com' }}</p>
                         </div>
                     </div>
                     
@@ -38,7 +38,7 @@
                         <div class="method-icon">📍</div>
                         <div class="method-content">
                             <strong>Endereço</strong>
-                            <p>Av. Paulista, 1000 - São Paulo/SP</p>
+                            <p>{{ loja.loja_endereco or 'Av. Paulista, 1000' }} - {{ loja.loja_cidade or 'São Paulo' }}/{{ loja.loja_estado or 'SP' }}</p>
                         </div>
                     </div>
                     
@@ -46,7 +46,7 @@
                         <div class="method-icon">⏰</div>
                         <div class="method-content">
                             <strong>Horário</strong>
-                            <p>Seg-Sex: 8h às 18h<br>Sáb: 9h às 13h</p>
+                            <p>{{ loja.loja_horario or 'Seg-Sex: 8h às 18h | Sáb: 8h às 12h' }}</p>
                         </div>
                     </div>
                 </div>
