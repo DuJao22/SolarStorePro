@@ -1,128 +1,501 @@
 {% extends "admin/base_admin.html" %}
 
 {% block title %}Pedido #{{ pedido.id }} - Admin SolarPro{% endblock %}
-{% block page_title %}Pedido #{{ pedido.id }}{% endblock %}
 
 {% block content %}
-<div class="detail-layout">
-    <div class="detail-main">
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h3>Produtos do Pedido</h3>
-            </div>
-            <div class="card-body">
-                {% set produtos = pedido.produtos_json|from_json %}
-                <table class="data-table full-width">
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Quantidade</th>
-                            <th>Preço Un.</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in produtos %}
-                        <tr>
-                            <td>{{ item.nome }}</td>
-                            <td>{{ item.quantidade }}</td>
-                            <td>{{ item.preco_unitario|format_price }}</td>
-                            <td>{{ item.subtotal|format_price }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
-                            <td>{{ pedido.subtotal|format_price }}</td>
-                        </tr>
-                        {% if pedido.desconto > 0 %}
-                        <tr>
-                            <td colspan="3" class="text-right"><strong>Desconto{% if pedido.cupom_usado %} ({{ pedido.cupom_usado }}){% endif %}:</strong></td>
-                            <td class="text-success">-{{ pedido.desconto|format_price }}</td>
-                        </tr>
-                        {% endif %}
-                        <tr class="total-row">
-                            <td colspan="3" class="text-right"><strong>Total:</strong></td>
-                            <td><strong>{{ pedido.total|format_price }}</strong></td>
-                        </tr>
-                    </tfoot>
-                </table>
+<div class="admin-header">
+    <div class="header-content">
+        <div>
+            <h1>📊 Pedido #{{ pedido.id }}</h1>
+            <div class="header-meta">
+                <span class="meta-item">📅 {{ pedido.data|format_date }}</span>
+                <span class="meta-item status-badge status-{{ pedido.status_pedido }}">
+                    {{ pedido.status_pedido|replace('_', ' ')|title }}
+                </span>
             </div>
         </div>
-        
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h3>Atualizar Status</h3>
+        <div class="header-actions">
+            <a href="{{ url_for('admin_pedidos') }}" class="btn-secondary">← Voltar aos Pedidos</a>
+        </div>
+    </div>
+</div>
+
+<div class="admin-content">
+    <div class="breadcrumb">
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <span>›</span>
+        <a href="{{ url_for('admin_pedidos') }}">Pedidos</a>
+        <span>›</span>
+        <span>Pedido #{{ pedido.id }}</span>
+    </div>
+
+    <div class="pedido-layout">
+        <!-- Coluna Principal -->
+        <div class="pedido-main">
+            <!-- Informações do Cliente -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2>👤 Informações do Cliente</h2>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Nome:</span>
+                        <span class="info-value">{{ pedido.nome_cliente or 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ pedido.email or 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Telefone:</span>
+                        <span class="info-value">{{ pedido.telefone or 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">CPF:</span>
+                        <span class="info-value">{{ pedido.cpf or 'N/A' }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
+
+            <!-- Endereço de Entrega -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2>📍 Endereço de Entrega</h2>
+                </div>
+                <div class="endereco-info">
+                    <p><strong>{{ pedido.endereco or 'N/A' }}</strong></p>
+                    <p>{{ pedido.cidade or 'N/A' }} - {{ pedido.estado or 'N/A' }}</p>
+                    <p>CEP: {{ pedido.cep or 'N/A' }}</p>
+                </div>
+            </div>
+
+            <!-- Produtos do Pedido -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2>📦 Produtos do Pedido</h2>
+                </div>
+
+                <div class="produtos-table-wrapper">
+                    <table class="admin-table produtos-table">
+                        <thead>
+                            <tr>
+                                <th>PRODUTO</th>
+                                <th class="text-center">QUANTIDADE</th>
+                                <th class="text-right">PREÇO UN.</th>
+                                <th class="text-right">SUBTOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set produtos = pedido.produtos_json|from_json %}
+                            {% for item in produtos %}
+                            <tr>
+                                <td>
+                                    <div class="produto-info">
+                                        <strong>{{ item.nome }}</strong>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{ item.quantidade }}</td>
+                                <td class="text-right">{{ item.preco_unitario|format_price }}</td>
+                                <td class="text-right"><strong>{{ item.subtotal|format_price }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="subtotal-row">
+                                <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                                <td class="text-right"><strong>{{ pedido.subtotal|format_price }}</strong></td>
+                            </tr>
+
+                            {% if pedido.desconto > 0 %}
+                            <tr class="desconto-row">
+                                <td colspan="3" class="text-right">
+                                    Desconto{% if pedido.cupom_usado %} ({{ pedido.cupom_usado }}){% endif %}:
+                                </td>
+                                <td class="text-right desconto-value">-{{ pedido.desconto|format_price }}</td>
+                            </tr>
+                            {% endif %}
+
+                            <tr class="total-row">
+                                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                                <td class="text-right total-value">{{ pedido.total|format_price }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna Lateral -->
+        <div class="pedido-sidebar">
+            <!-- Status do Pedido -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2>🔄 Atualizar Status</h2>
+                </div>
                 <form method="POST" action="{{ url_for('admin_atualizar_status_pedido', id=pedido.id) }}" class="status-form">
-                    <select name="status" class="status-select">
-                        {% for status in ['aguardando_pagamento', 'pago', 'processando', 'enviado', 'entregue', 'cancelado'] %}
-                        <option value="{{ status }}" {{ 'selected' if pedido.status_pedido == status else '' }}>
-                            {{ status|replace('_', ' ')|title }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                    <div class="form-group">
+                        <label for="status">Status do Pedido:</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="aguardando_pagamento" {% if pedido.status_pedido == 'aguardando_pagamento' %}selected{% endif %}>
+                                ⏳ Aguardando Pagamento
+                            </option>
+                            <option value="pago" {% if pedido.status_pedido == 'pago' %}selected{% endif %}>
+                                ✅ Pago
+                            </option>
+                            <option value="processando" {% if pedido.status_pedido == 'processando' %}selected{% endif %}>
+                                📦 Processando
+                            </option>
+                            <option value="enviado" {% if pedido.status_pedido == 'enviado' %}selected{% endif %}>
+                                🚚 Enviado
+                            </option>
+                            <option value="entregue" {% if pedido.status_pedido == 'entregue' %}selected{% endif %}>
+                                ✅ Entregue
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary btn-block">
+                        Atualizar Status
+                    </button>
                 </form>
+            </div>
+
+            <!-- Resumo do Pedido -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2>📊 Resumo</h2>
+                </div>
+                <div class="resumo-info">
+                    <div class="resumo-item">
+                        <span class="resumo-label">Data do Pedido:</span>
+                        <span class="resumo-value">{{ pedido.data|format_date }}</span>
+                    </div>
+                    {% if pedido.data_pagamento %}
+                    <div class="resumo-item">
+                        <span class="resumo-label">Data do Pagamento:</span>
+                        <span class="resumo-value">{{ pedido.data_pagamento|format_date }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="resumo-item">
+                        <span class="resumo-label">Status Pagamento:</span>
+                        <span class="resumo-value">
+                            <span class="status-badge status-{{ pedido.status_pagamento or 'pendente' }}">
+                                {{ pedido.status_pagamento or 'Pendente' }}
+                            </span>
+                        </span>
+                    </div>
+                    {% if pedido.mercadopago_id %}
+                    <div class="resumo-item">
+                        <span class="resumo-label">ID Mercado Pago:</span>
+                        <span class="resumo-value">{{ pedido.mercadopago_id }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2>⚡ Ações Rápidas</h2>
+                </div>
+                <div class="acoes-rapidas">
+                    <a href="mailto:{{ pedido.email }}" class="btn-action">
+                        📧 Enviar Email
+                    </a>
+                    {% if pedido.telefone %}
+                    <a href="https://wa.me/55{{ pedido.telefone|replace('(', '')|replace(')', '')|replace('-', '')|replace(' ', '') }}" target="_blank" class="btn-action">
+                        💬 WhatsApp
+                    </a>
+                    {% endif %}
+                    <button onclick="window.print()" class="btn-action">
+                        🖨️ Imprimir Pedido
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    
-    <aside class="detail-sidebar">
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h3>Cliente</h3>
-            </div>
-            <div class="card-body">
-                <p><strong>{{ pedido.cliente_nome or pedido.nome_cliente }}</strong></p>
-                <p>{{ pedido.cliente_email or pedido.email }}</p>
-                <p>{{ pedido.cliente_telefone or pedido.telefone }}</p>
-                {% if pedido.cpf %}<p>CPF: {{ pedido.cpf }}</p>{% endif %}
-            </div>
-        </div>
-        
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h3>Endereço de Entrega</h3>
-            </div>
-            <div class="card-body">
-                <p>{{ pedido.endereco }}</p>
-                <p>{{ pedido.cidade }} - {{ pedido.estado }}</p>
-                <p>CEP: {{ pedido.cep }}</p>
-            </div>
-        </div>
-        
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h3>Pagamento</h3>
-            </div>
-            <div class="card-body">
-                <p><span class="badge badge-{{ pedido.status_pagamento }}">{{ pedido.status_pagamento|title }}</span></p>
-                {% if pedido.mercadopago_id %}
-                <p><small>ID MP: {{ pedido.mercadopago_id }}</small></p>
-                {% endif %}
-                {% if pedido.data_pagamento %}
-                <p><small>Pago em: {{ pedido.data_pagamento|format_date }}</small></p>
-                {% endif %}
-            </div>
-        </div>
-        
-        <div class="dashboard-card">
-            <div class="card-header">
-                <h3>Datas</h3>
-            </div>
-            <div class="card-body">
-                <p><strong>Pedido:</strong> {{ pedido.data|format_date }}</p>
-                {% if pedido.data_envio %}<p><strong>Envio:</strong> {{ pedido.data_envio|format_date }}</p>{% endif %}
-                {% if pedido.data_entrega %}<p><strong>Entrega:</strong> {{ pedido.data_entrega|format_date }}</p>{% endif %}
-            </div>
-        </div>
-    </aside>
 </div>
 
-<div class="page-actions bottom">
-    <a href="{{ url_for('admin_pedidos') }}" class="btn btn-outline">Voltar aos Pedidos</a>
-</div>
+<style>
+.pedido-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.pedido-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pedido-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray);
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.header-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    align-items: center;
+}
+
+.meta-item {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.endereco-info {
+    background: var(--gray);
+    padding: 1.25rem;
+    border-radius: 8px;
+}
+
+.endereco-info p {
+    margin: 0.25rem 0;
+    color: var(--dark);
+}
+
+.produtos-table-wrapper {
+    overflow-x: auto;
+}
+
+.produtos-table {
+    width: 100%;
+}
+
+.produtos-table thead {
+    background: var(--gray);
+}
+
+.produtos-table th {
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.produtos-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray);
+}
+
+.produto-info strong {
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.subtotal-row td {
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--gray);
+    font-size: 1rem;
+}
+
+.desconto-row .desconto-value {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.total-row td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 2px solid var(--dark);
+    font-size: 1.1rem;
+}
+
+.total-value {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.status-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.status-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.resumo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.resumo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--gray);
+    border-radius: 6px;
+}
+
+.resumo-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.resumo-value {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.acoes-rapidas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-action {
+    display: block;
+    padding: 0.875rem 1rem;
+    background: var(--gray);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-action:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.status-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-aguardando_pagamento {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-pago,
+.status-aprovado {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-processando {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-enviado {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-entregue {
+    background: #c3e6cb;
+    color: #155724;
+}
+
+.status-pendente {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+@media (max-width: 1024px) {
+    .pedido-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    .admin-sidebar,
+    .header-actions,
+    .status-form,
+    .acoes-rapidas {
+        display: none !important;
+    }
+
+    .pedido-layout {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 {% endblock %}
