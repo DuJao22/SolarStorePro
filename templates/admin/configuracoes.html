@@ -1,73 +1,398 @@
+
 {% extends "admin/base_admin.html" %}
 
 {% block title %}Configurações - Admin SolarPro{% endblock %}
 {% block page_title %}Configurações{% endblock %}
+{% block header_icon %}⚙️{% endblock %}
+
+{% block extra_css %}
+<style>
+.config-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.config-section {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(11, 106, 74, 0.08);
+    overflow: hidden;
+}
+
+.config-section-header {
+    background: linear-gradient(135deg, #fafbfc 0%, var(--white) 100%);
+    padding: 1.75rem 2rem;
+    border-bottom: 2px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.config-section-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(11, 106, 74, 0.1) 0%, rgba(11, 106, 74, 0.05) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.config-section-title {
+    flex: 1;
+}
+
+.config-section-title h3 {
+    font-size: 1.35rem;
+    color: var(--dark-gray);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.config-section-title p {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.config-section-body {
+    padding: 2rem;
+}
+
+.config-field {
+    margin-bottom: 1.5rem;
+}
+
+.config-field:last-child {
+    margin-bottom: 0;
+}
+
+.config-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--dark-gray);
+    font-size: 0.95rem;
+}
+
+.config-label-icon {
+    font-size: 1.1rem;
+}
+
+.config-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: var(--transition);
+    font-family: inherit;
+    background: var(--white);
+}
+
+.config-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(11, 106, 74, 0.1);
+}
+
+.config-help {
+    display: block;
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+.config-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.875rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.config-badge.active {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.config-badge.inactive {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.config-actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--light-gray);
+    margin-top: 1.5rem;
+}
+
+.sandbox-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 28px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary-green);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(22px);
+}
+
+@media (max-width: 768px) {
+    .config-section-header {
+        padding: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .config-section-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.75rem;
+    }
+
+    .config-section-title h3 {
+        font-size: 1.2rem;
+    }
+
+    .config-section-body {
+        padding: 1.5rem;
+    }
+
+    .config-actions {
+        flex-direction: column;
+    }
+
+    .config-badge {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .config-section-header {
+        padding: 1rem;
+    }
+
+    .config-section-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .config-section-title h3 {
+        font-size: 1.1rem;
+    }
+
+    .config-section-body {
+        padding: 1rem;
+    }
+
+    .config-input {
+        padding: 0.7rem 0.875rem;
+        font-size: 0.9rem;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<form method="POST" class="settings-form">
-    <div class="dashboard-card">
-        <div class="card-header">
-            <h3>Integração Mercado Pago</h3>
-        </div>
-        <div class="card-body">
-            <p class="info-text">Configure as credenciais do Mercado Pago para receber pagamentos.</p>
-            
-            {% for config in configs if 'mercadopago' in config.chave %}
-            <div class="form-group">
-                <label for="config_{{ config.chave }}">{{ config.descricao }}</label>
-                {% if config.tipo == 'senha' %}
-                <input type="password" id="config_{{ config.chave }}" name="config_{{ config.chave }}" 
-                       value="{{ config.valor }}" placeholder="••••••••">
-                {% elif config.tipo == 'boolean' %}
-                <select id="config_{{ config.chave }}" name="config_{{ config.chave }}">
-                    <option value="1" {{ 'selected' if config.valor == '1' else '' }}>Sim (Sandbox)</option>
-                    <option value="0" {{ 'selected' if config.valor == '0' else '' }}>Não (Produção)</option>
-                </select>
-                {% else %}
-                <input type="text" id="config_{{ config.chave }}" name="config_{{ config.chave }}" value="{{ config.valor }}">
-                {% endif %}
+<form method="POST" class="config-grid">
+    <!-- Mercado Pago Section -->
+    <div class="config-section">
+        <div class="config-section-header">
+            <div class="config-section-icon">💳</div>
+            <div class="config-section-title">
+                <h3>Integração Mercado Pago</h3>
+                <p>Configure as credenciais do Mercado Pago para receber pagamentos</p>
             </div>
-            {% endfor %}
+            <span class="config-badge {% if config.mercadopago_access_token %}active{% else %}inactive{% endif %}">
+                {% if config.mercadopago_access_token %}✓ Configurado{% else %}⚠ Não Configurado{% endif %}
+            </span>
+        </div>
+        <div class="config-section-body">
+            <div class="config-field">
+                <label for="mercadopago_access_token" class="config-label">
+                    <span class="config-label-icon">🔑</span>
+                    Access Token
+                </label>
+                <input 
+                    type="text" 
+                    id="mercadopago_access_token" 
+                    name="mercadopago_access_token" 
+                    class="config-input"
+                    value="{{ config.mercadopago_access_token or '' }}"
+                    placeholder="APP_USR-xxxxxxxxxxxx-xxxxxxxx-xxxxxxxxxxxx"
+                >
+                <span class="config-help">
+                    Token de acesso do Mercado Pago. Obtenha em: 
+                    <a href="https://www.mercadopago.com.br/developers/panel/credentials" target="_blank" style="color: var(--primary-green); font-weight: 600;">
+                        Credenciais do Mercado Pago
+                    </a>
+                </span>
+            </div>
+
+            <div class="config-field">
+                <label for="mercadopago_public_key" class="config-label">
+                    <span class="config-label-icon">🔓</span>
+                    Public Key
+                </label>
+                <input 
+                    type="text" 
+                    id="mercadopago_public_key" 
+                    name="mercadopago_public_key" 
+                    class="config-input"
+                    value="{{ config.mercadopago_public_key or '' }}"
+                    placeholder="APP_USR-xxxxxxxxxxxx-xxxxxxxx-xxxxxxxxxxxx"
+                >
+                <span class="config-help">
+                    Chave pública para integração com checkout transparente
+                </span>
+            </div>
+
+            <div class="config-field">
+                <div class="sandbox-toggle">
+                    <label class="toggle-switch">
+                        <input 
+                            type="checkbox" 
+                            id="mercadopago_sandbox" 
+                            name="mercadopago_sandbox" 
+                            {% if config.mercadopago_sandbox %}checked{% endif %}
+                        >
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <div>
+                        <label for="mercadopago_sandbox" class="config-label" style="margin: 0; cursor: pointer;">
+                            <span class="config-label-icon">🧪</span>
+                            Modo Sandbox (Teste)
+                        </label>
+                        <span class="config-help" style="margin: 0;">
+                            Ative para usar credenciais de teste. Desative em produção.
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="dashboard-card">
-        <div class="card-header">
-            <h3>Assistente IA (OpenAI)</h3>
-        </div>
-        <div class="card-body">
-            <p class="info-text">Configure a chave da API OpenAI para usar o assistente inteligente.</p>
-            
-            {% for config in configs if 'openai' in config.chave %}
-            <div class="form-group">
-                <label for="config_{{ config.chave }}">{{ config.descricao }}</label>
-                <input type="password" id="config_{{ config.chave }}" name="config_{{ config.chave }}" 
-                       value="{{ config.valor }}" placeholder="sk-...">
+
+    <!-- OpenAI Section -->
+    <div class="config-section">
+        <div class="config-section-header">
+            <div class="config-section-icon">🤖</div>
+            <div class="config-section-title">
+                <h3>Assistente IA (OpenAI)</h3>
+                <p>Configure a chave da API OpenAI para usar o assistente inteligente</p>
             </div>
-            {% endfor %}
+            <span class="config-badge {% if config.openai_api_key %}active{% else %}inactive{% endif %}">
+                {% if config.openai_api_key %}✓ Configurado{% else %}⚠ Não Configurado{% endif %}
+            </span>
+        </div>
+        <div class="config-section-body">
+            <div class="config-field">
+                <label for="openai_api_key" class="config-label">
+                    <span class="config-label-icon">🔑</span>
+                    Chave da API
+                </label>
+                <input 
+                    type="text" 
+                    id="openai_api_key" 
+                    name="openai_api_key" 
+                    class="config-input"
+                    value="{{ config.openai_api_key or '' }}"
+                    placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                >
+                <span class="config-help">
+                    Chave de API da OpenAI para usar o assistente inteligente. Obtenha em: 
+                    <a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--primary-green); font-weight: 600;">
+                        OpenAI API Keys
+                    </a>
+                </span>
+            </div>
         </div>
     </div>
-    
-    <div class="dashboard-card">
-        <div class="card-header">
-            <h3>Configurações da Loja</h3>
-        </div>
-        <div class="card-body">
-            {% for config in configs if 'loja' in config.chave or 'frete' in config.chave or 'estoque' in config.chave or 'carrinho' in config.chave %}
-            <div class="form-group">
-                <label for="config_{{ config.chave }}">{{ config.descricao }}</label>
-                {% if config.tipo == 'numero' %}
-                <input type="number" id="config_{{ config.chave }}" name="config_{{ config.chave }}" value="{{ config.valor }}">
-                {% else %}
-                <input type="text" id="config_{{ config.chave }}" name="config_{{ config.chave }}" value="{{ config.valor }}">
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary btn-lg">Salvar Configurações</button>
+
+    <!-- Actions -->
+    <div class="config-actions">
+        <button type="submit" class="btn btn-primary">
+            <span>💾</span>
+            Salvar Configurações
+        </button>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">
+            <span>↩️</span>
+            Voltar ao Dashboard
+        </a>
     </div>
 </form>
+
+{% if config.mercadopago_access_token or config.openai_api_key %}
+<div class="alert alert-success" style="margin-top: 2rem;">
+    <span class="alert-icon">✅</span>
+    <div>
+        <strong>Integrações Ativas:</strong>
+        <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+            {% if config.mercadopago_access_token %}
+            <li>Mercado Pago configurado{% if config.mercadopago_sandbox %} (Modo Teste){% endif %}</li>
+            {% endif %}
+            {% if config.openai_api_key %}
+            <li>OpenAI configurado - Assistente IA disponível</li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
