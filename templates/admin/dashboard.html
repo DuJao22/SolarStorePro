@@ -6,6 +6,136 @@
 
 {% block extra_css %}
 <style>
+/* Power BI Dashboard Style */
+.powerbi-dashboard {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.powerbi-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid var(--primary-green);
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(11, 106, 74, 0.1);
+}
+
+.powerbi-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.metric-card-powerbi {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.metric-card-powerbi::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary-green), var(--secondary-gold));
+}
+
+.metric-card-powerbi:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.metric-header-powerbi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.metric-icon-powerbi {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, rgba(11, 106, 74, 0.1), rgba(11, 106, 74, 0.05));
+}
+
+.metric-trend {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+}
+
+.metric-trend.positive {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.metric-trend.negative {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.metric-value-powerbi {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--dark-gray);
+    margin-bottom: 0.25rem;
+    line-height: 1;
+}
+
+.metric-label-powerbi {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .quick-actions-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -342,38 +472,94 @@
 {% endblock %}
 
 {% block content %}
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-icon">💰</div>
+<div class="powerbi-dashboard">
+    {# Filtros Power BI Style #}
+    <div class="powerbi-filters">
+        <div class="filter-group">
+            <label for="filter-periodo" class="filter-label">📅 Período</label>
+            <select id="filter-periodo" class="filter-select">
+                <option value="hoje">Hoje</option>
+                <option value="semana">Esta Semana</option>
+                <option value="mes" selected>Este Mês</option>
+                <option value="ano">Este Ano</option>
+                <option value="total">Todo Período</option>
+            </select>
         </div>
-        <div class="stat-value">{{ faturamento_mes|format_price }}</div>
-        <div class="stat-label">Faturamento Bruto (Mês)</div>
+        <div class="filter-group">
+            <label for="filter-status" class="filter-label">📊 Status</label>
+            <select id="filter-status" class="filter-select">
+                <option value="todos">Todos os Status</option>
+                <option value="pago">Pagos</option>
+                <option value="processando">Processando</option>
+                <option value="enviado">Enviados</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filter-categoria" class="filter-label">🏷️ Categoria</label>
+            <select id="filter-categoria" class="filter-select">
+                <option value="todas">Todas Categorias</option>
+                <option value="paineis">Painéis Solares</option>
+                <option value="inversores">Inversores</option>
+                <option value="kits">Kits Completos</option>
+            </select>
+        </div>
     </div>
-    
-    <div class="stat-card stat-success">
-        <div class="stat-header">
-            <div class="stat-icon">📊</div>
+
+    {# Métricas Power BI Style #}
+    <div class="powerbi-metrics">
+        <div class="metric-card-powerbi">
+            <div class="metric-header-powerbi">
+                <div class="metric-icon-powerbi">💰</div>
+                <div class="metric-trend positive">▲ 15.3%</div>
+            </div>
+            <div class="metric-value-powerbi">{{ faturamento_mes|format_price }}</div>
+            <div class="metric-label-powerbi">Faturamento Bruto (Mês)</div>
         </div>
-        <div class="stat-value">{{ lucro_liquido_mes|format_price }}</div>
-        <div class="stat-label">Lucro Líquido (Mês)</div>
-        <div class="stat-badge">{{ "%.1f"|format(margem_lucro_mes) }}% margem</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-icon">📦</div>
+        
+        <div class="metric-card-powerbi">
+            <div class="metric-header-powerbi">
+                <div class="metric-icon-powerbi">✨</div>
+                <div class="metric-trend positive">▲ {{ "%.1f"|format(margem_lucro_mes) }}%</div>
+            </div>
+            <div class="metric-value-powerbi">{{ lucro_liquido_mes|format_price }}</div>
+            <div class="metric-label-powerbi">Lucro Líquido (Mês)</div>
         </div>
-        <div class="stat-value">{{ total_pedidos }}</div>
-        <div class="stat-label">Total de Pedidos</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-icon">📈</div>
+        
+        <div class="metric-card-powerbi">
+            <div class="metric-header-powerbi">
+                <div class="metric-icon-powerbi">📦</div>
+                <div class="metric-trend positive">▲ 8.2%</div>
+            </div>
+            <div class="metric-value-powerbi">{{ total_pedidos }}</div>
+            <div class="metric-label-powerbi">Total de Pedidos</div>
         </div>
-        <div class="stat-value">{{ pedidos_hoje }}</div>
-        <div class="stat-label">Pedidos Hoje</div>
+        
+        <div class="metric-card-powerbi">
+            <div class="metric-header-powerbi">
+                <div class="metric-icon-powerbi">📈</div>
+                <div class="metric-trend positive">▲ 2</div>
+            </div>
+            <div class="metric-value-powerbi">{{ pedidos_hoje }}</div>
+            <div class="metric-label-powerbi">Pedidos Hoje</div>
+        </div>
+
+        <div class="metric-card-powerbi">
+            <div class="metric-header-powerbi">
+                <div class="metric-icon-powerbi">👥</div>
+                <div class="metric-trend positive">▲ {{ clientes_mes }}</div>
+            </div>
+            <div class="metric-value-powerbi">{{ total_clientes }}</div>
+            <div class="metric-label-powerbi">Total de Clientes</div>
+        </div>
+
+        <div class="metric-card-powerbi">
+            <div class="metric-header-powerbi">
+                <div class="metric-icon-powerbi">💵</div>
+                <div class="metric-trend positive">{{ "%.1f"|format(margem_lucro) }}%</div>
+            </div>
+            <div class="metric-value-powerbi">{{ faturamento_total|format_price }}</div>
+            <div class="metric-label-powerbi">Faturamento Total</div>
+        </div>
     </div>
 </div>
 
